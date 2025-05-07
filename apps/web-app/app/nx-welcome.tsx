@@ -493,7 +493,7 @@ export function NxWelcome({ title }: { title: string }) {
                   </svg>
                   <span>
                     Documentation
-                    <span>Everything inn theres sa</span>
+                    <span>Everythin in there </span>
                   </span>
                   <svg
                     fill="none"
