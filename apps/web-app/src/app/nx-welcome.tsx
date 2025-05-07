@@ -432,7 +432,7 @@ export function NxWelcome({ title }: { title: string }) {
           <div id="welcome">
             <h1>
               <span> Hello there, </span>
-              Welcome REMIX {title} 👋
+              Welcome React {title} 👋
             </h1>
           </div>
 
@@ -493,7 +493,7 @@ export function NxWelcome({ title }: { title: string }) {
                   </svg>
                   <span>
                     Documentation
-                    <span>Everythin in there </span>
+                    <span> Everything is in there </span>
                   </span>
                   <svg
                     fill="none"
@@ -580,7 +580,7 @@ export function NxWelcome({ title }: { title: string }) {
                   </svg>
                 </a>
                 <a
-                  href="https://nx.dev/recipes/react/remix#remix-with-nx"
+                  href="https://nx.dev/react-tutorial/1-code-generation?utm_source=nx-project"
                   target="_blank"
                   rel="noreferrer"
                   className="list-item-link"

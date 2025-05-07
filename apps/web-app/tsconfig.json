@@ -1,29 +1,17 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2019"],
-    "types": ["@remix-run/node", "vite/client"],
-    "isolatedModules": true,
-    "esModuleInterop": true,
     "jsx": "react-jsx",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
-    "target": "ES2022",
-    "strict": true,
-    "allowJs": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true
+    "allowJs": false,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true
   },
-  "include": [],
   "files": [],
+  "include": [],
   "references": [
     {
       "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
     }
-  ]
+  ],
+  "extends": "../../tsconfig.base.json"
 }
