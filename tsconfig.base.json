@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "models": ["libs/models/src/index.ts"],
+      "product-domain/backend": ["libs/product-domain/backend/src/index.ts"],
       "product-domain/frontend": ["libs/product-domain/frontend/src/index.ts"]
     }
   },
