@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "models": ["libs/models/src/index.ts"],
+      "product-domain/frontend": ["libs/product-domain/frontend/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
