@@ -1,10 +1,4 @@
-/*
- * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- This is a starter component and can be deleted.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Delete this file and get started with your project!
- * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- */
+import { fromLibs } from '@ableai/product-domain/frontend';
 export function NxWelcome({ title }: { title: string }) {
   return (
     <>
@@ -434,6 +428,7 @@ export function NxWelcome({ title }: { title: string }) {
               <span> Hello there, </span>
               Welcome WEB APP {title} 👋
             </h1>
+            <h2>{fromLibs}</h2>
           </div>
 
           <div id="hero" className="rounded">
