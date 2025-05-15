@@ -1,30 +1,49 @@
+// # Libs
 import express from 'express';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
-import { Pool } from 'pg';
 import path from 'path';
-
-import drizzleConfig from './config/gig.drizzle.config';
-import privateDrizzleConfig from './config/private_gig.drizzle.config';
-import { users } from './schema';
 import { PgTableWithColumns } from 'drizzle-orm/pg-core';
 import { eq } from 'drizzle-orm';
 
-const pool = new Pool({
-  ...drizzleConfig.dbCredentials,
-});
-const gig_db = drizzle(pool);
+// # Modules
+import gigDbConfig from './config/gig.drizzle.config';
+import privateGigDbConfig from './config/private_gig.drizzle.config';
+import { users } from './schema';
 
-const privatePool = new Pool({
-  ...privateDrizzleConfig.dbCredentials,
+import { createPool } from '@vercel/postgres';
+import { drizzle as drizzleVercel } from 'drizzle-orm/vercel-postgres';
+interface DrizzleVercelDbConnection {
+  connectionString: string;
+}
+
+function createDrizzleVercelDbConnection(config: DrizzleVercelDbConnection) {
+  const { connectionString } = config;
+
+  const client = createPool({
+    connectionString,
+  });
+
+  return drizzleVercel(client);
+}
+
+const gig_db = createDrizzleVercelDbConnection({
+  connectionString: gigDbConfig.dbCredentials.url,
 });
-const private_gig_db = drizzle(privatePool);
+
+const private_gig_db = createDrizzleVercelDbConnection({
+  connectionString: privateGigDbConfig.dbCredentials.url,
+});
+
+type DbConnection =
+  | ReturnType<typeof drizzle>
+  | ReturnType<typeof drizzleVercel>;
 
 async function runMigrations({
   db,
   migrationsFolder,
 }: {
-  db: ReturnType<typeof drizzle>;
+  db: DbConnection;
   migrationsFolder: string;
 }) {
   try {
@@ -51,7 +70,7 @@ function setupCrudRouter<T extends { id: number }>({
   table,
   prefix,
 }: {
-  db: ReturnType<typeof drizzle>;
+  db: DbConnection;
   table: PgTableWithColumns<any>;
   prefix: string;
 }) {

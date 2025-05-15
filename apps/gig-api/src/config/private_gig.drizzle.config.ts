@@ -1,15 +1,13 @@
 import type { Config } from 'drizzle-kit';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default {
     schema: './src/schema.ts',
     out: './src/private_gig_migrations',
+    dialect: "postgresql",
     dbCredentials: {
-        host: process.env.DB_HOST ?? 'localhost',
-        port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 5432,
-        user: process.env.DB_USER ?? 'postgres',
-        password: process.env.DB_PASSWORD ?? 'postgres',
-        database: process.env.DB_NAME ?? 'private_gig_db',
+      url: process.env.PRIVATE_GIG_DB_URL,  
     },
-    strict: true,
-    dialect: 'postgresql'
 } satisfies Config;
