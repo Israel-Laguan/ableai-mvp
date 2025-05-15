@@ -143,3 +143,4 @@ vite.config.*.timestamp*
 vitest.config.*.timestamp*
 
 .husky/*
+.temp/*
