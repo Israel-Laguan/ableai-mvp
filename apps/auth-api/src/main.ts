@@ -124,7 +124,10 @@ function setupCrudRouter<T extends { id: number }>({
     try {
       const id = Number(req.params.id);
 
-      const deleted = await db.delete(table).where(eq(table.id, id)).returning();
+      const deleted = await db
+        .delete(table)
+        .where(eq(table.id, id))
+        .returning();
 
       if (!deleted) return res.status(404).json({ error: 'Not found' });
       res.status(204).send();
@@ -169,8 +172,13 @@ Promise.all([
     db: private_gig_db,
     migrationsFolder: path.join(__dirname, './private_gig_migrations'),
   }),
-]).then(() => {
-  app.listen(port, host, () => {
-    console.log(`[ ready ] http://${host}:${port}/${globalPrefix}`);
+])
+  .catch((err) => {
+    console.error('Error during startup:', err);
+    process.exit(1);
+  })
+  .then(() => {
+    app.listen(port, host, () => {
+      console.log(`[ ready ] http://${host}:${port}/${globalPrefix}`);
+    });
   });
-});
