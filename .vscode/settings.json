@@ -8,6 +8,7 @@
         "Nuxt",
         "pids",
         "stylelintcache",
+        "Vercel",
         "vite",
         "vitepress",
         "vitest",

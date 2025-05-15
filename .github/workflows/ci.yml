@@ -1,0 +1,27 @@
+name: Deployment Pipeline
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [dev]
+
+# Trigger configuration
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'dev' # Verify if merged to 'dev'
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel Environment Info
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Artifact to Vercel Project
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
