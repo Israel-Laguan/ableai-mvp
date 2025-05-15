@@ -1,0 +1,76 @@
+{
+  "name": "payments-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/payments-api/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/payments-api",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/payments-api/src/main.ts",
+        "tsConfig": "apps/payments-api/tsconfig.app.json",
+        "assets": [
+          "apps/payments-api/src/assets",
+          {
+            "input": "apps/payments-api/src/gig_migrations",
+            "glob": "**/*",
+            "output": "apps/payments-api/src/gig_migrations"
+          },
+          {
+            "input": "apps/payments-api/src/private_gig_migrations",
+            "glob": "**/*",
+            "output": "apps/payments-api/src/private_gig_migrations"
+          }
+        ],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "payments-api:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "payments-api:build:development"
+        },
+        "production": {
+          "buildTarget": "payments-api:build:production"
+        }
+      }
+    },
+    "test": {
+      "options": {
+        "passWithNoTests": true
+      }
+    }
+  }
+}
