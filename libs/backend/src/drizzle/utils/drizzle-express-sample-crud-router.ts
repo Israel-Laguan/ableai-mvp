@@ -1,4 +1,3 @@
-// # Libs
 import { eq } from 'drizzle-orm';
 import type { PgTableWithColumns } from 'drizzle-orm/pg-core';
 import { drizzle } from 'drizzle-orm/node-postgres';
