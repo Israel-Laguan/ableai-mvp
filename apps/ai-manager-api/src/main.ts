@@ -69,7 +69,7 @@ createDrizzleExpressSampleCrudRouter({
 });
 
 app.get('/' + globalPrefix, (req, res) => {
-  res.send({ message: 'Hello Gig-API' });
+  res.send({ message: 'Hello Ai-Manager-API' });
 });
 
 // API startup
