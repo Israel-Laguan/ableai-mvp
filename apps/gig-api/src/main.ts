@@ -1,29 +1,43 @@
-// # Libs
 import express from 'express';
-import path from 'path';
-import dotenv from 'dotenv';
 
-// # Modules
-import gigDbConfig from './config/gig.drizzle.config';
-import privateGigDbConfig from './config/private_gig.drizzle.config';
+import { Drizzle, Shared } from '@backend';
+import { env } from './config/env.config';
 import { users } from './schema';
-
-import { Drizzle } from '@backend';
-
-dotenv.config();
 
 // Db connection config
 
 const {
-  Utils: { createDrizzleExpressSampleCrudRouter, createDrizzleVercelDbConnection, runMigrations },
+  Utils: {
+    createDrizzleExpressSampleCrudRouter,
+    createDrizzleVercelDbConnection,
+
+    runMigrations,
+  },
 } = Drizzle;
+const {
+  Utils: { createMigrationsPath },
+} = Shared;
 
 const gig_db = createDrizzleVercelDbConnection({
-  connectionString: gigDbConfig.dbCredentials.url,
+  connectionString: env.GIG_DB_URL,
 });
 
 const private_gig_db = createDrizzleVercelDbConnection({
-  connectionString: privateGigDbConfig.dbCredentials.url,
+  connectionString: env.PRIVATE_GIG_DB_URL,
+});
+
+const gigMigrationsPath = createMigrationsPath({
+  domainContext: 'shared',
+  framework: 'drizzle',
+  finalPathPattern: 'gig_migrations',
+  validateExists: true,
+});
+
+const privateGigMigrationsPath = createMigrationsPath({
+  domainContext: 'shared',
+  framework: 'drizzle',
+  finalPathPattern: 'private_gig_migrations',
+  validateExists: true,
 });
 
 // Api config
@@ -63,14 +77,14 @@ app.get('/' + globalPrefix, (req, res) => {
 Promise.all([
   runMigrations({
     db: gig_db,
-    migrationsFolder: path.join(__dirname, './gig_migrations'),
+    migrationsFolder: gigMigrationsPath,
   }),
   runMigrations({
     db: private_gig_db,
-    migrationsFolder: path.join(__dirname, './private_gig_migrations'),
+    migrationsFolder: privateGigMigrationsPath,
   }),
 ])
-  .catch((err) => {
+  .catch(err => {
     console.error('Error during startup:', err);
     process.exit(1);
   })

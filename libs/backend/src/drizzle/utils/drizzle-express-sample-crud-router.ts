@@ -1,10 +1,11 @@
 // # Libs
 import { eq } from 'drizzle-orm';
 import type { PgTableWithColumns } from 'drizzle-orm/pg-core';
-import { drizzle } from 'drizzle-orm/vercel-postgres';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { drizzle as drizzleVercel } from 'drizzle-orm/vercel-postgres';
 import * as express from 'express';
 
-type DbConnection = ReturnType<typeof drizzle>;
+type DbConnection = ReturnType<typeof drizzleVercel> | ReturnType<typeof drizzle>;
 
 const devErrLog = ({ action, err }: { action: string; err: unknown }) => {
   if (process.env['NODE_ENV'] === 'development')
