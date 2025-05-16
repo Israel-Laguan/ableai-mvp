@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
-. "$(dirname "$0")/h"
+. "$(dirname "$0")/_/husky.sh"
 
 npx nx run-many --target=build --all --skip-nx-cache
