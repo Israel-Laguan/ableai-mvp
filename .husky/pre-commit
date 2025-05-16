@@ -1,1 +1,31 @@
-npx lint-stage
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# --- START: Informative pre-commit messages ---
+echo "========================================"
+echo "  Running pre-commit checks..."
+echo "  (This might take a moment)"
+echo "========================================"
+echo ""
+# --- END: Informative pre-commit messages ---
+
+# Execute lint-staged to run linters/formatters on staged files
+npx lint-staged
+
+# --- START: Post-lint-staged messages ---
+# Capture the exit code of the lint-staged command
+EXIT_CODE=$? 
+
+# Check if lint-staged completed successfully
+if [ $EXIT_CODE -eq 0 ]; then
+  echo ""
+  echo "✅ Pre-commit checks passed successfully."
+else
+  echo ""
+  echo "❌ ERROR: Pre-commit checks failed. Please fix the issues and try again."
+  echo "========================================"
+fi
+
+# Exit the hook with the original exit code to either allow or prevent the commit
+exit $EXIT_CODE
+# --- END: Post-lint-staged messages ---

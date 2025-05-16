@@ -1,3 +1,3 @@
-function exampleFn() {
-  console.log('This is an example file.');
+function exampleFn(a, b) {
+  const c = a + b;
 }

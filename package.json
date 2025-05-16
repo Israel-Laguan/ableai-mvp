@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepare": "husky",
-    "postinstall": "husky install"
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
