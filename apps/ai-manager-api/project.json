@@ -17,17 +17,7 @@
         "main": "apps/ai-manager-api/src/main.ts",
         "tsConfig": "apps/ai-manager-api/tsconfig.app.json",
         "assets": [
-          "apps/ai-manager-api/src/assets",
-          {
-            "input": "apps/ai-manager-api/src/gig_migrations",
-            "glob": "**/*",
-            "output": "apps/ai-manager-api/src/gig_migrations"
-          },
-          {
-            "input": "apps/ai-manager-api/src/private_gig_migrations",
-            "glob": "**/*",
-            "output": "apps/ai-manager-api/src/private_gig_migrations"
-          }
+          "apps/ai-manager-api/src/assets"
         ],
         "generatePackageJson": true,
         "esbuildOptions": {

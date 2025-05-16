@@ -79,6 +79,7 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
+.env.stage
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -145,6 +146,5 @@ vitest.config.*.timestamp*
 .husky/*
 tmp
 postgres
-github/instructions
-.cursor\rules\nx-rules.mdc
-.github\instructions\nx.instructions.md
+.github/instructions
+.cursor/rules/nx-rules.mdc
