@@ -1,1 +1,1 @@
-export * from './lib/product-domain/backend';
+export * as Shared from './shared';

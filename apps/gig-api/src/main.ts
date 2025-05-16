@@ -1,22 +1,27 @@
 import express from 'express';
 
-import { Drizzle, Shared } from '@backend';
+import { Shared as SharedDomainBackend } from '@ableai/product-domain/backend';
+import { Shared as SharedBackend } from '@backend';
 import { env } from './config/env.config';
-import { users } from './schema';
-
-// Db connection config
 
 const {
-  Utils: {
-    createDrizzleExpressSampleCrudRouter,
-    createDrizzleVercelDbConnection,
-
-    runMigrations,
+  Infrastructure: {
+    Drizzle: {
+      Mocks: { users },
+      Utils: {
+        createDrizzleExpressSampleCrudRouter,
+        createDrizzleVercelDbConnection,
+        runMigrations,
+      },
+    },
   },
-} = Drizzle;
+} = SharedDomainBackend;
+
 const {
   Utils: { createMigrationsPath },
-} = Shared;
+} = SharedBackend;
+
+// Db connection config
 
 const gigDb = createDrizzleVercelDbConnection({
   connectionString: env.GIG_DB_URL,
