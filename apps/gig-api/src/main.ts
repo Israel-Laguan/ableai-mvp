@@ -18,11 +18,11 @@ const {
   Utils: { createMigrationsPath },
 } = Shared;
 
-const gig_db = createDrizzleVercelDbConnection({
+const gigDb = createDrizzleVercelDbConnection({
   connectionString: env.GIG_DB_URL,
 });
 
-const private_gig_db = createDrizzleVercelDbConnection({
+const privateGigDb = createDrizzleVercelDbConnection({
   connectionString: env.PRIVATE_GIG_DB_URL,
 });
 
@@ -56,14 +56,14 @@ app.use(express.json());
 
 createDrizzleExpressSampleCrudRouter({
   app,
-  db: gig_db,
+  db: gigDb,
   table: users,
   prefix: `/${globalPrefix}/gig/users`,
 });
 
 createDrizzleExpressSampleCrudRouter({
   app,
-  db: private_gig_db,
+  db: privateGigDb,
   table: users,
   prefix: `/${globalPrefix}/private-gig/users`,
 });
@@ -76,11 +76,11 @@ app.get('/' + globalPrefix, (req, res) => {
 
 Promise.all([
   runMigrations({
-    db: gig_db,
+    db: gigDb,
     migrationsFolder: gigMigrationsPath,
   }),
   runMigrations({
-    db: private_gig_db,
+    db: privateGigDb,
     migrationsFolder: privateGigMigrationsPath,
   }),
 ])
