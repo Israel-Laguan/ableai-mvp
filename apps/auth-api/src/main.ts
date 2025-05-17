@@ -10,7 +10,7 @@ const {
       Mocks: { users },
       Utils: {
         createDrizzleExpressSampleCrudRouter,
-        createDrizzleVercelDbConnection,
+        createDrizzlePostgresDbConnection,
         runMigrations,
       },
     },
@@ -23,11 +23,11 @@ const {
 
 // Db connection config
 
-const gigDb = createDrizzleVercelDbConnection({
+const gigDb = createDrizzlePostgresDbConnection({
   connectionString: env.GIG_DB_URL,
 });
 
-const privateGigDb = createDrizzleVercelDbConnection({
+const privateGigDb = createDrizzlePostgresDbConnection({
   connectionString: env.PRIVATE_GIG_DB_URL,
 });
 
