@@ -1,16 +1,31 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "apps/auth-api/src/main.ts",
-      "use": "@vercel/node"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "outputDirectory": "public",
+
+  "functions": {
+    "api/ai-manager-api/main.js": {
+      "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+      "memory": 1024,
+      "maxDuration": 30
+    },
+
+    "api/auth-api/main.js": {
+      "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+      "memory": 1024,
+      "maxDuration": 30
+    },
+
+    "api/gig-api/main.js": {
+      "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+      "memory": 1024,
+      "maxDuration": 30
+    },
+
+    "api/payments-api/main.js": {
+      "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+      "memory": 1024,
+      "maxDuration": 30
     }
-  ],
-  "routes": [
-    {
-      "src": "/auth-api/(.*)",
-      "dest": "apps/auth-api/src/main.ts",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]
-    }
-  ]
+  }
 }

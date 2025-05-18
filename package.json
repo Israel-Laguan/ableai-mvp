@@ -2,9 +2,8 @@
   "name": "ableai-mvp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "prepare": "npx husky"
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
