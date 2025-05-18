@@ -11,7 +11,7 @@ export default [
   ...tseslint.configs.stylistic,
   pluginJs.configs.recommended,
   {
-    ignores: ['**/dist', '**/vite.config.*.timestamp*', '**/vitest.config.*.timestamp*'],
+    ignores: ['**/dist', '**/vite.config.*.timestamp*', '**/vitest.config.*.timestamp*', 'api'],
   },
   {
     plugins: {

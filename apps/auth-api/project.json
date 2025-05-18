@@ -6,34 +6,14 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
+      "executor": "nx:run-commands",
       "options": {
-        "platform": "node",
-        "outputPath": "dist/apps/auth-api",
-        "format": ["cjs"],
-        "bundle": false,
-        "main": "apps/auth-api/src/main.ts",
-        "tsConfig": "apps/auth-api/tsconfig.app.json",
-        "assets": ["apps/auth-api/src/assets"],
-        "generatePackageJson": true,
-        "esbuildOptions": {
-          "sourcemap": true,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
+        "command": "webpack-cli build",
+        "args": ["node-env=production"]
       },
       "configurations": {
-        "development": {},
-        "production": {
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
+        "development": {
+          "args": ["node-env=development"]
         }
       }
     },
@@ -53,20 +33,6 @@
         "production": {
           "buildTarget": "auth-api:build:production"
         }
-      }
-    },
-    "generate-gig-auth-migration": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "drizzle-kit generate --config=./src/config/gig.drizzle.config.ts --name=auth_gig",
-        "cwd": "apps/auth-api"
-      }
-    },
-    "generate-private-gig-auth-migration": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "drizzle-kit generate --config=./src/config/private_gig.drizzle.config.ts --name=auth_private_gig",
-        "cwd": "apps/auth-api"
       }
     }
   }

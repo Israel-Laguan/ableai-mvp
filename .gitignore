@@ -147,8 +147,9 @@ dist
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
 
-.husky/_
-tmp
-postgres
-.github/instructions
 .cursor/rules/nx-rules.mdc
+.github/instructions
+.husky/_
+.vercel
+postgres
+tmp

@@ -34,20 +34,20 @@ const privateGigDb = createDrizzlePostgresDbConnection({
 const gigMigrationsPath = createMigrationsPath({
   domainContext: 'shared',
   framework: 'drizzle',
-  finalPathPattern: 'gig_migrations',
+  finalPathPattern: 'gig-migrations',
   validateExists: true,
 });
 
 const privateGigMigrationsPath = createMigrationsPath({
   domainContext: 'shared',
   framework: 'drizzle',
-  finalPathPattern: 'private_gig_migrations',
+  finalPathPattern: 'private-gig-migrations',
   validateExists: true,
 });
 
 // Api config
 
-const globalPrefix = 'auth-api';
+const globalPrefix = 'api/auth-api/main';
 
 const host = process.env.HOST ?? 'localhost';
 
@@ -98,3 +98,5 @@ Promise.all([
       console.log(`[ ready ] http://${host}:${port}/${globalPrefix}`);
     });
   });
+
+export default app;
