@@ -1,3 +1,3 @@
-export * from "./drizzle-express-sample-crud-router"
+export * from './drizzle-express-sample-crud-router';
 export * from './migration';
-export * from './vercel-db-connection';
+export * from './postgres-db-connection';

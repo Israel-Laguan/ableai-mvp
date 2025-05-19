@@ -10,7 +10,7 @@ const {
       Mocks: { users },
       Utils: {
         createDrizzleExpressSampleCrudRouter,
-        createDrizzleVercelDbConnection,
+        createDrizzlePostgresDbConnection,
         runMigrations,
       },
     },
@@ -23,31 +23,31 @@ const {
 
 // Db connection config
 
-const gigDb = createDrizzleVercelDbConnection({
+const gigDb = createDrizzlePostgresDbConnection({
   connectionString: env.GIG_DB_URL,
 });
 
-const privateGigDb = createDrizzleVercelDbConnection({
+const privateGigDb = createDrizzlePostgresDbConnection({
   connectionString: env.PRIVATE_GIG_DB_URL,
 });
 
 const gigMigrationsPath = createMigrationsPath({
   domainContext: 'shared',
   framework: 'drizzle',
-  finalPathPattern: 'gig_migrations',
+  finalPathPattern: 'gig-migrations',
   validateExists: true,
 });
 
 const privateGigMigrationsPath = createMigrationsPath({
   domainContext: 'shared',
   framework: 'drizzle',
-  finalPathPattern: 'private_gig_migrations',
+  finalPathPattern: 'private-gig-migrations',
   validateExists: true,
 });
 
 // Api config
 
-const globalPrefix = 'gig-api';
+const globalPrefix = 'api/gig-api/main';
 
 const host = process.env.HOST ?? 'localhost';
 
@@ -98,3 +98,5 @@ Promise.all([
       console.log(`[ ready ] http://${host}:${port}/${globalPrefix}`);
     });
   });
+
+export default app;
