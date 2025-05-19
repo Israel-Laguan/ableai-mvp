@@ -151,5 +151,7 @@ vitest.config.*.timestamp*
 .github/instructions
 .husky/_
 .vercel
+api
+public
 postgres
 tmp
