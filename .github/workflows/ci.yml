@@ -27,7 +27,7 @@ jobs:
         run: npm ci
       
       - name: Build app
-        run: npx nx run-many --target=build ai-manager-api auth-api gig-api payments-api
+        run: npx nx run-many --target=build --all
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
