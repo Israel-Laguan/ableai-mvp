@@ -13,7 +13,7 @@ const devErrLog = ({ action, err }: { action: string; err: unknown }) => {
     });
 };
 
-export function createDrizzleExpressSampleCrudRouter({
+export function createDrizzleExpressCrudRouter({
   app,
   db,
   prefix,
@@ -21,6 +21,7 @@ export function createDrizzleExpressSampleCrudRouter({
 }: {
   app: express.Express;
   db: DbConnection;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table: PgTableWithColumns<any>;
   prefix: string;
 }) {
