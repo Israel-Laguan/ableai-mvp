@@ -3,29 +3,70 @@
 
   "outputDirectory": "public",
 
-  "functions": {
-    "api/ai-manager-api/main.js": {
-      "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
-      "memory": 1024,
-      "maxDuration": 30
+  "builds": [
+    {
+      "src": "api/ai-manager-api/main.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+        "memory": 1024,
+        "maxDuration": 30
+      }
     },
-
-    "api/auth-api/main.js": {
-      "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
-      "memory": 1024,
-      "maxDuration": 30
+    {
+      "src": "api/auth-api/main.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+        "memory": 1024,
+        "maxDuration": 30
+      }
     },
-
-    "api/gig-api/main.js": {
-      "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
-      "memory": 1024,
-      "maxDuration": 30
+    {
+      "src": "api/gig-api/main.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+        "memory": 1024,
+        "maxDuration": 30
+      }
     },
-
-    "api/payments-api/main.js": {
-      "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
-      "memory": 1024,
-      "maxDuration": 30
+    {
+      "src": "api/payments-api/main.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+        "memory": 1024,
+        "maxDuration": 30
+      }
     }
-  }
+  ],
+
+  "routes": [
+    {
+      "src": "/api/ai-manager-api/(.*)",
+      "dest": "/api/ai-manager-api/main.js",
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+    },
+    {
+      "src": "/api/auth-api/(.*)",
+      "dest": "/api/auth-api/main.js",
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+    },
+    {
+      "src": "/api/gig-api/(.*)",
+      "dest": "/api/gig-api/main.js",
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+    },
+    {
+      "src": "/api/payments-api/(.*)",
+      "dest": "/api/payments-api/main.js",
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public",
+      "methods": ["GET"]
+    }
+  ]
 }
