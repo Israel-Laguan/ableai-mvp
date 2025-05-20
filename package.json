@@ -82,6 +82,7 @@
   },
   "nx": {},
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.4",
     "axios": "^1.6.0",
     "drizzle-orm": "^0.43.1",
     "express": "^4.21.2",
