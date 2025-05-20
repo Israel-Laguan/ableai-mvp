@@ -56,6 +56,40 @@ Husky is integrated into this repository to manage Git hooks. It helps enforce c
 
 ## Scripts
 
+Below are some useful scripts for development and deployment:
+
+### Serve a specific app
+
+```sh
+npx nx serve <app-name>
+```
+Example:
+```sh
+npx nx serve gig-api
+```
+
+### Build a specific project
+
+```sh
+npx nx build <app-name>
+```
+Example:
+```sh
+npx nx build gig-api
+```
+
+### Build all projects
+
+```sh
+npx nx run-many --target=build --all
+```
+
+### Serve all apps
+
+```sh
+npx nx run-many --target=serve --all
+```
+
 These are the available scripts to generate backend domain migrations using Drizzle Kit:
 
 - **Generate migration for gig**  
