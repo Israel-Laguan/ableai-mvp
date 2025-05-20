@@ -1,10 +1,18 @@
 import { eq } from 'drizzle-orm';
-import type { PgTableWithColumns } from 'drizzle-orm/pg-core';
 import { drizzle } from 'drizzle-orm/node-postgres';
+import * as p from 'drizzle-orm/pg-core';
 import { drizzle as drizzleVercel } from 'drizzle-orm/vercel-postgres';
 import * as express from 'express';
 
 type DbConnection = ReturnType<typeof drizzleVercel> | ReturnType<typeof drizzle>;
+type PgTable = ReturnType<typeof p.pgTable>;
+
+interface DrizzleExpressCrudRouterConfig {
+  app: express.Express;
+  db: DbConnection;
+  prefix: string;
+  table: PgTable;
+}
 
 const devErrLog = ({ action, err }: { action: string; err: unknown }) => {
   if (process.env['NODE_ENV'] === 'development')
@@ -18,13 +26,7 @@ export function createDrizzleExpressCrudRouter({
   db,
   prefix,
   table,
-}: {
-  app: express.Express;
-  db: DbConnection;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  table: PgTableWithColumns<any>;
-  prefix: string;
-}) {
+}: DrizzleExpressCrudRouterConfig) {
   const router = express.Router();
 
   // GET all
