@@ -1,17 +1,17 @@
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
-import * as p from 'drizzle-orm/pg-core';
-import { drizzle as drizzleVercel } from 'drizzle-orm/vercel-postgres';
+import { AnyPgTable, PgColumn } from 'drizzle-orm/pg-core';
 import * as express from 'express';
 
-type DbConnection = ReturnType<typeof drizzleVercel> | ReturnType<typeof drizzle>;
-type PgTable = ReturnType<typeof p.pgTable>;
+type DbConnection = ReturnType<typeof drizzle>;
 
 interface DrizzleExpressCrudRouterConfig {
   app: express.Express;
   db: DbConnection;
   prefix: string;
-  table: PgTable;
+  table: AnyPgTable & {
+    id: PgColumn;
+  };
 }
 
 const devErrLog = ({ action, err }: { action: string; err: unknown }) => {
@@ -26,7 +26,11 @@ export function createDrizzleExpressCrudRouter({
   db,
   prefix,
   table,
-}: DrizzleExpressCrudRouterConfig) {
+}: DrizzleExpressCrudRouterConfig): void {
+  if (!app || !db || !prefix || !table) {
+    throw new Error('Missing required parameters');
+  }
+
   const router = express.Router();
 
   // GET all
