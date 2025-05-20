@@ -8,11 +8,7 @@ const {
   Infrastructure: {
     Drizzle: {
       Mocks: { users },
-      Utils: {
-        createDrizzleExpressSampleCrudRouter,
-        createDrizzlePostgresDbConnection,
-        runMigrations,
-      },
+      Utils: { createDrizzleExpressCrudRouter, createDrizzlePostgresDbConnection, runMigrations },
     },
   },
 } = SharedDomainBackend;
@@ -59,14 +55,14 @@ app.use(express.json());
 
 // Routers config
 
-createDrizzleExpressSampleCrudRouter({
+createDrizzleExpressCrudRouter({
   app,
   db: gigDb,
   table: users,
   prefix: `/${globalPrefix}/gig/users`,
 });
 
-createDrizzleExpressSampleCrudRouter({
+createDrizzleExpressCrudRouter({
   app,
   db: privateGigDb,
   table: users,
