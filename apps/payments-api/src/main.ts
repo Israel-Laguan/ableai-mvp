@@ -43,7 +43,7 @@ const privateGigMigrationsPath = createMigrationsPath({
 
 // Api config
 
-const globalPrefix = 'api/payments-api/main';
+const globalPrefix = 'api/payments/v1';
 
 const host = process.env.HOST ?? 'localhost';
 

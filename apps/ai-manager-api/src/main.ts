@@ -43,7 +43,7 @@ const privateGigMigrationsPath = createMigrationsPath({
 
 // Api config
 
-const globalPrefix = 'api/ai-manager-api/v1';
+const globalPrefix = 'api/ai-manager/v1';
 
 const host = process.env.HOST ?? 'localhost';
 

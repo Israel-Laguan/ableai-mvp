@@ -4,7 +4,7 @@ const { join } = require('path');
 
 module.exports = {
   output: {
-    path: join(__dirname, '../../api/gig-api'),
+    path: join(__dirname, '../../dist/apps/gig-api'),
   },
   plugins: [
     new NxAppWebpackPlugin({
