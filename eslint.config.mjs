@@ -1,5 +1,4 @@
 import nx from '@nx/eslint-plugin';
-import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import nxPlugin from '@nx/eslint-plugin';
 
@@ -9,7 +8,6 @@ export default [
   ...nx.configs['flat/javascript'],
   ...tseslint.configs.recommended,
   ...tseslint.configs.stylistic,
-  pluginJs.configs.recommended,
   {
     ignores: ['**/dist', '**/vite.config.*.timestamp*', '**/vitest.config.*.timestamp*', 'api'],
   },
