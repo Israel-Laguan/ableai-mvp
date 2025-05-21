@@ -2,7 +2,7 @@
 
 ## Description
 
-**ableai-mvp** is a private monorepo project built with [Nx](https://nx.dev/) as the foundation for a production-ready application. The project is designed to serve as the base for a more complex system, following **Clean Architecture** principles and a **microservices architecture** to ensure clarity, extensibility, and a strong separation of concerns.
+**ableai-mvp** is a private monorepo project built with [Nx](https://nx.dev/) as the foundation for a production-ready application. The project is designed to serve as the base for a more complex system, following **Clean Architecture** principles to ensure clarity, extensibility, and a strong separation of concerns.
 
 The project uses multiple databases to ensure clear separation of responsibilities and data privacy. There is a dedicated database for private user information, another for public user information, and a separate database specifically for notifications and chat data.
 
@@ -21,7 +21,7 @@ The project uses multiple databases to ensure clear separation of responsibiliti
 
 ## Project Structure
 
-The project follows an architecture based on Nx monorepo,Clean Architecture and Microservices Architecture, organized as follows:
+The project follows an architecture based on Nx monorepo, Clean Architecture and Nano Services, organized as follows:
 
 ## `apps/`
 
