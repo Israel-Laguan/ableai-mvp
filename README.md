@@ -2,7 +2,13 @@
 
 ## Description
 
-**ableai-mvp** is a private monorepo project built with [Nx](https://nx.dev/) as the foundation for a production-ready application. The project is designed to serve as the base for a more complex system, following **Clean Architecture** principles to ensure clarity, extensibility, and a strong separation of concerns.
+**ableai-mvp** is a private monorepo project built with [Nx](https://nx.dev/) as the foundation for a production-ready application. The project is designed to serve as the base for a more complex system, following **Clean Architecture** principles and a **microservices architecture** to ensure clarity, extensibility, and a strong separation of concerns.
+
+The project uses multiple databases to ensure clear separation of responsibilities and data privacy. There is a dedicated database for private user information, another for public user information, and a separate database specifically for notifications and chat data.
+
+<div align="center">
+  <img src="./assets/readme/ableai-schema.png" alt="Project Schema" width="500"/>
+</div>
 
 ## Tech Stack
 
@@ -15,18 +21,19 @@
 
 ## Project Structure
 
-The project follows an architecture based on Nx monorepo and Clean Architecture, organized as follows:
+The project follows an architecture based on Nx monorepo,Clean Architecture and Microservices Architecture, organized as follows:
 
 ## `apps/`
 
 Contains the main applications of the system. Each application has its entry point in `src/`. Examples:
 
-* `apps/ai-manager-api/`
-* `apps/auth-api/`
-* `apps/dashboard/`
-* `apps/gig-api/`
-* `apps/payments-api/`
-* `apps/web-app/`
+* `apps/ai-manager-api/` — Handles interaction with AI service providers.
+* `apps/auth-api/` — Issues tokens, manages refresh tokens, and handles user information.
+* `apps/dashboard/` — Admin web application for system metrics and management.
+* `apps/gig-api/` — Manages business logic for gig-workers and employers.
+* `apps/payments-api/` — Handles integration with payment service providers.
+* `apps/web-app/` — Main user-facing web application.
+* `apps/socket-api/` — Manages real-time notifications and chat functionality.
 
 ## `libs/`
 
