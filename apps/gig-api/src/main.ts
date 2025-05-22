@@ -43,7 +43,7 @@ const privateGigMigrationsPath = createMigrationsPath({
 
 // Api config
 
-const globalPrefix = 'api/gig-api/main';
+const globalPrefix = 'api/gig/v1';
 
 const host = process.env.HOST ?? 'localhost';
 
