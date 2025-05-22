@@ -1,21 +1,22 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { Transport } from '@modelcontextprotocol/sdk/shared/transport';
 import {
   CallToolRequestSchema,
   ListResourcesRequestSchema,
   ListToolsRequestSchema,
   ReadResourceRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { Express, Response, Request } from 'express';
 import { Pool, PoolConfig } from 'pg';
 
-interface McpPostgresServerConfig {
-  pool: PoolConfig;
-  transport?: Transport;
-}
-
-function createMcpPostgresServer(config: McpPostgresServerConfig): Server {
+/**
+ * Creates a Model Context Protocol (MCP) server for PostgreSQL.
+ *
+ * This server is configured to allow only read-only operations.
+ * No data modification (INSERT, UPDATE, DELETE) is permitted through this server.
+ *
+ * @param config - Configuration for the MCP PostgreSQL server.
+ * @returns The configured MCP server.
+ */
+export function makeMcpPostgresServer(config: PoolConfig): Server {
   const server = new Server(
     {
       name: 'mcp-postgres-server',
@@ -29,15 +30,7 @@ function createMcpPostgresServer(config: McpPostgresServerConfig): Server {
     }
   );
 
-  config.pool.max = config.pool.max || 10;
-
-  config.pool.idleTimeoutMillis = config.pool.idleTimeoutMillis || 30000;
-
-  config.pool.connectionTimeoutMillis = config.pool.connectionTimeoutMillis || 2000;
-
-  config.pool.allowExitOnIdle = config.pool.allowExitOnIdle || true;
-
-  const pool = new Pool(config.pool);
+  const pool = new Pool(config);
 
   const resourceBaseUrl = pool.options.connectionString;
 
@@ -141,74 +134,4 @@ function createMcpPostgresServer(config: McpPostgresServerConfig): Server {
   });
 
   return server;
-}
-
-interface McpPostgresExpressEndpointConfig {
-  app: Express;
-  dbConfig: McpPostgresServerConfig;
-  prefix: string;
-}
-
-export function createMcpPostgresExpressEndpoint(config: McpPostgresExpressEndpointConfig) {
-  const { app, dbConfig, prefix } = config;
-
-  app.post(prefix, async (req: Request, res: Response) => {
-    try {
-      const server = createMcpPostgresServer(dbConfig);
-
-      const transport = new StreamableHTTPServerTransport({
-        sessionIdGenerator: undefined,
-      });
-
-      res.on('close', () => {
-        transport.close();
-        server.close();
-      });
-
-      await server.connect(transport);
-
-      await transport.handleRequest(req, res, req.body);
-    } catch {
-      if (!res.headersSent) {
-        res.status(500).json({
-          jsonrpc: '2.0',
-          error: {
-            code: -32603,
-            message: 'Internal server error',
-          },
-          id: null,
-        });
-      }
-    }
-  });
-
-  app.get(prefix, async (req: Request, res: Response) => {
-    res.writeHead(405).end(
-      JSON.stringify({
-        jsonrpc: '2.0',
-        error: {
-          code: -32000,
-          message: 'Method not allowed.',
-        },
-        id: null,
-      })
-    );
-  });
-
-  app.delete(prefix, async (req: Request, res: Response) => {
-    res.writeHead(405).end(
-      JSON.stringify({
-        jsonrpc: '2.0',
-        error: {
-          code: -32000,
-          message: 'Method not allowed.',
-        },
-        id: null,
-      })
-    );
-  });
-
-  console.log(
-    `MCP Stateless Streamable HTTP Server initialize and accepting requests on: [POST] ${prefix}`
-  );
 }
