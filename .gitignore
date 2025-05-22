@@ -148,7 +148,7 @@ vite.config.*.timestamp*
 vitest.config.*.timestamp*
 
 .cursor/rules/nx-rules.mdc
-.github/instructions
+.github/instructions/
 .husky/_
 .vercel
 api

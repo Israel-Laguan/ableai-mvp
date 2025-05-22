@@ -1,1 +1,2 @@
-export * from './lib/models';
+export * as IAuth from './auth';
+export * as IShared from './shared';
