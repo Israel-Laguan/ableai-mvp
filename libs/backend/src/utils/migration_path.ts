@@ -32,7 +32,7 @@ interface MigrationPathConfig {
 const migrationPathConfigSchema = z.object({
   domainContext: z.string(),
   framework: z.string(),
-  finalPathPattern:z.string().optional(),
+  finalPathPattern: z.string().optional(),
   validateExists: z.boolean().optional(),
 });
 
@@ -47,7 +47,8 @@ const migrationPathConfigSchema = z.object({
  * This function creates the migration path according to the conventions of the project architecture.
  */
 export const createMigrationsPath = (config: MigrationPathConfig) => {
-  const { domainContext, framework, finalPathPattern, validateExists } = migrationPathConfigSchema.parse(config);
+  const { domainContext, framework, finalPathPattern, validateExists } =
+    migrationPathConfigSchema.parse(config);
 
   const segments = [
     process.cwd(),
@@ -61,7 +62,7 @@ export const createMigrationsPath = (config: MigrationPathConfig) => {
     'migrations',
   ];
 
-  if(finalPathPattern) segments.push(finalPathPattern)
+  if (finalPathPattern) segments.push(finalPathPattern);
 
   const migrationsPath = resolve(...segments);
 

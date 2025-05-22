@@ -16,13 +16,10 @@
     "baseUrl": ".",
     "paths": {
       "@ableai/models": ["libs/models/src/index.ts"],
-      "@ableai/product-domain/backend": [
-        "libs/product-domain/backend/src/index.ts"
-      ],
-      "@ableai/product-domain/frontend": [
-        "libs/product-domain/frontend/src/index.ts"
-      ],
-      "@backend": ["libs/backend/src/index.ts"]
+      "@ableai/product-domain/backend": ["libs/product-domain/backend/src/index.ts"],
+      "@ableai/product-domain/frontend": ["libs/product-domain/frontend/src/index.ts"],
+      "@backend": ["libs/backend/src/index.ts"],
+      "@shared": ["libs/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
