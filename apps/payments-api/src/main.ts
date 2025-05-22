@@ -1,11 +1,11 @@
 import express from 'express';
 
-import { Shared as SharedDomainBackend } from '@ableai/product-domain/backend';
-import { Shared as SharedBackend } from '@backend';
+import { Shared as SharedDomainBackend } from '@product-domain/backend';
+import { Utils as UtilsBackend } from '@backend';
 import { env } from './config/env.config';
 
 const {
-  Infrastructure: {
+  Infra: {
     Drizzle: {
       Mocks: { users },
       Utils: { createDrizzleExpressCrudRouter, createDrizzlePostgresDbConnection, runMigrations },
@@ -13,9 +13,7 @@ const {
   },
 } = SharedDomainBackend;
 
-const {
-  Utils: { createMigrationsPath },
-} = SharedBackend;
+const { createMigrationsPath } = UtilsBackend;
 
 // Db connection config
 

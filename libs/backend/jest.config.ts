@@ -1,5 +1,5 @@
 export default {
-  displayName: 'bakcned',
+  displayName: 'backend',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

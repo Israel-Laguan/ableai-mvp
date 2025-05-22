@@ -1,1 +1,2 @@
-export * as Infrastructure from './infrastructure';
+export * as Domain from './domain';
+export * as Infra from './infrastructure';
