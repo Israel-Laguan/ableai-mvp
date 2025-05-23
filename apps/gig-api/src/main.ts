@@ -1,7 +1,8 @@
 import express from 'express';
 
-import { Shared as SharedDomainBackend } from '@ableai/product-domain/backend';
 import { Utils as UtilsBackend } from '@backend';
+import { Shared as SharedDomainBackend } from '@product-domain/backend';
+
 import { env } from './config/env.config';
 
 const {
@@ -19,10 +20,12 @@ const { createMigrationsPath } = UtilsBackend;
 
 const gigDb = createDrizzlePostgresDbConnection({
   connectionString: env.GIG_DB_URL,
+  environment: env.NODE_ENV,
 });
 
 const privateGigDb = createDrizzlePostgresDbConnection({
   connectionString: env.PRIVATE_GIG_DB_URL,
+  environment: env.NODE_ENV,
 });
 
 const gigMigrationsPath = createMigrationsPath({
