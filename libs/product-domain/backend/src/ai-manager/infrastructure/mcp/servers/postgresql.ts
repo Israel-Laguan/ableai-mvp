@@ -7,13 +7,14 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { Pool, PoolConfig } from 'pg';
 
+import { Errors } from '@shared';
+
 interface ExtendedServer extends Server {
   closePool?: () => Promise<void>;
 }
 
 interface ServerConfig {
   poolConfig: PoolConfig;
-  environment?: string;
 }
 
 /**
@@ -25,10 +26,7 @@ interface ServerConfig {
  * @param config - Configuration for the MCP PostgreSQL server.
  * @returns The configured MCP server.
  */
-export function makeMcpPostgresServer({
-  poolConfig,
-  environment = 'production',
-}: ServerConfig): ExtendedServer {
+export function makeMcpPostgresServer({ poolConfig }: ServerConfig): ExtendedServer {
   const server: ExtendedServer = new Server(
     {
       name: 'mcp-postgres-server',
@@ -67,7 +65,10 @@ export function makeMcpPostgresServer({
         })),
       };
     } catch (error) {
-      if (environment === 'development') console.error('Error fetching resources:', error);
+      console.error('Error fetching resources:', error);
+      return {
+        error: 'Error fetching resources',
+      };
     } finally {
       client.release();
     }
@@ -83,7 +84,9 @@ export function makeMcpPostgresServer({
     const tableName = pathComponents.pop();
 
     if (schema !== SCHEMA_PATH) {
-      throw new Error('Invalid resource URI');
+      throw Errors.BadRequestError.create(
+        `Invalid schema path. Expected "${SCHEMA_PATH}", got "${schema}".`
+      );
     }
 
     const client = await pool.connect();
@@ -104,7 +107,10 @@ export function makeMcpPostgresServer({
         ],
       };
     } catch (error) {
-      if (environment === 'development') console.error('Error fetching resources:', error);
+      console.error('Error fetching resources:', error);
+      return {
+        error: 'Error fetching resources',
+      };
     } finally {
       client.release();
     }
@@ -143,7 +149,10 @@ export function makeMcpPostgresServer({
           isError: false,
         };
       } catch (error) {
-        if (environment === 'development') console.error('Error fetching resources:', error);
+        console.error('Error fetching resources:', error);
+        return {
+          error: 'Error fetching resources',
+        };
       } finally {
         client
           .query('ROLLBACK')
