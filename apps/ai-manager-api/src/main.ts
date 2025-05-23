@@ -1,96 +1,11 @@
-import express from 'express';
-
-import { Shared as SharedDomainBackend } from '@ableai/product-domain/backend';
-import { Utils as UtilsBackend } from '@backend';
+import router, { globalPrefix } from './routes';
+import { makeExpressApp } from './core';
 import { env } from './config/env.config';
 
-const {
-  Infra: {
-    Drizzle: {
-      Mocks: { users },
-      Utils: { createDrizzleExpressCrudRouter, createDrizzlePostgresDbConnection, runMigrations },
-    },
-  },
-} = SharedDomainBackend;
+const { HOST: host, PORT: port } = env;
 
-const { createMigrationsPath } = UtilsBackend;
+const app = makeExpressApp(router);
 
-// Db connection config
-
-const gigDb = createDrizzlePostgresDbConnection({
-  connectionString: env.GIG_DB_URL,
+app.listen(Number(port), host, () => {
+  console.log(`::: [ Auth-API ready 🚀 ] http://${host}:${port}${globalPrefix}`);
 });
-
-const privateGigDb = createDrizzlePostgresDbConnection({
-  connectionString: env.PRIVATE_GIG_DB_URL,
-});
-
-const gigMigrationsPath = createMigrationsPath({
-  domainContext: 'shared',
-  framework: 'drizzle',
-  finalPathPattern: 'gig-migrations',
-  validateExists: true,
-});
-
-const privateGigMigrationsPath = createMigrationsPath({
-  domainContext: 'shared',
-  framework: 'drizzle',
-  finalPathPattern: 'private-gig-migrations',
-  validateExists: true,
-});
-
-// Api config
-
-const globalPrefix = 'api/ai-manager/v1';
-
-const host = process.env.HOST ?? 'localhost';
-
-const port = process.env.PORT ? Number(process.env.PORT) : 3001;
-
-const app = express();
-
-app.use(express.json());
-
-// Routers config
-
-createDrizzleExpressCrudRouter({
-  app,
-  db: gigDb,
-  table: users,
-  prefix: `/${globalPrefix}/gig/users`,
-});
-
-createDrizzleExpressCrudRouter({
-  app,
-  db: privateGigDb,
-  table: users,
-  prefix: `/${globalPrefix}/private-gig/users`,
-});
-
-app.get('/' + globalPrefix, (req, res) => {
-  res.send({ message: 'Hello Ai-Manager-API' });
-});
-
-// API startup
-
-Promise.all([
-  runMigrations({
-    db: gigDb,
-    migrationsFolder: gigMigrationsPath,
-  }),
-  runMigrations({
-    db: privateGigDb,
-    migrationsFolder: privateGigMigrationsPath,
-  }),
-])
-  .catch(err => {
-    console.error('Error during startup:', err);
-    process.exit(1);
-  })
-  .then(() => {
-    app.listen(port, host, () => {
-      console.log(`[ ready ] http://${host}:${port}/${globalPrefix}`);
-    });
-  });
-
-export default app;
