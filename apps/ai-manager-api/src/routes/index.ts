@@ -6,7 +6,7 @@ import { McpServers } from '../dependency-injection';
 const {
   Infra: {
     MCP: {
-      Utils: { makeStatelessStreamableMcpServerRouter },
+      Routers: { makeStatelessStreamableMcpRouter },
     },
   },
 } = AiManager;
@@ -15,7 +15,7 @@ export const globalPrefix = '/api/ai-manager/v1';
 
 const apiV1 = Router();
 
-const gigDbRouter = makeStatelessStreamableMcpServerRouter({
+const gigDbRouter = makeStatelessStreamableMcpRouter({
   server: McpServers.gigDbMcpServer,
   suffix: '/gig-db/mcp',
 });

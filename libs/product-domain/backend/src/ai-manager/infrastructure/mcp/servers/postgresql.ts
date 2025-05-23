@@ -40,7 +40,15 @@ export function makeMcpPostgresServer({ poolConfig }: ServerConfig): ExtendedSer
     }
   );
 
-  const pool = new Pool(poolConfig);
+  const newPoolConfig: PoolConfig = {
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
+    maxUses: 7500,
+    ...poolConfig,
+  };
+
+  const pool = new Pool(newPoolConfig);
 
   server.closePool = async () => {
     await pool.end();
@@ -83,15 +91,15 @@ export function makeMcpPostgresServer({ poolConfig }: ServerConfig): ExtendedSer
 
     const tableName = pathComponents.pop();
 
-    if (schema !== SCHEMA_PATH) {
-      throw Errors.BadRequestError.create(
-        `Invalid schema path. Expected "${SCHEMA_PATH}", got "${schema}".`
-      );
-    }
-
     const client = await pool.connect();
 
     try {
+      if (schema !== SCHEMA_PATH) {
+        throw Errors.BadRequestError.create(
+          `Invalid schema path. Expected "${SCHEMA_PATH}", got "${schema}".`
+        );
+      }
+
       const result = await client.query(
         'SELECT column_name, data_type FROM information_schema.columns WHERE table_name = $1',
         [tableName]
