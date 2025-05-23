@@ -32,23 +32,12 @@ export const makeExpressApp = ({ appName, router, onClose = [] }: AppConfig): Ap
 
   const closeSignals = ['SIGTERM', 'SIGINT', 'SIGUSR2', 'SIGQUIT'];
 
-  let isClosing = false;
-
   closeSignals.forEach(s =>
     process.on(s, async () => {
-      if (isClosing) return;
-
-      isClosing = true;
-
-      try {
-        if (onClose.length > 0) {
-          await Promise.all(onClose.map(fn => fn()));
-        }
-      } catch (err) {
-        console.error(`An error occurred while shutting down '${appName ?? 'application'}':`, err);
+      if (onClose.length > 0) {
+        await Promise.allSettled(onClose.map(fn => fn()));
       }
-
-      console.log(`'${appName ?? 'application'}' shut down gracefully.`);
+      console.log(`'${appName ?? 'application'}' is shutting down...`);
 
       process.exit(0);
     })
