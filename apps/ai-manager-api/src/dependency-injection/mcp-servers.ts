@@ -10,9 +10,11 @@ const {
 } = AiManager;
 
 export const gigDbMcpServer = makeMcpPostgresServer({
-  connectionString: env.GIG_DB_URL,
+  poolConfig: { connectionString: env.GIG_DB_URL },
+  environment: env.NODE_ENV,
 });
 
 export const privateGigDbMcpServer = makeMcpPostgresServer({
-  connectionString: env.PRIVATE_GIG_DB_URL,
+  poolConfig: { connectionString: env.PRIVATE_GIG_DB_URL },
+  environment: env.NODE_ENV,
 });

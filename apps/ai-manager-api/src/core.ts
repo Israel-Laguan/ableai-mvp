@@ -2,7 +2,13 @@ import cors from 'cors';
 import helmet from 'helmet';
 import express, { Application, Router } from 'express';
 
-export const makeExpressApp = (routes: Router): Application => {
+interface AppConfig {
+  router: Router;
+  appName?: string;
+  onClose?: (() => Promise<void>)[];
+}
+
+export const makeExpressApp = ({ appName, router, onClose = [] }: AppConfig): Application => {
   const app = express();
 
   app.use(helmet());
@@ -12,7 +18,7 @@ export const makeExpressApp = (routes: Router): Application => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
-  app.use(routes);
+  app.use(router);
 
   process.on('unhandledRejection', error => {
     console.error(error);
@@ -25,9 +31,25 @@ export const makeExpressApp = (routes: Router): Application => {
   });
 
   const closeSignals = ['SIGTERM', 'SIGINT', 'SIGUSR2', 'SIGQUIT'];
+
+  let isClosing = false;
+
   closeSignals.forEach(s =>
     process.on(s, async () => {
-      // TODO: Here close client como dbs
+      if (isClosing) return;
+
+      isClosing = true;
+
+      try {
+        if (onClose.length > 0) {
+          await Promise.all(onClose.map(fn => fn()));
+        }
+      } catch (err) {
+        console.error(`An error occurred while shutting down '${appName ?? 'application'}':`, err);
+      }
+
+      console.log(`'${appName ?? 'application'}' shut down gracefully.`);
+
       process.exit(0);
     })
   );

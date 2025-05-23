@@ -7,6 +7,15 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { Pool, PoolConfig } from 'pg';
 
+interface ExtendedServer extends Server {
+  closePool?: () => Promise<void>;
+}
+
+interface ServerConfig {
+  poolConfig: PoolConfig;
+  environment?: string;
+}
+
 /**
  * Creates a Model Context Protocol (MCP) server for PostgreSQL.
  *
@@ -16,8 +25,11 @@ import { Pool, PoolConfig } from 'pg';
  * @param config - Configuration for the MCP PostgreSQL server.
  * @returns The configured MCP server.
  */
-export function makeMcpPostgresServer(config: PoolConfig): Server {
-  const server = new Server(
+export function makeMcpPostgresServer({
+  poolConfig,
+  environment = 'production',
+}: ServerConfig): ExtendedServer {
+  const server: ExtendedServer = new Server(
     {
       name: 'mcp-postgres-server',
       version: '0.1.0',
@@ -30,7 +42,11 @@ export function makeMcpPostgresServer(config: PoolConfig): Server {
     }
   );
 
-  const pool = new Pool(config);
+  const pool = new Pool(poolConfig);
+
+  server.closePool = async () => {
+    await pool.end();
+  };
 
   const resourceBaseUrl = pool.options.connectionString;
 
@@ -50,6 +66,8 @@ export function makeMcpPostgresServer(config: PoolConfig): Server {
           name: `"${row.table_name}" database schema`,
         })),
       };
+    } catch (error) {
+      if (environment === 'development') console.error('Error fetching resources:', error);
     } finally {
       client.release();
     }
@@ -85,6 +103,8 @@ export function makeMcpPostgresServer(config: PoolConfig): Server {
           },
         ],
       };
+    } catch (error) {
+      if (environment === 'development') console.error('Error fetching resources:', error);
     } finally {
       client.release();
     }
@@ -122,6 +142,8 @@ export function makeMcpPostgresServer(config: PoolConfig): Server {
           content: [{ type: 'text', text: JSON.stringify(result.rows, null, 2) }],
           isError: false,
         };
+      } catch (error) {
+        if (environment === 'development') console.error('Error fetching resources:', error);
       } finally {
         client
           .query('ROLLBACK')
