@@ -7,12 +7,12 @@ const appName = 'Ai-Manager-API';
 
 const { HOST: host, PORT: port } = env;
 
-const { gigDbMcpServer, privateGigDbMcpServer } = McpServers;
+const { gigDbMcpServer } = McpServers;
 
 const app = makeExpressApp({
   router,
   appName,
-  onClose: [gigDbMcpServer.closePool, privateGigDbMcpServer.closePool],
+  onClose: [gigDbMcpServer.closePool],
 });
 
 app.listen(Number(port), host, () => {
