@@ -6,6 +6,8 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']),
   GIG_DB_URL: z.string().min(1),
   ENV_JWT_SECRET: z.string().min(1),
+  AI_API_KEY: z.string(),
+  MCP_SERVER_URL: z.string().startsWith('http://'),
 });
 
 export const env = envSchema.parse(process.env);
