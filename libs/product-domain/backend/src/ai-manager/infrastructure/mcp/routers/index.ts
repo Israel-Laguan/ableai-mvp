@@ -1,1 +1,1 @@
-export * from './stateless-streamable-server-router';
+export * from './stateless-streamable-router';

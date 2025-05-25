@@ -4,6 +4,7 @@ import {
   ListResourcesRequestSchema,
   ListToolsRequestSchema,
   ReadResourceRequestSchema,
+  Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 import { Pool, PoolConfig } from 'pg';
 
@@ -76,6 +77,7 @@ export function makeMcpPostgresServer({ poolConfig }: ServerConfig): ExtendedSer
       console.error('Error fetching resources:', error);
       return {
         error: 'Error fetching resources',
+        isError: true,
       };
     } finally {
       client.release();
@@ -118,26 +120,28 @@ export function makeMcpPostgresServer({ poolConfig }: ServerConfig): ExtendedSer
       console.error('Error fetching resources:', error);
       return {
         error: 'Error fetching resources',
+        isError: true,
       };
     } finally {
       client.release();
     }
   });
 
+  const readOnlyQueryTollDefinition: Tool = {
+    name: 'query',
+    description: 'Run a read-only SQL query',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        sql: { type: 'string' },
+      },
+      required: ['sql'],
+    },
+  };
+
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
-      tools: [
-        {
-          name: 'query',
-          description: 'Run a read-only SQL query',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              sql: { type: 'string' },
-            },
-          },
-        },
-      ],
+      tools: [readOnlyQueryTollDefinition],
     };
   });
 
@@ -160,6 +164,7 @@ export function makeMcpPostgresServer({ poolConfig }: ServerConfig): ExtendedSer
         console.error('Error fetching resources:', error);
         return {
           error: 'Error fetching resources',
+          isError: true,
         };
       } finally {
         client
