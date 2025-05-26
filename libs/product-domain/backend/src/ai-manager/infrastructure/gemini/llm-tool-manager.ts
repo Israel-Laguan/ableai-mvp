@@ -68,16 +68,18 @@ export function makeLlmToolManagerService({
           toolResponsePart.functionResponse.response = { result: toolResult };
           return (await chat.sendMessage([toolResponsePart])).response.text();
         } catch (error) {
-          console.error(`Error executing the '${name}' tool: ${error.message}`);
+          const errorMessage = error instanceof Error ? error.message : String(error);
 
-          toolResponsePart.functionResponse.response = { error: error.message };
+          console.error(`Error executing the '${name}' tool: ${errorMessage}`);
+
+          toolResponsePart.functionResponse.response = { error: errorMessage };
           return (await chat.sendMessage([toolResponsePart])).response.text();
         }
       } else {
         return response1.text();
       }
     } catch (error) {
-      console.error('Error in LLM tool manager:', error.message);
+      console.error('Error in LLM tool manager:', error);
       return `Sorry, I couldn't complete your request at this time. Please try again later.`;
     }
   };

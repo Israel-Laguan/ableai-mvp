@@ -147,7 +147,7 @@ export function makeMcpPostgresServer({ poolConfig }: ServerConfig): ExtendedSer
 
   server.setRequestHandler(CallToolRequestSchema, async request => {
     if (request.params.name === 'query') {
-      const sql = request.params.arguments?.sql as string;
+      const sql = request.params.arguments?.['sql'] as string;
 
       const client = await pool.connect();
 
