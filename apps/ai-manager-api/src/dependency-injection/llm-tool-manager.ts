@@ -4,11 +4,11 @@ import { env } from '../config/env.config';
 
 const {
   Infra: {
-    Gemini: { Tools, createLlmToolManagerService },
+    Gemini: { Tools, makeLlmToolManagerService },
   },
 } = AiManager;
 
-export const llmService = createLlmToolManagerService({
+export const generateLlmResponse = makeLlmToolManagerService({
   llmClient: new GoogleGenerativeAI(env.AI_API_KEY),
   systemContext:
     'You are an assistant capable of helping with queries on a PostgreSQL database. Only read-only queries are allowed.',
