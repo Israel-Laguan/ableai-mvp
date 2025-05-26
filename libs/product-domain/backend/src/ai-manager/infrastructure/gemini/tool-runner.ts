@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
+import { Errors } from '@shared';
+
 import { JsonRpcRequest, JsonRpcResponse, McpExecutorConfig } from './types';
 
 /**
@@ -54,12 +56,11 @@ export async function executeMcpTool<ToolArgs = unknown, ToolOutput = unknown>({
           )}`
         : `MCP error: \n Connection error: ${error.message}`;
 
-      console.error(errorMessage);
-
-      throw new Error(errorMessage);
+      throw Errors.InternalServerError.create(errorMessage);
     } else {
-      console.error(`MCP error: ${error.message}`);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
+      throw Errors.InternalServerError.create(errorMessage);
     }
   }
 }

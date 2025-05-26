@@ -5,3 +5,4 @@ export * from './custom-error';
 export * from './already-exist';
 export * from './error-handler';
 export * from './not-found-resource';
+export * from './internal-server-error';
