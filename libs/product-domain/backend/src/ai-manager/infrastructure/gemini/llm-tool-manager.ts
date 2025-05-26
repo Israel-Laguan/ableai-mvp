@@ -78,7 +78,7 @@ export function makeLlmToolManagerService({
       }
     } catch (error) {
       console.error('Error in LLM tool manager:', error.message);
-      return `Error: ${error.message}`;
+      return `Sorry, I couldn't complete your request at this time. Please try again later.`;
     }
   };
 }
