@@ -97,21 +97,20 @@ npx nx run-many --target=build --all
 npx nx run-many --target=serve --all
 ```
 
-These are the available scripts to generate backend domain migrations using Drizzle Kit:
+### Generate a Drizzle migration
 
-- **Generate migration for gig**  
-
-Run:
+To generate a new migration for a specific context and database, use:
 
 ```sh
-    npx nx run product-domain/backend:generate-gig-migration
+npm run generate-migration -- <scope> <dbName> <migrationName> [--custom]
 ```
+- `<scope>`: The domain context (e.g., `ai-manager`)
+- `<dbName>`: The database/schema name (e.g., `main`)
+- `<migrationName>`: The migration name (valid file name)
+- `--custom`: (optional) If present, creates a custom/empty migration
 
-- **Generate migration for private_gig**
-
-Run:
-
+Example:
 ```sh
-    npx nx run product-domain/backend:generate-private-gig-migration
+npm run generate-migration -- ai-manager main add-user-table
 ```
 
