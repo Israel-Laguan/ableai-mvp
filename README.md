@@ -60,6 +60,7 @@ Contains reusable libraries and shared logic. Examples:
 
   Example structure for backend domain migrations: `libs/product-domain/backend/[context]/infrastructure/[framework]/migrations/`
 
+
 This organization promotes separation of responsibilities, scalability, and clarity in development.
 
 ## Deployment Workflow
@@ -110,20 +111,36 @@ npx nx run-many --target=build --all
 npx nx run-many --target=serve --all
 ```
 
-These are the available scripts to generate backend domain migrations using Drizzle Kit:
+### Generate a Drizzle migration
+
+
+To generate a new migration for a specific context and database, use:
 
 - **Generate migration for gig**
 
 Run:
 
 ```sh
-    npx nx run product-domain/backend:generate-gig-migration
+npm run generate-migration -- <scope> <dbName> <migrationName> [--custom]
 ```
 
-- **Generate migration for private_gig**
+- `<scope>`: The domain context (e.g., `auth`)
+- `<dbName>`: The database/schema name (e.g., `gig-db`)
+- `<migrationName>`: The migration name (must be a valid file name)
+- `--custom`: (Optional) If present, creates an empty migration file for custom SQL.
 
-Run:
+**Example:**
 
 ```sh
-    npx nx run product-domain/backend:generate-private-gig-migration
+npm run generate-migration -- auth gig-db add-user-table
 ```
+
+This will generate a new migration file, typically named with a timestamp prefix (e.g., 0001_add_user_table.ts), in the appropriate migration directory.
+
+**Migration System Structure**
+
+Our Drizzle migration system follows these organization rules:
+
+- **Schemas:** `libs/product-domain/backend/[context]/infrastructure/drizzle/schemas/[database]`. Schemas are organized by their specific domain context and associated database.
+- **Migrations:** All generated migration files are stored within the shared context at `libs/product-domain/backend/shared/infrastructure/drizzle/migrations/[database]`. They are organized solely by the database they apply to.
+

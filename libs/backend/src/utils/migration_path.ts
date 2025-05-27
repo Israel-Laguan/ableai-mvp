@@ -4,13 +4,6 @@ import { existsSync } from 'fs';
 
 interface MigrationPathConfig {
   /**
-   * Domain context for the migrations.
-   * This is typically the name of the domain or module.
-   * For example, 'sample-domain-context'.
-   */
-  domainContext: string;
-
-  /**
    * Framework being used for the migrations.
    * This is typically the name of the framework or library.
    * For example, 'drizzle'.
@@ -30,7 +23,6 @@ interface MigrationPathConfig {
 }
 
 const migrationPathConfigSchema = z.object({
-  domainContext: z.string(),
   framework: z.string(),
   finalPathPattern: z.string().optional(),
   validateExists: z.boolean().optional(),
@@ -40,15 +32,14 @@ const migrationPathConfigSchema = z.object({
  * Generates the absolute path to the migrations directory based on the provided configuration,
  * following the conventions of the project's architecture.
  *
- * @param config - The configuration object specifying environment, domain context, framework, and validation options.
+ * @param config - The configuration object specifying environment, database name, framework, and validation options.
  * @returns The resolved absolute path to the migrations directory.
  * @throws If `validateExists` is true and the migrations path does not exist, an error is thrown.
  *
  * This function creates the migration path according to the conventions of the project architecture.
  */
 export const createMigrationsPath = (config: MigrationPathConfig) => {
-  const { domainContext, framework, finalPathPattern, validateExists } =
-    migrationPathConfigSchema.parse(config);
+  const { framework, finalPathPattern, validateExists } = migrationPathConfigSchema.parse(config);
 
   const segments = [
     process.cwd(),
@@ -56,7 +47,7 @@ export const createMigrationsPath = (config: MigrationPathConfig) => {
     'product-domain',
     'backend',
     'src',
-    domainContext,
+    'shared',
     'infrastructure',
     framework,
     'migrations',

@@ -1,25 +1,12 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool, PoolOptions } from 'pg';
+import { Pool, PoolConfig } from 'pg';
 
 interface DrizzleVercelDbConnection {
-  connectionString: string;
-  environment: 'development' | 'production' | 'test';
+  poolConfig: PoolConfig;
 }
 
-export function createDrizzlePostgresDbConnection(config: DrizzleVercelDbConnection) {
-  const { connectionString } = config;
-
-  const poolOptions = {
-    connectionString,
-  } as PoolOptions;
-
-  if (config.environment !== 'development') {
-    poolOptions.ssl = {
-      rejectUnauthorized: false,
-    };
-  }
-
-  const client = new Pool(poolOptions);
+export function createDrizzlePostgresDbConnection({ poolConfig }: DrizzleVercelDbConnection) {
+  const client = new Pool(poolConfig);
 
   return drizzle(client);
 }

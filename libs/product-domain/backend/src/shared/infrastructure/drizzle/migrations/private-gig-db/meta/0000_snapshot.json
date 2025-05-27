@@ -1,11 +1,11 @@
 {
-  "id": "771db1a2-5a52-4ada-a868-b3ec790d0351",
+  "id": "4399587a-a8c5-411d-9b73-c4a985342d94",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.users": {
-      "name": "users",
+    "public.private_data_user": {
+      "name": "private_data_user",
       "schema": "",
       "columns": {
         "id": {
@@ -14,28 +14,49 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "text",
+        "full_name": {
+          "name": "full_name",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
         "email": {
           "name": "email",
-          "type": "text",
+          "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "users_email_unique": {
-          "name": "users_email_unique",
+        "private_data_user_email_unique": {
+          "name": "private_data_user_email_unique",
           "nullsNotDistinct": false,
           "columns": [
             "email"
+          ]
+        },
+        "private_data_user_full_name_unique": {
+          "name": "private_data_user_full_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "full_name"
           ]
         }
       },

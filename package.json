@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate-migration": "npx tsx  scripts/drizzle-migrations.ts"
   },
   "repository": {
     "type": "git",
