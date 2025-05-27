@@ -1,16 +1,72 @@
 {
-  "version": 2,
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "outputDirectory": "public",
+
   "builds": [
     {
-      "src": "apps/auth/src/main.ts",
-      "use": "@vercel/node"
+      "src": "api/ai-manager-api/main.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+        "memory": 1024,
+        "maxDuration": 30
+      }
+    },
+    {
+      "src": "api/auth-api/main.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+        "memory": 1024,
+        "maxDuration": 30
+      }
+    },
+    {
+      "src": "api/gig-api/main.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+        "memory": 1024,
+        "maxDuration": 30
+      }
+    },
+    {
+      "src": "api/payments-api/main.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "./libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/**/*",
+        "memory": 1024,
+        "maxDuration": 30
+      }
     }
   ],
+
   "routes": [
     {
-      "src": "/auth/(.*)",
-      "dest": "apps/auth/src/main.ts",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"]
+      "src": "/api/ai-manager-api/(.*)",
+      "dest": "/api/ai-manager-api/main.js",
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+    },
+    {
+      "src": "/api/auth-api/(.*)",
+      "dest": "/api/auth-api/main.js",
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+    },
+    {
+      "src": "/api/gig-api/(.*)",
+      "dest": "/api/gig-api/main.js",
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+    },
+    {
+      "src": "/api/payments-api/(.*)",
+      "dest": "/api/payments-api/main.js",
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public",
+      "methods": ["GET"]
     }
   ]
 }

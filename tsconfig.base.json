@@ -21,7 +21,8 @@
       ],
       "@ableai/product-domain/frontend": [
         "libs/product-domain/frontend/src/index.ts"
-      ]
+      ],
+      "@backend": ["libs/backend/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
