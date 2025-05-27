@@ -1,0 +1,9 @@
+@baseUrl = http://localhost:3002/api/ai-manager/v1
+
+Prompting Database,
+POST {{baseUrl}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "¿Cuantos registro tengo actualmente en mi base da datos?"
+}

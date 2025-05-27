@@ -10,6 +10,14 @@ The project uses multiple databases to ensure clear separation of responsibiliti
   <img src="./assets/readme/ableai-schema.png" alt="Project Schema" width="500"/>
 </div>
 
+**AI Assistant Database Query Flow**
+
+The project now includes a flow for handling database queries through an AI assistant that leverages the Model Context Protocols (MCPs) provided by our backend. As illustrated in the diagram above, the process works as follows: the user submits a prompt, which is received by the LLM (Large Language Model). If the LLM determines that a function call is required, it sends a request to the backend server. The server processes the request and returns the result to the LLM. The LLM then generates a response for the user, sends it back to the server, and finally, the server delivers the LLM's response to the user. This architecture enables seamless and intelligent interaction with the databases via natural language prompts, ensuring a robust and extensible integration between the AI assistant and backend services.
+
+<div align="center">
+  <img src="./assets/readme/ableai-ai-assistants-mcp-flow.jpeg" alt="Ai assistants flow" width="500"/>
+</div>
+
 ## Tech Stack
 
 - **Monorepo**: Nx
@@ -27,29 +35,29 @@ The project follows an architecture based on Nx monorepo, Clean Architecture and
 
 Contains the main applications of the system. Each application has its entry point in `src/`. Examples:
 
-* `apps/ai-manager-api/` — Handles interaction with AI service providers.
-* `apps/auth-api/` — Issues tokens, manages refresh tokens, and handles user information.
-* `apps/dashboard/` — Admin web application for system metrics and management.
-* `apps/gig-api/` — Manages business logic for gig-workers and employers.
-* `apps/payments-api/` — Handles integration with payment service providers.
-* `apps/web-app/` — Main user-facing web application.
-* `apps/socket-api/` — Manages real-time notifications and chat functionality.
+- `apps/ai-manager-api/` — Handles interaction with AI service providers.
+- `apps/auth-api/` — Issues tokens, manages refresh tokens, and handles user information.
+- `apps/dashboard/` — Admin web application for system metrics and management.
+- `apps/gig-api/` — Manages business logic for gig-workers and employers.
+- `apps/payments-api/` — Handles integration with payment service providers.
+- `apps/web-app/` — Main user-facing web application.
+- `apps/socket-api/` — Manages real-time notifications and chat functionality.
 
 ## `libs/`
 
 Contains reusable libraries and shared logic. Examples:
 
-* `libs/backend/` — Backend logic not related to the domain.
-* `libs/frontend/` — Frontend logic not related to the domain.
-* `libs/models/` — Shared data models.
-* `libs/product-domain/`
+- `libs/backend/` — Backend logic not related to the domain.
+- `libs/frontend/` — Frontend logic not related to the domain.
+- `libs/models/` — Shared data models.
+- `libs/product-domain/`
 
-    Contains the domain logic, separated into backend and frontend:
+  Contains the domain logic, separated into backend and frontend:
 
-    * `libs/product-domain/backend/` — Backend domain logic, including migrations organized by context and framework.
-    * `libs/product-domain/frontend/` — Frontend domain logic.
+  - `libs/product-domain/backend/` — Backend domain logic, including migrations organized by context and framework.
+  - `libs/product-domain/frontend/` — Frontend domain logic.
 
-    Example structure for backend domain migrations: `libs/product-domain/backend/[context]/infrastructure/[framework]/migrations/`
+  Example structure for backend domain migrations: `libs/product-domain/backend/[context]/infrastructure/[framework]/migrations/`
 
 This organization promotes separation of responsibilities, scalability, and clarity in development.
 
@@ -70,7 +78,9 @@ Below are some useful scripts for development and deployment:
 ```sh
 npx nx serve <app-name>
 ```
+
 Example:
+
 ```sh
 npx nx serve gig-api
 ```
@@ -80,7 +90,9 @@ npx nx serve gig-api
 ```sh
 npx nx build <app-name>
 ```
+
 Example:
+
 ```sh
 npx nx build gig-api
 ```
@@ -99,7 +111,7 @@ npx nx run-many --target=serve --all
 
 These are the available scripts to generate backend domain migrations using Drizzle Kit:
 
-- **Generate migration for gig**  
+- **Generate migration for gig**
 
 Run:
 
@@ -114,4 +126,3 @@ Run:
 ```sh
     npx nx run product-domain/backend:generate-private-gig-migration
 ```
-
