@@ -27,29 +27,27 @@ The project follows an architecture based on Nx monorepo, Clean Architecture and
 
 Contains the main applications of the system. Each application has its entry point in `src/`. Examples:
 
-* `apps/ai-manager-api/` — Handles interaction with AI service providers.
-* `apps/auth-api/` — Issues tokens, manages refresh tokens, and handles user information.
-* `apps/dashboard/` — Admin web application for system metrics and management.
-* `apps/gig-api/` — Manages business logic for gig-workers and employers.
-* `apps/payments-api/` — Handles integration with payment service providers.
-* `apps/web-app/` — Main user-facing web application.
-* `apps/socket-api/` — Manages real-time notifications and chat functionality.
+- `apps/ai-manager-api/` — Handles interaction with AI service providers.
+- `apps/auth-api/` — Issues tokens, manages refresh tokens, and handles user information.
+- `apps/dashboard/` — Admin web application for system metrics and management.
+- `apps/gig-api/` — Manages business logic for gig-workers and employers.
+- `apps/payments-api/` — Handles integration with payment service providers.
+- `apps/web-app/` — Main user-facing web application.
+- `apps/socket-api/` — Manages real-time notifications and chat functionality.
 
 ## `libs/`
 
 Contains reusable libraries and shared logic. Examples:
 
-* `libs/backend/` — Backend logic not related to the domain.
-* `libs/frontend/` — Frontend logic not related to the domain.
-* `libs/models/` — Shared data models.
-* `libs/product-domain/`
+- `libs/backend/` — Backend logic not related to the domain.
+- `libs/frontend/` — Frontend logic not related to the domain.
+- `libs/models/` — Shared data models.
+- `libs/product-domain/`
 
-    Contains the domain logic, separated into backend and frontend:
+  Contains the domain logic, separated into backend and frontend:
 
-    * `libs/product-domain/backend/` — Backend domain logic, including migrations organized by context and framework.
-    * `libs/product-domain/frontend/` — Frontend domain logic.
-
-    Example structure for backend domain migrations: `libs/product-domain/backend/[context]/infrastructure/[framework]/migrations/`
+  - `libs/product-domain/backend/` — Backend domain logic, including migrations organized by context and framework.
+  - `libs/product-domain/frontend/` — Frontend domain logic.
 
 This organization promotes separation of responsibilities, scalability, and clarity in development.
 
@@ -70,7 +68,9 @@ Below are some useful scripts for development and deployment:
 ```sh
 npx nx serve <app-name>
 ```
+
 Example:
+
 ```sh
 npx nx serve gig-api
 ```
@@ -80,7 +80,9 @@ npx nx serve gig-api
 ```sh
 npx nx build <app-name>
 ```
+
 Example:
+
 ```sh
 npx nx build gig-api
 ```
@@ -104,13 +106,23 @@ To generate a new migration for a specific context and database, use:
 ```sh
 npm run generate-migration -- <scope> <dbName> <migrationName> [--custom]
 ```
-- `<scope>`: The domain context (e.g., `ai-manager`)
-- `<dbName>`: The database/schema name (e.g., `main`)
-- `<migrationName>`: The migration name (valid file name)
-- `--custom`: (optional) If present, creates a custom/empty migration
 
-Example:
+- `<scope>`: The domain context (e.g., `auth`)
+- `<dbName>`: The database/schema name (e.g., `gig-db`)
+- `<migrationName>`: The migration name (must be a valid file name)
+- `--custom`: (Optional) If present, creates an empty migration file for custom SQL.
+
+**Example:**
+
 ```sh
-npm run generate-migration -- ai-manager main add-user-table
+npm run generate-migration -- auth gig-db add-user-table
 ```
 
+This will generate a new migration file, typically named with a timestamp prefix (e.g., 0001_add_user_table.ts), in the appropriate migration directory.
+
+**Migration System Structure**
+
+Our Drizzle migration system follows these organization rules:
+
+- **Schemas:** `libs/product-domain/backend/[context]/infrastructure/drizzle/schemas/[database]`. Schemas are organized by their specific domain context and associated database.
+- **Migrations:** All generated migration files are stored within the shared context at `libs/product-domain/backend/shared/infrastructure/drizzle/migrations/[database]`. They are organized solely by the database they apply to.

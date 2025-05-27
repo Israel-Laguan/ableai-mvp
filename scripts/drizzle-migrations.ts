@@ -32,7 +32,7 @@ if (!parsed.success) {
 
 // Build paths
 const schemaPath = `libs/product-domain/backend/src/${scope}/infrastructure/drizzle/schemas/${dbName}`;
-const outPath = `libs/product-domain/backend/src/${scope}/infrastructure/drizzle/migrations/${dbName}`;
+const outPath = `libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/${dbName}`;
 
 // Build drizzle-kit command
 let drizzleCmd = `npx drizzle-kit generate`;
