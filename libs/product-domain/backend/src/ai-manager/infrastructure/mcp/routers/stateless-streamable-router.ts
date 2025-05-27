@@ -8,10 +8,15 @@ interface RouterConfig {
   suffix: string;
 }
 
-export const makeStatelessStreamableMcpServerRouter = ({
-  server,
-  suffix,
-}: RouterConfig): Router => {
+/**
+ *
+ * @param param0 - Configuration object containing the server and suffix.
+ * @returns An Express router that handles incoming requests for the Model Context Protocol
+ * (MCP) server.
+ *
+ * JSON-RPC 2.0 is used for communication, and the router is stateless.
+ */
+export const makeStatelessStreamableMcpRouter = ({ server, suffix }: RouterConfig): Router => {
   const router = Router();
 
   router.post(suffix, async (req: Request, res: Response) => {

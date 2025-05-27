@@ -30,6 +30,8 @@ export default [
           ],
         },
       ],
+      '@typescript-eslint/consistent-type-definitions': 'off',
+      '@typescript-eslint/array-type': 'off',
     },
   },
   {
@@ -43,9 +45,5 @@ export default [
       '**/*.cjs',
       '**/*.mjs',
     ],
-    rules: {
-      '@typescript-eslint/consistent-type-definitions': 'off',
-      '@typescript-eslint/array-type': 'off',
-    },
   },
 ];
