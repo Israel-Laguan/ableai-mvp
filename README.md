@@ -19,6 +19,14 @@ The project uses multiple databases to ensure clear separation of responsibiliti
 - **Testing**: Jest
 - **Code Quality**: ESLint, Prettier
 
+## Deployment Workflow
+
+The project uses GitHub Actions for continuous integration. On every pull request, the workflow defined in `.github/workflows/ci.yml` is triggered. This workflow checks out the code and runs basic scripts to ensure the repository is ready for deployment. You can extend this workflow to include build, test, and deployment steps as needed for your environment.
+
+## Husky Integration
+
+Husky is integrated into this repository to manage Git hooks. It helps enforce code quality by running scripts such as linters or tests automatically before commits and pushes. This ensures that only code meeting the project's standards is committed to the repository.
+
 ## Project Structure
 
 The project follows an architecture based on Nx monorepo, Clean Architecture and Nano Services, organized as follows:
@@ -28,15 +36,6 @@ The project follows an architecture based on Nx monorepo, Clean Architecture and
 Contains the main applications of the system. Each application has its entry point in `src/`. Examples:
 
 - `apps/ai-manager-api/` — Handles interaction with AI service providers.
-
-**AI Assistant Database Query Flow**
-
-The project now includes a flow for handling database queries through an AI assistant that leverages the Model Context Protocols (MCPs) provided by our backend. As illustrated in the diagram above, the process works as follows: the user submits a prompt, which is received by the LLM (Large Language Model). If the LLM determines that a function call is required, it sends a request to the backend server. The server processes the request and returns the result to the LLM. The LLM then generates a response for the user, sends it back to the server, and finally, the server delivers the LLM's response to the user. This architecture enables seamless and intelligent interaction with the databases via natural language prompts, ensuring a robust and extensible integration between the AI assistant and backend services.
-
-<div align="center">
-  <img src="./assets/readme/ableai-ai-assistants-mcp-flow.jpeg" alt="Ai assistants flow" width="500"/>
-</div>
-
 - `apps/auth-api/` — Issues tokens, manages refresh tokens, and handles user information.
 - `apps/dashboard/` — Admin web application for system metrics and management.
 - `apps/gig-api/` — Manages business logic for gig-workers and employers.
@@ -58,18 +57,17 @@ Contains reusable libraries and shared logic. Examples:
   - `libs/product-domain/backend/` — Backend domain logic, including migrations organized by context and framework.
   - `libs/product-domain/frontend/` — Frontend domain logic.
 
-  Example structure for backend domain migrations: `libs/product-domain/backend/[context]/infrastructure/[framework]/migrations/`
+  Each context uses the following structure:
 
+  - `libs/product-domain/backend/[context]/application/` — Application layer: use cases, service orchestration, and application logic for the context.
+  - `libs/product-domain/backend/[context]/domain/` — Domain layer: core business logic, domain models, and domain services for the context.
+  - `libs/product-domain/backend/[context]/infrastructure/` — Infrastructure layer: database access, external service integrations, and technical implementations for the context.
+
+  This structure enforces a clear separation of concerns and aligns with Clean Architecture principles, making the codebase more maintainable and scalable.
+
+- `libs/shared` — library provides common utilities, constants, and error handling modules used across multiple applications and libraries.
 
 This organization promotes separation of responsibilities, scalability, and clarity in development.
-
-## Deployment Workflow
-
-The project uses GitHub Actions for continuous integration. On every pull request, the workflow defined in `.github/workflows/ci.yml` is triggered. This workflow checks out the code and runs basic scripts to ensure the repository is ready for deployment. You can extend this workflow to include build, test, and deployment steps as needed for your environment.
-
-## Husky Integration
-
-Husky is integrated into this repository to manage Git hooks. It helps enforce code quality by running scripts such as linters or tests automatically before commits and pushes. This ensures that only code meeting the project's standards is committed to the repository.
 
 ## Scripts
 
@@ -113,7 +111,6 @@ npx nx run-many --target=serve --all
 
 ### Generate a Drizzle migration
 
-
 To generate a new migration for a specific context and database, use:
 
 - **Generate migration for gig**
@@ -143,4 +140,3 @@ Our Drizzle migration system follows these organization rules:
 
 - **Schemas:** `libs/product-domain/backend/[context]/infrastructure/drizzle/schemas/[database]`. Schemas are organized by their specific domain context and associated database.
 - **Migrations:** All generated migration files are stored within the shared context at `libs/product-domain/backend/shared/infrastructure/drizzle/migrations/[database]`. They are organized solely by the database they apply to.
-
