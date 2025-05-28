@@ -1,11 +1,12 @@
 import express from 'express';
 
-import { Shared as SharedDomainBackend } from '@ableai/product-domain/backend';
-import { Shared as SharedBackend } from '@backend';
+import { Utils as UtilsBackend } from '@backend';
+import { Shared as SharedDomainBackend } from '@product-domain/backend';
+
 import { env } from './config/env.config';
 
 const {
-  Infrastructure: {
+  Infra: {
     Drizzle: {
       Mocks: { users },
       Utils: { createDrizzleExpressCrudRouter, createDrizzlePostgresDbConnection, runMigrations },
@@ -13,37 +14,23 @@ const {
   },
 } = SharedDomainBackend;
 
-const {
-  Utils: { createMigrationsPath },
-} = SharedBackend;
+const { createMigrationsPath } = UtilsBackend;
 
 // Db connection config
 
 const gigDb = createDrizzlePostgresDbConnection({
-  connectionString: env.GIG_DB_URL,
-});
-
-const privateGigDb = createDrizzlePostgresDbConnection({
-  connectionString: env.PRIVATE_GIG_DB_URL,
+  poolConfig: { connectionString: env.GIG_DB_URL },
 });
 
 const gigMigrationsPath = createMigrationsPath({
-  domainContext: 'shared',
   framework: 'drizzle',
-  finalPathPattern: 'gig-migrations',
-  validateExists: true,
-});
-
-const privateGigMigrationsPath = createMigrationsPath({
-  domainContext: 'shared',
-  framework: 'drizzle',
-  finalPathPattern: 'private-gig-migrations',
+  finalPathPattern: 'gig-db',
   validateExists: true,
 });
 
 // Api config
 
-const globalPrefix = 'api/gig-api/main';
+const globalPrefix = 'api/gig/v1';
 
 const host = process.env.HOST ?? 'localhost';
 
@@ -62,13 +49,6 @@ createDrizzleExpressCrudRouter({
   prefix: `/${globalPrefix}/gig/users`,
 });
 
-createDrizzleExpressCrudRouter({
-  app,
-  db: privateGigDb,
-  table: users,
-  prefix: `/${globalPrefix}/private-gig/users`,
-});
-
 app.get('/' + globalPrefix, (req, res) => {
   res.send({ message: 'Hello Gig-API' });
 });
@@ -79,10 +59,6 @@ Promise.all([
   runMigrations({
     db: gigDb,
     migrationsFolder: gigMigrationsPath,
-  }),
-  runMigrations({
-    db: privateGigDb,
-    migrationsFolder: privateGigMigrationsPath,
   }),
 ])
   .catch(err => {
