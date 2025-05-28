@@ -2,6 +2,14 @@
 
 The **AI Manager API** is a RESTful service designed to manage AI assistants and facilitate AI-powered interactions with a PostgreSQL database. It provides endpoints for streaming MCP (Model Context Protocol) requests and generating responses using large language models (LLMs) with read-only database access.
 
+**AI Assistant Database Query Flow**
+
+The project now includes a flow for handling database queries through an AI assistant that leverages the Model Context Protocols (MCPs) provided by our backend. As illustrated in the diagram above, the process works as follows: the user submits a prompt, which is received by the LLM (Large Language Model). If the LLM determines that a function call is required, it sends a request to the backend server. The server processes the request and returns the result to the LLM. The LLM then generates a response for the user, sends it back to the server, and finally, the server delivers the LLM's response to the user. This architecture enables seamless and intelligent interaction with the databases via natural language prompts, ensuring a robust and extensible integration between the AI assistant and backend services.
+
+<div align="center">
+  <img src="./assets/readme/ableai-ai-assistants-mcp-flow.jpeg" alt="Ai assistants flow" width="500"/>
+</div>
+
 # Functionality
 
 - Exposes REST endpoints for AI assistant interactions and MCP streaming.
