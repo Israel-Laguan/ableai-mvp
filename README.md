@@ -27,6 +27,48 @@ The project uses GitHub Actions for continuous integration. On every pull reques
 
 Husky is integrated into this repository to manage Git hooks. It helps enforce code quality by running scripts such as linters or tests automatically before commits and pushes. This ensures that only code meeting the project's standards is committed to the repository.
 
+## Project Structure
+
+The project follows an architecture based on Nx monorepo, Clean Architecture and Nano Services, organized as follows:
+
+## `apps/`
+
+Contains the main applications of the system. Each application has its entry point in `src/`. Examples:
+
+- `apps/ai-manager-api/` — Handles interaction with AI service providers.
+- `apps/auth-api/` — Issues tokens, manages refresh tokens, and handles user information.
+- `apps/dashboard/` — Admin web application for system metrics and management.
+- `apps/gig-api/` — Manages business logic for gig-workers and employers.
+- `apps/payments-api/` — Handles integration with payment service providers.
+- `apps/web-app/` — Main user-facing web application.
+- `apps/socket-api/` — Manages real-time notifications and chat functionality.
+
+## `libs/`
+
+Contains reusable libraries and shared logic. Examples:
+
+- `libs/backend/` — Backend logic not related to the domain.
+- `libs/frontend/` — Frontend logic not related to the domain.
+- `libs/models/` — Shared data models.
+- `libs/product-domain/`
+
+  Contains the domain logic, separated into backend and frontend:
+
+  - `libs/product-domain/backend/` — Backend domain logic, including migrations organized by context and framework.
+  - `libs/product-domain/frontend/` — Frontend domain logic.
+
+  Each context uses the following structure:
+
+  - `libs/product-domain/backend/[context]/application/` — Application layer: use cases, service orchestration, and application logic for the context.
+  - `libs/product-domain/backend/[context]/domain/` — Domain layer: core business logic, domain models, and domain services for the context.
+  - `libs/product-domain/backend/[context]/infrastructure/` — Infrastructure layer: database access, external service integrations, and technical implementations for the context.
+
+  This structure enforces a clear separation of concerns and aligns with Clean Architecture principles, making the codebase more maintainable and scalable.
+
+- `libs/shared` — library provides common utilities, constants, and error handling modules used across multiple applications and libraries.
+
+This organization promotes separation of responsibilities, scalability, and clarity in development.
+
 ## Scripts
 
 Below are some useful scripts for development and deployment:
@@ -69,7 +111,6 @@ npx nx run-many --target=serve --all
 
 ### Generate a Drizzle migration
 
-
 To generate a new migration for a specific context and database, use:
 
 - **Generate migration for gig**
@@ -99,21 +140,3 @@ Our Drizzle migration system follows these organization rules:
 
 - **Schemas:** `libs/product-domain/backend/[context]/infrastructure/drizzle/schemas/[database]`. Schemas are organized by their specific domain context and associated database.
 - **Migrations:** All generated migration files are stored within the shared context at `libs/product-domain/backend/shared/infrastructure/drizzle/migrations/[database]`. They are organized solely by the database they apply to.
-
----
-
-## Shared Library
-
-The `libs/shared` library provides common utilities, constants, and error handling modules used across multiple applications and libraries in the AbleAI monorepo. It is built with Nx and includes:
-
-- Reusable utility functions and modules
-- Common configuration and types
-- Centralized error handling and constants
-- Code that promotes DRY (Don't Repeat Yourself) principles across the codebase
-
-**Build:**
-```sh
-nx build shared
-```
-
-
