@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { Express } from '@backend';
 import { AiManager } from '@product-domain/backend';
 import { McpServers } from '../dependency-injection';
 import assistantsRouter from './assistants';
@@ -23,5 +24,6 @@ const gigDbRouter = makeStatelessStreamableMcpRouter({
 
 apiV1.use(globalPrefix, gigDbRouter);
 apiV1.use(globalPrefix, assistantsRouter);
+apiV1.use(globalPrefix, Express.Api.Health.router);
 
 export default apiV1;
