@@ -1,49 +1,21 @@
 import express from 'express';
 
 import { Shared as SharedDomainBackend } from '@product-domain/backend';
-import { Utils as UtilsBackend } from '@backend';
-import { env } from './config/env.config';
+import { Gig, PrivateGig } from './db';
+import router, { globalPrefix } from './routes';
+
+const { gigMigrationsPath, gigDb } = Gig;
+const { privateGigMigrationsPath, privateGigDb } = PrivateGig;
 
 const {
   Infra: {
     Drizzle: {
-      Mocks: { users },
-      Utils: { createDrizzleExpressCrudRouter, createDrizzlePostgresDbConnection, runMigrations },
+      Utils: { runMigrations },
     },
   },
 } = SharedDomainBackend;
 
-const { createMigrationsPath } = UtilsBackend;
-
-// Db connection config
-
-const gigDb = createDrizzlePostgresDbConnection({
-  poolConfig: {
-    connectionString: env.GIG_DB_URL,
-  },
-});
-
-const privateGigDb = createDrizzlePostgresDbConnection({
-  poolConfig: {
-    connectionString: env.PRIVATE_GIG_DB_URL,
-  },
-});
-
-const gigMigrationsPath = createMigrationsPath({
-  framework: 'drizzle',
-  finalPathPattern: 'gig-db',
-  validateExists: true,
-});
-
-const privateGigMigrationsPath = createMigrationsPath({
-  framework: 'drizzle',
-  finalPathPattern: 'private-gig-db',
-  validateExists: true,
-});
-
 // Api config
-
-const globalPrefix = 'api/auth/v1';
 
 const host = process.env.HOST ?? 'localhost';
 
@@ -55,23 +27,7 @@ app.use(express.json());
 
 // Routers config
 
-createDrizzleExpressCrudRouter({
-  app,
-  db: gigDb,
-  table: users,
-  prefix: `/${globalPrefix}/gig/users`,
-});
-
-createDrizzleExpressCrudRouter({
-  app,
-  db: privateGigDb,
-  table: users,
-  prefix: `/${globalPrefix}/private-gig/users`,
-});
-
-app.get('/' + globalPrefix, (req, res) => {
-  res.send({ message: 'Hello Auth-API' });
-});
+app.use(router);
 
 // API startup
 

@@ -6,7 +6,7 @@ export type WhereField = {
 };
 
 export type GetAllInput = {
-  sort?: 'asc' | 'desc';
+  sort?: string;
   where?: {
     fields?: Array<WhereField>;
   };

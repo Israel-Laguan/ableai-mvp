@@ -8,6 +8,13 @@
       "when": 1748360200289,
       "tag": "0000_add-private-users-table",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1748399124666,
+      "tag": "0001_add-phone-number",
+      "breakpoints": true
     }
   ]
 }

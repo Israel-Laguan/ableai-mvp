@@ -1,0 +1,12 @@
+import { IOmitBase, GetAllInput, PaginationResult } from '.';
+
+export type CreateEntityInput<E> = Omit<E, IOmitBase>;
+export type UpdateEntityInput<E> = Omit<Partial<E>, IOmitBase>;
+
+export interface ISQLBaseRepository<T> {
+  create(input: CreateEntityInput<T>): Promise<T[]>;
+  getAll(input?: GetAllInput): Promise<PaginationResult<T>>;
+  getById(id: string): Promise<T | null>;
+  updateById(id: string, input: UpdateEntityInput<T>): Promise<{ success: boolean }>;
+  deleteById(id: string | string[]): Promise<{ success: boolean }>;
+}

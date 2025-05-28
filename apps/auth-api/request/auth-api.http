@@ -1,59 +1,77 @@
-@baseUrl = http://localhost:3000/auth-api
+@baseUrl = http://localhost:3002/api/auth/v1
 
-### Root endpoint
+### ROOT Auth API
+
+### GET greeting
 GET {{baseUrl}}/
 
-### GET all users (gig)
-GET {{baseUrl}}/gig/users
+############################################################################
 
-### GET user by id (gig)
-GET {{baseUrl}}/gig/users/1
+### PRIVATE GIG/ private-data-user
 
-### CREATE user (gig)
-POST {{baseUrl}}/gig/users
-Content-Type: application/json
+### GET all
+GET {{baseUrl}}/private-gig/users?sort=asc:fullName
 
-{
-  "name": "Nuevo Usuario",
-  "email": "nuevo@ejemplo.com"
-}
-
-### UPDATE user (gig)
-PUT {{baseUrl}}/gig/users/1
-Content-Type: application/json
-
-{
-  "name": "Usuario Actualizado",
-  "email": "actualizado@ejemplo.com"
-}
-
-### DELETE user (gig)
-DELETE {{baseUrl}}/gig/users/1
-
-### GET all users (private-gig)
-GET {{baseUrl}}/private-gig/users
-
-### GET user by id (private-gig)
+### GET by id
 GET {{baseUrl}}/private-gig/users/1
 
-### CREATE user (private-gig)
+### CREATE
 POST {{baseUrl}}/private-gig/users
 Content-Type: application/json
 
 {
-  "name": "Privado Usuario",
-  "email": "privado@ejemplo.com"
+  "fullName": "Nuevo Usuario IV",
+  "email": "nuevoIV@ejemplo.com",
+  "phoneNumber": "+1234567890"
 }
 
-### UPDATE user (private-gig)
+### UPDATE by id
 PUT {{baseUrl}}/private-gig/users/1
 Content-Type: application/json
 
 {
-  "name": "Privado Actualizado",
-  "email": "privado_actualizado@ejemplo.com"
+  "fullName": "Usuario Actualizado II",
+  "email": "actualizado@ejemplo.com",
+  "phoneNumber": "+1234567891"
 }
 
-### DELETE user (private-gig)
+### DELETE by id
 DELETE {{baseUrl}}/private-gig/users/1
+
+############################################################################
+
+### GIG/ users
+
+### GET all
+GET {{baseUrl}}/gig/users
+
+### GET by id
+GET {{baseUrl}}/gig/users/1
+
+### CREATE
+POST {{baseUrl}}/gig/users
+Content-Type: application/json
+
+{
+  "password": "your_awesome_password",
+  "private_data_user_id": 1,
+  "enabled": true,
+  "role_id": "gig"
+}
+
+### UPDATE by id
+PUT {{baseUrl}}/gig/users/1
+Content-Type: application/json
+
+{
+  {
+  "password": "your_awesome_password",
+  "private_data_user_id": 1,
+  "enabled": true,
+  "role_id": "gig"
+}
+}
+
+### DELETE by id
+DELETE {{baseUrl}}/gig/users/1
 
