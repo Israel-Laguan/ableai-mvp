@@ -1,9 +1,9 @@
 import { eq } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/node-postgres';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { AnyPgTable, PgColumn } from 'drizzle-orm/pg-core';
 import * as express from 'express';
 
-type DbConnection = ReturnType<typeof drizzle>;
+type DbConnection = NodePgDatabase<Record<string, unknown>>;
 
 interface DrizzleExpressCrudRouterConfig {
   app: express.Express;
