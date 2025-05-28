@@ -31,16 +31,6 @@ The **Payments API** is a RESTful service for managing payment-related data in t
 
 # API Documentation
 
-All endpoints are prefixed with `/api/payments/v1`.
-
-- Endpoints for user and payment data are generated using Drizzle's CRUD router.
-- Example (users):
-  - `GET /api/payments/v1/gig/users` — List all users.
-  - `GET /api/payments/v1/gig/users/:id` — Get a user by ID.
-  - `POST /api/payments/v1/gig/users` — Create a new user.
-  - `PUT /api/payments/v1/gig/users/:id` — Update a user by ID.
-  - `DELETE /api/payments/v1/gig/users/:id` — Delete a user by ID.
-
 **Controller:**  
 All routes are handled by the Drizzle-generated CRUD router, which interacts with the `users` table and other payment-related tables.
 

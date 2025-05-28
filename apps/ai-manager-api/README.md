@@ -29,22 +29,6 @@ The **AI Manager API** is a RESTful service designed to manage AI assistants and
     npx nx serve ai-manager-api
    ```
 
-# API Documentation
-
-All endpoints are prefixed with `/api/ai-manager/v1`.
-
-## MCP Streaming
-- **Route:** `POST /api/ai-manager/v1/mcp`
-- **Description:** Streams MCP requests to the database using the configured MCP server.
-- **Controller:** Provided by `makeStatelessStreamableMcpRouter` from the domain backend.
-
-## Assistants
-- **Route:** `POST /api/ai-manager/v1/assistants`
-- **Description:** Generates an LLM-based response to a prompt, with read-only database access.
-- **Controller:** Uses `generateLlmResponse` from the dependency injection layer.
-- **Request Body:** `{ "prompt": "<your prompt>" }`
-- **Response:** LLM-generated answer, possibly including database query results.
-
 # Database Documentation
 
 - **Database:** PostgreSQL (connection via `GIG_DB_URL`)

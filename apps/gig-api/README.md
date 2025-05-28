@@ -30,14 +30,6 @@ The **Gig API** is a RESTful service for managing user data in the AbleAI platfo
 
 # API Documentation
 
-All endpoints are prefixed with `/api/gig/v1/gig/users`.
-
-- `GET /api/gig/v1/gig/users` — List all users.
-- `GET /api/gig/v1/gig/users/:id` — Get a user by ID.
-- `POST /api/gig/v1/gig/users` — Create a new user.
-- `PUT /api/gig/v1/gig/users/:id` — Update a user by ID.
-- `DELETE /api/gig/v1/gig/users/:id` — Delete a user by ID.
-
 **Controller:**  
 All routes are handled by the Drizzle-generated CRUD router, which interacts with the `users` table.
 
