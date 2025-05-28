@@ -28,6 +28,6 @@ export const privateDataUserRepository = makePrivateDataUserRepository(privateGi
 
 export const privateGigMigrationsPath = createMigrationsPath({
   framework: 'drizzle',
-  finalPathPattern: 'private-gig-migrations',
+  finalPathPattern: 'private-gig-db',
   validateExists: true,
 });

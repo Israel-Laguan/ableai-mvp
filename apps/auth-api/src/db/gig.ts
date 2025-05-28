@@ -28,6 +28,6 @@ export const userRepository = makeUserRepository(gigDb);
 
 export const gigMigrationsPath = createMigrationsPath({
   framework: 'drizzle',
-  finalPathPattern: 'gig-migrations',
+  finalPathPattern: 'gig-db',
   validateExists: true,
 });

@@ -20,8 +20,8 @@ POST {{baseUrl}}/private-gig/users
 Content-Type: application/json
 
 {
-  "fullName": "Nuevo Usuario III",
-  "email": "nuevoIII@ejemplo.com"
+  "fullName": "Nuevo Usuario I",
+  "email": "nuevoI@ejemplo.com"
 }
 
 ### UPDATE by id

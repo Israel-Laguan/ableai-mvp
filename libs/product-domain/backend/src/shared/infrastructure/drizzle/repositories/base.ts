@@ -118,15 +118,11 @@ export const makeDrizzleBaseRepository = <TSchema>({
     },
     deleteById: async (id: string | string[]) => {
       const ids = Array.isArray(id) ? id : [id];
-      console.log('Deleting IDs:', ids);
 
       const result = await em
         .delete(schema)
         .where(inArray((schema as unknown as Record<string, PgColumn>)['id'], ids))
         .returning();
-
-      console.log('Delete result:', result);
-
       return { success: result.length > 0 };
     },
   };
