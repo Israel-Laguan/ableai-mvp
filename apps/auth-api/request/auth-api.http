@@ -10,7 +10,7 @@ GET {{baseUrl}}/
 ### PRIVATE GIG/ private-data-user
 
 ### GET all
-GET {{baseUrl}}/private-gig/users?sort=desc:email
+GET {{baseUrl}}/private-gig/users?sort=asc:fullName
 
 ### GET by id
 GET {{baseUrl}}/private-gig/users/1
@@ -20,8 +20,9 @@ POST {{baseUrl}}/private-gig/users
 Content-Type: application/json
 
 {
-  "fullName": "Nuevo Usuario I",
-  "email": "nuevoI@ejemplo.com"
+  "fullName": "Nuevo Usuario IV",
+  "email": "nuevoIV@ejemplo.com",
+  "phoneNumber": "+1234567890"
 }
 
 ### UPDATE by id
@@ -30,7 +31,8 @@ Content-Type: application/json
 
 {
   "fullName": "Usuario Actualizado II",
-  "email": "actualizado@ejemplo.com"
+  "email": "actualizado@ejemplo.com",
+  "phoneNumber": "+1234567891"
 }
 
 ### DELETE by id
