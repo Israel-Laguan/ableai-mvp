@@ -5,7 +5,7 @@ import { env } from '../config/env.config';
 const {
   Infra: {
     Drizzle: {
-      Repositories: { makeUserRepository },
+      Repositories: { makeDrizzleUserRepository },
     },
   },
 } = Auth;
@@ -24,7 +24,7 @@ export const gigDb = createDrizzlePostgresDbConnection({
   poolConfig: { connectionString: env.GIG_DB_URL },
 });
 
-export const userRepository = makeUserRepository(gigDb);
+export const userRepository = makeDrizzleUserRepository({ db: gigDb });
 
 export const gigMigrationsPath = createMigrationsPath({
   framework: 'drizzle',

@@ -1,6 +1,14 @@
 import type { PrivateDataUser } from '@models/auth';
-import type { ISQLBaseRepository } from '@models/shared';
+import type { ISQLCustomRepository, ISQLRepositoryMaker } from '@models/shared';
 
-export type PrivateDataUserRepository = ISQLBaseRepository<PrivateDataUser> & {
+interface CustomMethods {
   getByEmail: (input: { email: string }) => Promise<PrivateDataUser | null>;
-};
+}
+
+export type PrivateDataUserRepository = ISQLCustomRepository<PrivateDataUser, CustomMethods>;
+
+export type PrivateDataUserRepositoryMaker<TDatabase> = ISQLRepositoryMaker<
+  TDatabase,
+  PrivateDataUser,
+  CustomMethods
+>;

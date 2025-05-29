@@ -1,8 +1,17 @@
 import type { User, Infra } from '@models/auth';
-import type { ISQLBaseRepository } from '@models/shared';
+import type { ISQLCustomRepository, ISQLRepositoryMaker } from '@models/shared';
 
-type UserRepositoryBase = ISQLBaseRepository<User>;
+type OmitBase = 'create';
 
-export interface UserRepository extends Omit<UserRepositoryBase, 'create'> {
+interface CustomMethods {
   create: (userInput: Infra.UserCreateInput) => Promise<User[]>;
 }
+
+export type UserRepository = ISQLCustomRepository<User, CustomMethods, OmitBase>;
+
+export type UserRepositoryMaker<TDatabase> = ISQLRepositoryMaker<
+  TDatabase,
+  User,
+  CustomMethods,
+  OmitBase
+>;

@@ -13,7 +13,7 @@ const {
 const {
   Infra: {
     Drizzle: {
-      Repositories: { makePrivateDataUserRepository },
+      Repositories: { makeDrizzlePrivateUserDataRepository },
     },
   },
 } = Auth;
@@ -24,7 +24,7 @@ export const privateGigDb = createDrizzlePostgresDbConnection({
   poolConfig: { connectionString: env.PRIVATE_GIG_DB_URL },
 });
 
-export const privateDataUserRepository = makePrivateDataUserRepository(privateGigDb);
+export const privateDataUserRepository = makeDrizzlePrivateUserDataRepository({ db: privateGigDb });
 
 export const privateGigMigrationsPath = createMigrationsPath({
   framework: 'drizzle',
