@@ -5,11 +5,11 @@ import { Infra } from '../../../../shared';
 import type { Repositories } from '../../../domain';
 import { privateDataUser } from '../schemas';
 
-export const makeDrizzlePrivateUserDataRepository = (
-  db: NodePgDatabase
-): Repositories.PrivateDataUserRepository => {
+export const makeDrizzlePrivateUserDataRepository: Repositories.PrivateDataUserRepositoryMaker<
+  NodePgDatabase
+> = ({ db }) => {
   const repository = Infra.Drizzle.Repositories.makeDrizzleBaseRepository<PrivateDataUser>({
-    em: db,
+    db,
     schema: privateDataUser,
   });
 
