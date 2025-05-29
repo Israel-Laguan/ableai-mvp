@@ -1,4 +1,4 @@
-import { PgColumn, PgTable } from 'drizzle-orm/pg-core';
+import { PgColumn } from 'drizzle-orm/pg-core';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq, and, SQL, desc, asc, count, inArray } from 'drizzle-orm';
 
@@ -9,25 +9,29 @@ import {
   PaginationResult,
   UpdateEntityInput,
 } from '@models/shared';
+import { Drizzle } from '../../../domain';
 
-interface Config {
-  em: NodePgDatabase;
-  schema: PgTable;
-}
+type ConfigWithJustSchema = Pick<Drizzle.Repositories.BaseRepositoryConfig, 'schema'>;
 
-export const makeDrizzleBaseRepository = <TSchema>({
-  em,
+type RepositoryConfigJustEm = Pick<Drizzle.Repositories.BaseRepositoryConfig, 'db'>;
+
+type BaseRepositoryConfig = Pick<Drizzle.Repositories.BaseRepositoryConfig, 'db' | 'schema'>;
+
+export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
   schema,
-}: Config): ISQLBaseRepository<TSchema> => {
-  return {
-    create: async function (input: CreateEntityInput<TSchema>): Promise<TSchema[]> {
-      const result = await em.insert(schema).values(input).returning();
+}: ConfigWithJustSchema): (({ db }: RepositoryConfigJustEm) => ISQLBaseRepository<TSchema>) => {
+  const repository = {
+    create: async function (
+      db: NodePgDatabase,
+      input: CreateEntityInput<TSchema>
+    ): Promise<TSchema[]> {
+      const result = await db.insert(schema).values(input).returning();
 
       return result as TSchema[];
     },
 
-    getAll: async (input?: GetAllInput): Promise<PaginationResult<TSchema>> => {
-      const query = em.select().from(schema);
+    getAll: async (db: NodePgDatabase, input?: GetAllInput): Promise<PaginationResult<TSchema>> => {
+      const query = db.select().from(schema);
       const conditions: SQL[] = [];
 
       if (input?.where?.fields && input.where.fields.length > 0) {
@@ -50,7 +54,7 @@ export const makeDrizzleBaseRepository = <TSchema>({
         }
       }
 
-      const countQuery = em.select({ count: count() }).from(schema);
+      const countQuery = db.select({ count: count() }).from(schema);
 
       if (conditions.length > 0) {
         countQuery.where(and(...conditions));
@@ -99,16 +103,16 @@ export const makeDrizzleBaseRepository = <TSchema>({
       };
     },
 
-    getById: async (id: string): Promise<TSchema | null> => {
-      const result = await em
+    getById: async (db: NodePgDatabase, id: string): Promise<TSchema | null> => {
+      const result = await db
         .select()
         .from(schema)
         .where(eq((schema as unknown as Record<string, PgColumn>)['id'], id));
       return (result[0] as TSchema) || null;
     },
 
-    updateById: async (id: string, entity: UpdateEntityInput<TSchema>) => {
-      const result = await em
+    updateById: async (db: NodePgDatabase, id: string, entity: UpdateEntityInput<TSchema>) => {
+      const result = await db
         .update(schema)
         .set(entity)
         .where(eq((schema as unknown as Record<string, PgColumn>)['id'], id))
@@ -116,14 +120,47 @@ export const makeDrizzleBaseRepository = <TSchema>({
 
       return { success: result.length > 0 };
     },
-    deleteById: async (id: string | string[]) => {
+
+    deleteById: async (db: NodePgDatabase, id: string | string[]) => {
       const ids = Array.isArray(id) ? id : [id];
 
-      const result = await em
+      const result = await db
         .delete(schema)
         .where(inArray((schema as unknown as Record<string, PgColumn>)['id'], ids))
         .returning();
       return { success: result.length > 0 };
     },
   };
+
+  return ({ db }): ISQLBaseRepository<TSchema> => {
+    return {
+      create: async function (input: CreateEntityInput<TSchema>): Promise<TSchema[]> {
+        return await repository.create(db, input);
+      },
+      getAll: async function (input?: GetAllInput): Promise<PaginationResult<TSchema>> {
+        return await repository.getAll(db, input);
+      },
+      getById: async function (id: string): Promise<TSchema | null> {
+        return await repository.getById(db, id);
+      },
+      updateById: async function (
+        id: string,
+        input: UpdateEntityInput<TSchema>
+      ): Promise<{ success: boolean }> {
+        return await repository.updateById(db, id, input);
+      },
+      deleteById: async function (id: string | string[]): Promise<{ success: boolean }> {
+        return await repository.deleteById(db, id);
+      },
+    };
+  };
+};
+
+export const makeDrizzleBaseRepository = <TSchema>({
+  db,
+  schema,
+}: BaseRepositoryConfig): ISQLBaseRepository<TSchema> => {
+  return makeDrizzleBaseRepositoryWithSettlesEm<TSchema>({ schema })({
+    db: db,
+  });
 };
