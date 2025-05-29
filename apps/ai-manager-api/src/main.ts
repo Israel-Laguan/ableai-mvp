@@ -1,7 +1,8 @@
+import { Express } from '@backend';
+
+import router from './routes';
 import { env } from './config/env.config';
-import { makeExpressApp } from './core';
 import { McpServers } from './dependency-injection';
-import router, { globalPrefix } from './routes';
 
 const appName = 'Ai-Manager-API';
 
@@ -9,9 +10,11 @@ const { HOST: host, PORT: port } = env;
 
 const { gigDbMcpServer } = McpServers;
 
-const app = makeExpressApp({
+const globalPrefix = '/api/ai-manager/v1';
+const app = Express.makeExpressApp({
   router,
   appName,
+  globalPrefix,
   onClose: [gigDbMcpServer.closePool],
 });
 
