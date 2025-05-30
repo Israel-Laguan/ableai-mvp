@@ -1,0 +1,6 @@
+@baseUrl = http://localhost:3004/api/payments/v1
+
+
+## Health
+GET {{baseUrl}}/health
+

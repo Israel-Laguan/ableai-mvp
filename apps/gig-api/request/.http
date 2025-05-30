@@ -1,0 +1,6 @@
+@baseUrl = http://localhost:3003/api/gig/v1
+
+
+## Health
+GET {{baseUrl}}/health
+
