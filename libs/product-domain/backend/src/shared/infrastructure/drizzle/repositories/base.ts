@@ -2,14 +2,14 @@ import { PgColumn } from 'drizzle-orm/pg-core';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq, and, SQL, desc, asc, count, inArray } from 'drizzle-orm';
 
-import {
+import type {
   CreateEntityInput,
   GetAllInput,
   ISQLBaseRepository,
   PaginationResult,
   UpdateEntityInput,
 } from '@models/shared';
-import { Drizzle } from '../../../domain';
+import type { Drizzle } from '../../../domain';
 
 type ConfigWithJustSchema = Pick<Drizzle.Repositories.BaseRepositoryConfig, 'schema'>;
 

@@ -1,8 +1,8 @@
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import type { User, Infra as ModelsAutInfra } from '@models/auth';
+import type { Repositories } from '../../../domain';
 import { Infra } from '../../../../shared';
-import { Repositories } from '../../../domain';
 import { users } from '../schemas';
 
 export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgDatabase> = ({

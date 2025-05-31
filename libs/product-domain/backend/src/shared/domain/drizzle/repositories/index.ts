@@ -1,11 +1,9 @@
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { PgTable } from 'drizzle-orm/pg-core';
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import type { PgTable } from 'drizzle-orm/pg-core';
 
-import { ISQLRepositoryMaker, SafeAny } from '@models/shared';
-
-export interface BaseRepositoryConfig {
+export interface BaseRepositoryConfig<Repository = unknown> {
   db: NodePgDatabase;
   schema: PgTable;
   repositoryName: string;
-  repositoryMaker: ISQLRepositoryMaker<NodePgDatabase, SafeAny, SafeAny>;
+  repositoryMaker: (...args: unknown[]) => Repository;
 }
