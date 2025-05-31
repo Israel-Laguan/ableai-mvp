@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express';
 
-import { PrivateGig } from '../db';
+import { Repositories } from '../dependency-injection';
 
-const { privateDataUserRepository } = PrivateGig;
+const { privateDataUserRepository } = Repositories;
 
 export const getPrivateDataUserById = async (req: Request, res: Response) => {
   try {

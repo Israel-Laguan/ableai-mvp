@@ -1,7 +1,7 @@
 import { Express } from '@backend';
 
 import { env } from './config/env.config';
-import { initDatabase } from './db';
+import { initDatabase, gigDb, privateGigDb } from './db';
 import router from './routes';
 
 const { HOST: host, PORT: port } = env;
@@ -18,8 +18,7 @@ initDatabase()
       router,
       appName,
       globalPrefix,
-      //TODO: Should close db ?
-      onClose: [],
+      onClose: [gigDb.$client.end, privateGigDb.$client.end],
     });
     app.listen(Number(port), host, () => {
       console.log(`::: [ ${appName} ready 🚀 ] http://${host}:${port}/${globalPrefix}`);

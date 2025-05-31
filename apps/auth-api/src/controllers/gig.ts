@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express';
 
-import { Gig } from '../db';
+import { Repositories } from '../dependency-injection';
 
-const { userRepository } = Gig;
+const { userRepository } = Repositories;
 
 export const getUserById = async (req: Request, res: Response) => {
   try {

@@ -1,9 +1,12 @@
 import { Router } from 'express';
 
-import { register } from '../../controllers';
+import { AuthController } from '../../controllers';
+import { AuthValidation } from '../../dependency-injection';
 
-const router = Router();
+const authRouter = Router();
 
-router.post(`/register`, register);
+// authRouter.post('/login', AuthValidation.validateBodyEmail, AuthController.auth);
 
-export default router;
+authRouter.post('/register', AuthValidation.validateRegisterUser, AuthController.register);
+
+export default authRouter;

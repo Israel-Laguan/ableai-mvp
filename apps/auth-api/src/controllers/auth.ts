@@ -1,22 +1,23 @@
 import { Request, Response } from 'express';
 
-import { registerService } from '../services';
-import { Errors } from '@shared';
+import { CONSTANTS } from '@shared';
 
-export const register = async (req: Request, res: Response) => {
-  const { email, password, fullName, phoneNumber } = req.body;
+import { Express } from '@backend';
+import { UseCases } from '../dependency-injection';
 
-  try {
-    const result = await registerService({
-      email,
-      password,
-      fullName,
-      phoneNumber: phoneNumber || null,
-    });
+const { HTTP_STATUS_CODE } = CONSTANTS;
 
-    return res.status(201).json({ success: result.success });
-  } catch (error) {
-    const { statusCode, message } = error as Errors.ObjectError;
-    return res.status(statusCode).json({ message });
-  }
-};
+const { tryCatchAndNext } = Express;
+
+// export const auth = tryCatchAndNext(async (req: Request, res: Response) => {
+//   const { email } = req.body;
+
+//   const token = await AuthUseCases.authorized({ email });
+//   res.json({ token });
+// });
+
+export const register = tryCatchAndNext(async (req: Request, res: Response) => {
+  await UseCases.registerUseCase(req.body);
+
+  res.status(HTTP_STATUS_CODE.CREATED).json();
+});
