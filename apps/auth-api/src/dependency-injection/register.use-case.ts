@@ -1,10 +1,13 @@
 import { Shared, Auth } from '@product-domain/backend';
-import { Gig, PrivateGig } from '../db';
+import { SharedDictionary } from '@models/shared';
 import { env } from '../config/env.config';
+import { Gig, PrivateGig } from '../db';
+import { sendEmailService } from './nodemailer';
 
 type PrivateDataUserRepository = Auth.Domain.Repositories.PrivateDataUserRepository;
 type UserRepository = Auth.Domain.Repositories.UserRepository;
-import { sendEmailService } from './nodemailer';
+
+const { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } = SharedDictionary;
 
 export const emailLinkService = Shared.Infra.Firebase.makeFirebaseEmailLinkService({
   appName: 'auth-api',
@@ -21,13 +24,13 @@ const runInTransaction = Shared.Infra.Drizzle.Repositories.makeDrizzleUnitOfWork
   PrivateDataUserRepository | UserRepository
 >([
   {
-    db: Gig.gigDb,
-    repositoryName: 'privateDataUserRepository',
+    db: PrivateGig.privateGigDb,
+    repositoryName: PRIVATE_USER_DATA_REPOSITORY,
     repositoryMaker: Auth.Infra.Drizzle.Repositories.makeDrizzlePrivateUserDataRepository,
   },
   {
-    db: PrivateGig.privateGigDb,
-    repositoryName: 'userRepository',
+    db: Gig.gigDb,
+    repositoryName: USER_REPOSITORY,
     repositoryMaker: Auth.Infra.Drizzle.Repositories.makeDrizzleUserRepository,
   },
 ]);

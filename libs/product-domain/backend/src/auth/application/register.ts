@@ -2,14 +2,20 @@ import * as bcrypt from 'bcrypt';
 
 import { Errors } from '@shared';
 import type { Infra as AuthInfra, DependencyInjection } from '@models/auth';
-import type { Transaction } from '@models/shared';
+import { type Transaction, SharedDictionary } from '@models/shared';
 import type { Repositories } from '../domain';
 
-const saltRounds = 10;
+type PrivateDataUserRepository = Repositories.PrivateDataUserRepository;
+
+type UserRepository = Repositories.UserRepository;
 
 interface RegisterErrorInputs {
   email?: string;
 }
+
+const saltRounds = 10;
+
+const { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } = SharedDictionary;
 
 const { throwError } = Errors.makeErrorRunner<RegisterErrorInputs>({
   'already-exist': ({ email }) =>
@@ -37,10 +43,6 @@ async function hashPassword(plainPassword: string) {
   }
 }
 
-type PrivateDataUserRepository = Repositories.PrivateDataUserRepository;
-
-type UserRepository = Repositories.UserRepository;
-
 export const makeRegisterUserUseCase = (config: {
   runInTransaction: Transaction.RunInTransaction<PrivateDataUserRepository | UserRepository>;
   emailLinkService: DependencyInjection.ThirdPartyEmailLinkServices;
@@ -50,10 +52,10 @@ export const makeRegisterUserUseCase = (config: {
   return async ({ email, password, fullName, phoneNumber = null }: AuthInfra.RegisterInput) => {
     const { success } = await runInTransaction(async repositoryManager => {
       const privateDataUserRepository = repositoryManager.getRepository(
-        'privateDataUserRepository'
+        PRIVATE_USER_DATA_REPOSITORY
       ) as PrivateDataUserRepository;
 
-      const userRepository = repositoryManager.getRepository('userRepository') as UserRepository;
+      const userRepository = repositoryManager.getRepository(USER_REPOSITORY) as UserRepository;
 
       const userExist = await privateDataUserRepository.getByEmail({ email });
 
