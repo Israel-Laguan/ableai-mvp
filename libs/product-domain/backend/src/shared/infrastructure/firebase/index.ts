@@ -95,7 +95,7 @@ export function makeFirebaseEmailLinkService({
 
     const sendVerificationEmailLink = async () => {
       try {
-        const link = await auth.generateSignInWithEmailLink(email, actionCodeSettings);
+        const link = await auth.generateEmailVerificationLink(email, actionCodeSettings);
         await sendEmailService({
           to: email,
           subject: 'Verify your email address',
