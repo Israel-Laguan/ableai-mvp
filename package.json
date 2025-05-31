@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "prepare": "husky",
-    "generate-migration": "npx tsx  scripts/drizzle-migrations.ts"
+    "generate-migration": "npx tsx  scripts/drizzle-migrations.ts",
+    "base64-encode": "npx tsx scripts/base64-encoder.ts"
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,7 @@
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20.0.0",
+    "@types/nodemailer": "^6.4.17",
     "@types/pg": "^8.15.1",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",
@@ -93,10 +95,10 @@
     "bcrypt": "^6.0.0",
     "drizzle-orm": "^0.43.1",
     "express": "^4.21.2",
-    "firebase": "^11.8.1",
     "firebase-admin": "^13.4.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.3",
     "pg": "^8.16.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
