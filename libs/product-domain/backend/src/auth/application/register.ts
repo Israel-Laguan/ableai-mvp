@@ -1,63 +1,63 @@
 import * as bcrypt from 'bcrypt';
 
 import { Errors } from '@shared';
-import { Infra as AuthInfra } from '@models/auth';
-import { Infra } from '../../shared';
-import { DependencyInjection, Repositories } from '../domain';
-
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import type { Infra as AuthInfra, DependencyInjection } from '@models/auth';
+import type { Transaction } from '@models/shared';
+import type { Repositories } from '../domain';
 
 const saltRounds = 10;
+
+interface RegisterErrorInputs {
+  email?: string;
+}
+
+const { throwError } = Errors.makeErrorRunner<RegisterErrorInputs>({
+  'already-exist': ({ email }) =>
+    Errors.AlreadyExistError.create(`The user ${email} already exist`, 'AUTH_REGISTER'),
+
+  'could-not-hash': () =>
+    Errors.InternalServerError.create('Could not hash the password.', 'AUTH_REGISTER'),
+
+  'private-data-user-creation-failed': () =>
+    Errors.InternalServerError.create(`Could not create the user private data.`, 'AUTH_REGISTER'),
+
+  'user-creation-failed': () =>
+    Errors.InternalServerError.create(
+      `Could not create the user in the repository.`,
+      'AUTH_REGISTER'
+    ),
+});
 
 async function hashPassword(plainPassword: string) {
   try {
     const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
     return hashedPassword;
   } catch {
-    throw Errors.InternalServerError.create('Could not hash the password.', 'AUTH_REGISTER');
+    return throwError('could-not-hash');
   }
 }
 
+type PrivateDataUserRepository = Repositories.PrivateDataUserRepository;
+
+type UserRepository = Repositories.UserRepository;
+
 export const makeRegisterUserUseCase = (config: {
-  privateDataUserRepository: {
-    db: NodePgDatabase;
-    repositoryMaker: Repositories.PrivateDataUserRepositoryMaker<NodePgDatabase>;
-  };
-  userRepository: {
-    db: NodePgDatabase;
-    repositoryMaker: Repositories.UserRepositoryMaker<NodePgDatabase>;
-  };
+  runInTransaction: Transaction.RunInTransaction<PrivateDataUserRepository | UserRepository>;
   emailLinkService: DependencyInjection.ThirdPartyEmailLinkServices;
 }) => {
-  const { privateDataUserRepository, userRepository, emailLinkService } = config;
-
-  const runInTransaction = Infra.Drizzle.Repositories.makeDrizzleUnitOfWork([
-    {
-      db: privateDataUserRepository.db,
-      repositoryName: 'privateDataUserRepository',
-      repositoryMaker: privateDataUserRepository.repositoryMaker,
-    },
-    {
-      db: userRepository.db,
-      repositoryName: 'userRepository',
-      repositoryMaker: userRepository.repositoryMaker,
-    },
-  ]);
+  const { runInTransaction, emailLinkService } = config;
 
   return async ({ email, password, fullName, phoneNumber = null }: AuthInfra.RegisterInput) => {
     const { success } = await runInTransaction(async repositoryManager => {
-      const privateDataUserRepository =
-        repositoryManager.getRepository<Repositories.PrivateDataUserRepository>(
-          'privateDataUserRepository'
-        );
-      const userRepository =
-        repositoryManager.getRepository<Repositories.UserRepository>('userRepository');
+      const privateDataUserRepository = repositoryManager.getRepository(
+        'privateDataUserRepository'
+      ) as PrivateDataUserRepository;
+
+      const userRepository = repositoryManager.getRepository('userRepository') as UserRepository;
 
       const userExist = await privateDataUserRepository.getByEmail({ email });
 
-      if (userExist) {
-        throw Errors.AlreadyExistError.create(`The user ${email} already exist`, 'AUTH_REGISTER');
-      }
+      if (userExist) throwError('already-exist', { email });
 
       const { sendVerificationEmailLink, rollbackThirdPartyEmailRegistration } =
         await emailLinkService({ email });
@@ -71,30 +71,20 @@ export const makeRegisterUserUseCase = (config: {
           phoneNumber,
         });
 
-        if (!privateDataUser || privateDataUser.length === 0) {
-          throw Errors.InternalServerError.create(`Could not create the user.`, 'AUTH_REGISTER');
-        }
+        if (!privateDataUser || privateDataUser.length === 0)
+          throwError('private-data-user-creation-failed');
 
         const user = await userRepository.create({
           password: hashedPassword,
           privateDataUserId: privateDataUser[0].id,
         });
 
-        if (!user) {
-          throw Errors.InternalServerError.create(
-            'Could not create the user in the repository.',
-            'AUTH_REGISTER'
-          );
-        }
+        if (!user) throwError('user-creation-failed');
 
         await sendVerificationEmailLink();
       } catch (error) {
         await rollbackThirdPartyEmailRegistration();
-        throw Errors.InternalServerError.create(
-          'An error occurred during user registration.',
-          'AUTH_REGISTER',
-          error
-        );
+        throw error;
       }
       return { success: true };
     });
