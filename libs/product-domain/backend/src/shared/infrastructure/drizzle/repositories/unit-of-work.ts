@@ -1,41 +1,67 @@
 import z from 'zod';
 
-import { ISQLCustomRepository, SafeAny } from '@models/shared';
+import type { Transaction } from '@models/shared';
 import { Errors } from '@shared';
 import { Drizzle } from '../../../domain';
 import { Schemas } from '../../zod';
 
-type TransactionRepositoryConfig = Pick<
-  Drizzle.Repositories.BaseRepositoryConfig,
+type TransactionRepositoryConfig<Repository> = Pick<
+  Drizzle.Repositories.BaseRepositoryConfig<Repository>,
   'db' | 'repositoryMaker' | 'repositoryName'
 >;
 
-type TransactionRepositoryStack = TransactionRepositoryConfig[];
+type RepositoryMap<Repositories> = Map<string, Repositories>;
 
-type AnyCustomRepository = ISQLCustomRepository<SafeAny, SafeAny>;
+const { throwError } = Errors.makeErrorRunner<Partial<TransactionRepositoryConfig<unknown>>>({
+  'invalid-repository-config': ({ db, repositoryMaker, repositoryName }) => {
+    const errorDetails = JSON.stringify({
+      db,
+      repositoryMaker,
+      repositoryName,
+    });
+    return Errors.InternalServerError.create(
+      `Invalid repository configuration:
+      ${errorDetails}`,
+      'DRIZZLE_TRANSACTION'
+    );
+  },
 
-type RepositoryMap = Map<string, AnyCustomRepository>;
+  'repository-not-found': ({ repositoryName }) =>
+    Errors.InternalServerError.create(
+      `Repository for schema ${repositoryName} not found`,
+      'DRIZZLE_TRANSACTION'
+    ),
 
-interface RepositoryManager {
-  getRepository: <Repository>(repositoryName: string) => Repository;
-}
+  'rollback-error': () =>
+    Errors.InternalServerError.create(
+      'Rollback Error: The rollback stack is empty.',
+      'DRIZZLE_TRANSACTION'
+    ),
+});
 
-function executeRollback(rollbackStack: (() => never)[], error?: unknown): never {
-  if (rollbackStack.length > 0) rollbackStack.forEach(rollback => rollback());
-  throw Errors.InternalServerError.create('Transaction failed', 'DRIZZLE_TRANSACTION', error);
-}
-
-function makeRepositoryManager(repositoryMap: RepositoryMap) {
-  const repositoryManager: RepositoryManager = {
-    getRepository: <Repository>(repositoryName: string): Repository => {
-      const repository = repositoryMap.get(repositoryName);
-      if (!repository) {
-        throw Errors.InternalServerError.create(
-          `Repository for schema ${repositoryName} not found`,
-          'DRIZZLE_TRANSACTION'
-        );
+function executeRollback(rollbackStack: (() => never)[]): void {
+  if (rollbackStack.length > 0) {
+    return rollbackStack.forEach(rollback => {
+      try {
+        rollback();
+      } catch {
+        return;
       }
-      return repository as Repository;
+    });
+  }
+  throwError('rollback-error');
+}
+
+function makeRepositoryManager<Repositories>(repositoryMap: RepositoryMap<Repositories>) {
+  const repositoryManager: Transaction.RepositoryManager<Repositories> = {
+    getRepository: (repositoryName: string): Repositories => {
+      const repository = repositoryMap.get(repositoryName);
+
+      if (!repository) {
+        throwError('repository-not-found', { repositoryName });
+      }
+
+      return repository as Repositories;
     },
   };
 
@@ -44,40 +70,38 @@ function makeRepositoryManager(repositoryMap: RepositoryMap) {
 
 const { NodePgDatabaseSchema } = Schemas;
 
-export function makeDrizzleUnitOfWork(
-  repositories: TransactionRepositoryStack
-): (
-  work: (repositoryManager: RepositoryManager) => Promise<{ success: boolean }>
-) => Promise<{ success: boolean }> {
-  repositories.forEach(({ db: em, repositoryMaker, repositoryName }) => {
+export function makeDrizzleUnitOfWork<Repositories>(
+  repositories: TransactionRepositoryConfig<Repositories>[]
+): Transaction.RunInTransaction<Repositories> {
+  repositories.forEach(({ db, repositoryMaker, repositoryName }) => {
     let success = false;
 
-    success = NodePgDatabaseSchema.safeParse(em).success;
+    success = NodePgDatabaseSchema.safeParse(db).success;
     success = z.function().safeParse(repositoryMaker).success;
     success = z.string().safeParse(repositoryName).success;
 
     if (!success) {
-      throw Errors.InternalServerError.create(
-        'Invalid repository configuration',
-        'DRIZZLE_TRANSACTION'
-      );
+      throwError('invalid-repository-config', {
+        db,
+        repositoryMaker,
+        repositoryName,
+      });
     }
   });
 
   const execute = async (
-    work: (repositoryManager: RepositoryManager) => Promise<{ success: boolean }>,
-    repositoryMap: RepositoryMap = new Map(),
+    work: Transaction.Work<Repositories>,
+    repositoryMap: RepositoryMap<Repositories> = new Map(),
     rollbackStack: (() => never)[] = [],
     stackIndex = 0
   ): Promise<{ success: boolean }> => {
     if (repositoryMap.size !== repositories.length) {
-      const { db: em, repositoryName, repositoryMaker } = repositories[stackIndex];
+      const { db, repositoryName, repositoryMaker } = repositories[stackIndex];
       try {
-        // Start a new transaction
-        return await em.transaction(async tx => {
+        return await db.transaction(async tx => {
           const repository = repositoryMaker({
             db: tx,
-          }) as AnyCustomRepository;
+          });
 
           repositoryMap.set(repositoryName, repository);
           rollbackStack.push(tx.rollback);
@@ -85,23 +109,18 @@ export function makeDrizzleUnitOfWork(
           return await execute(work, repositoryMap, rollbackStack, stackIndex + 1);
         });
       } catch (error) {
-        executeRollback(rollbackStack, error);
+        executeRollback(rollbackStack);
+        throw error;
       }
     }
 
     try {
       return await work(makeRepositoryManager(repositoryMap));
     } catch (error) {
-      executeRollback(rollbackStack, error);
+      executeRollback(rollbackStack);
+      throw error;
     }
   };
 
-  return (work: (repositoryManager: RepositoryManager) => Promise<{ success: boolean }>) =>
-    execute(work);
+  return work => execute(work);
 }
-
-/* displayName,
-avatarUrl,
-lastAppRole: WORKER | BUYER,
-lastViewBuyer,
-lastViewWorker */
