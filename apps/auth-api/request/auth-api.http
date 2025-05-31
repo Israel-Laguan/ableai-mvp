@@ -6,6 +6,19 @@
 GET {{baseUrl}}/
 
 ############################################################################
+### AUTH
+
+### POST Register
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "yur_full_name",
+  "email": "your_awesome_email@example.com",
+  "password": "your_awesome_password"
+}
+
+############################################################################
 
 ### PRIVATE GIG/ private-data-user
 
@@ -13,7 +26,10 @@ GET {{baseUrl}}/
 GET {{baseUrl}}/private-gig/users?sort=asc:fullName
 
 ### GET by id
-GET {{baseUrl}}/private-gig/users/1
+GET {{baseUrl}}/private-gig/users/id/5
+
+### GET by email
+GET {{baseUrl}}/private-gig/users/email?email=nuevoII@ejemplo.com
 
 ### CREATE
 POST {{baseUrl}}/private-gig/users
@@ -36,7 +52,7 @@ Content-Type: application/json
 }
 
 ### DELETE by id
-DELETE {{baseUrl}}/private-gig/users/1
+DELETE {{baseUrl}}/private-gig/users/20
 
 ############################################################################
 
@@ -73,5 +89,5 @@ Content-Type: application/json
 }
 
 ### DELETE by id
-DELETE {{baseUrl}}/gig/users/1
+DELETE {{baseUrl}}/gig/users/20
 

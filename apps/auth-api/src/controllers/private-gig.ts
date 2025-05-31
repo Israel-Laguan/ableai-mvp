@@ -58,3 +58,19 @@ export const deletePrivateDataUserById = async (req: Request, res: Response) => 
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+export const getUserByEmail = async (req: Request, res: Response) => {
+  try {
+    const response = await privateDataUserRepository.getByEmail({
+      email: req.query.email as string,
+    });
+    if (response) {
+      res.json(response);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching user by email:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

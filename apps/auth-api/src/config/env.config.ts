@@ -6,7 +6,10 @@ const envSchema = z.object({
   PRIVATE_GIG_DB_URL: z.string(),
   GOOGLE_APPLICATION_CREDENTIALS: z
     .string()
-    .transform(v => JSON.parse(v))
+    .transform(v => {
+      const decoded = Buffer.from(v, 'base64').toString('utf8');
+      return JSON.parse(decoded);
+    })
     .refine(v =>
       z
         .object({
@@ -19,6 +22,20 @@ const envSchema = z.object({
         .parse(v)
     ),
   REDIRECT_AFTER_REGISTER_URL: z.string().url(),
+  EMAIL_CREDENTIALS: z
+    .string()
+    .transform(v => {
+      const decoded = Buffer.from(v, 'base64').toString('utf8');
+      return JSON.parse(decoded);
+    })
+    .refine(v =>
+      z
+        .object({
+          user: z.string().email(),
+          pass: z.string(),
+        })
+        .parse(v)
+    ),
 });
 
 export const env = envSchema.parse(process.env);
