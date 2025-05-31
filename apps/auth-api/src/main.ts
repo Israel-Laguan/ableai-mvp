@@ -1,54 +1,27 @@
-import express from 'express';
+import { Express } from '@backend';
 
-import { Shared as SharedDomainBackend } from '@product-domain/backend';
-import { Gig, PrivateGig } from './db';
-import router, { globalPrefix } from './routes';
+import { env } from './config/env.config';
+import { initDatabase } from './db';
+import router from './routes';
 
-const { gigMigrationsPath, gigDb } = Gig;
-const { privateGigMigrationsPath, privateGigDb } = PrivateGig;
+const { HOST: host, PORT: port } = env;
 
-const {
-  Infra: {
-    Drizzle: {
-      Utils: { runMigrations },
-    },
-  },
-} = SharedDomainBackend;
-
-// Api config
-
-const host = process.env.HOST ?? 'localhost';
-
-const port = process.env.PORT ? Number(process.env.PORT) : 3002;
-
-const app = express();
-
-app.use(express.json());
-
-// Routers config
-
-app.use(router);
-
-// API startup
-
-Promise.all([
-  runMigrations({
-    db: gigDb,
-    migrationsFolder: gigMigrationsPath,
-  }),
-  runMigrations({
-    db: privateGigDb,
-    migrationsFolder: privateGigMigrationsPath,
-  }),
-])
+initDatabase()
   .catch(err => {
     console.error('Error during startup:', err);
     process.exit(1);
   })
   .then(() => {
-    app.listen(port, host, () => {
-      console.log(`[ ready ] http://${host}:${port}/${globalPrefix}`);
+    const appName = 'Auth-API';
+    const globalPrefix = '/api/auth/v1';
+    const app = Express.makeExpressApp({
+      router,
+      appName,
+      globalPrefix,
+      //TODO: Should close db ?
+      onClose: [],
+    });
+    app.listen(Number(port), host, () => {
+      console.log(`::: [ ${appName} ready 🚀 ] http://${host}:${port}/${globalPrefix}`);
     });
   });
-
-export default app;
