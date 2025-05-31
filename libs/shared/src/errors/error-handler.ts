@@ -31,3 +31,16 @@ export const ErrorHandler: ErrorHandler = {
     return InternalServerError.create(message, path);
   },
 };
+
+export function makeErrorRunner<TErrorInputs>(
+  errorStack: Record<string, (errorInputs: TErrorInputs) => Error>
+) {
+  return {
+    throwError: (errorCode: string, errorInputs?: TErrorInputs): never => {
+      throw (
+        errorStack[errorCode](errorInputs || ({} as TErrorInputs)) ||
+        InternalServerError.create(`Unknown error: ${errorCode}`, 'ERROR_HANDLER')
+      );
+    },
+  };
+}
