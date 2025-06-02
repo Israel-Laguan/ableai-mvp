@@ -13,15 +13,10 @@ type TransactionRepositoryConfig<Repository> = Pick<
 type RepositoryMap<Repositories> = Map<string, Repositories>;
 
 const { throwError } = Errors.makeErrorRunner<Partial<TransactionRepositoryConfig<unknown>>>({
-  'invalid-repository-config': ({ db, repositoryMaker, repositoryName }) => {
-    const errorDetails = JSON.stringify({
-      db,
-      repositoryMaker,
-      repositoryName,
-    });
+  'invalid-repository-config': ({ repositoryName }) => {
     return Errors.InternalServerError.create(
       `Invalid repository configuration:
-      ${errorDetails}`,
+      ${repositoryName ? `Repository name: ${repositoryName}` : 'No repository name provided'}`,
       'DRIZZLE_TRANSACTION'
     );
   },
@@ -74,16 +69,12 @@ export function makeDrizzleUnitOfWork<Repositories>(
   repositories: TransactionRepositoryConfig<Repositories>[]
 ): Transaction.RunInTransaction<Repositories> {
   repositories.forEach(({ db, repositoryMaker, repositoryName }) => {
-    let success = false;
+    const isValidDb = NodePgDatabaseSchema.safeParse(db).success;
+    const isValidRepositoryMaker = z.function().safeParse(repositoryMaker).success;
+    const isValidRepositoryName = z.string().safeParse(repositoryName).success;
 
-    success = NodePgDatabaseSchema.safeParse(db).success;
-    success = z.function().safeParse(repositoryMaker).success;
-    success = z.string().safeParse(repositoryName).success;
-
-    if (!success) {
+    if (!isValidDb || !isValidRepositoryMaker || !isValidRepositoryName) {
       throwError('invalid-repository-config', {
-        db,
-        repositoryMaker,
         repositoryName,
       });
     }
