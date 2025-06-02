@@ -1,5 +1,9 @@
 import z from 'zod';
 
+import { CONSTANTS } from '@shared';
+
+const { NODE_ENV } = CONSTANTS;
+
 const envSchema = z.object({
   EMAIL_CREDENTIALS: z
     .string()
@@ -40,7 +44,7 @@ const envSchema = z.object({
 
   HOST: z.string().default('localhost'),
 
-  NODE_ENV: z.enum(['development', 'production', 'test']),
+  NODE_ENV: z.enum(NODE_ENV).default(NODE_ENV[0]),
 
   PORT: z.string().default('3001'),
 
