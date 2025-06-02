@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 import { execSync } from 'child_process';
+import path from 'path';
 
 // Zod schema for CLI arguments
 const argSchema = z.object({
@@ -13,7 +14,7 @@ const argSchema = z.object({
 
 // Parse CLI args
 const args = process.argv.slice(2);
-if (args.length < 2) {
+if (args.length < 3) {
   console.error(
     'Usage: tsx scripts/drizzle-migrations.ts <scope> <dbName> <migrationName> [--custom]'
   );
@@ -33,6 +34,10 @@ if (!parsed.success) {
 // Build paths
 const schemaPath = `libs/product-domain/backend/src/${scope}/infrastructure/drizzle/schemas/${dbName}`;
 const outPath = `libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/${dbName}`;
+const baseTsConfigPath = path.resolve(process.cwd(), 'tsconfig.base.json');
+const envForDrizzleKit = {
+  TS_NODE_PROJECT: baseTsConfigPath,
+};
 
 // Build drizzle-kit command
 let drizzleCmd = `npx drizzle-kit generate`;
@@ -44,7 +49,10 @@ if (custom) {
 }
 
 try {
-  execSync(drizzleCmd, { stdio: 'inherit' });
+  execSync(drizzleCmd, {
+    stdio: 'inherit',
+    env: envForDrizzleKit,
+  });
   console.log('Migration created successfully.');
 } catch (err) {
   console.error('Error running drizzle-kit:', '\n', err);
