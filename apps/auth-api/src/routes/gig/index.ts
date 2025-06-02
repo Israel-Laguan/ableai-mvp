@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { Gig } from '../../controllers';
+import { GigController } from '../../controllers';
 
-const { getUserById, getUsers, createUser, updateUserById, deleteUserById } = Gig;
+const { getUserById, getUsers, createUser, updateUserById, deleteUserById } = GigController;
 
 const router = Router();
 

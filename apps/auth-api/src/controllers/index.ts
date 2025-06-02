@@ -1,3 +1,3 @@
 export * as AuthController from './auth';
-export * as Gig from './gig';
-export * as PrivateGig from './private-gig';
+export * as GigController from './gig';
+export * as PrivateGigController from './private-gig';

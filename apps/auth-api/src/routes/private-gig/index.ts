@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PrivateGig } from '../../controllers';
+import { PrivateGigController } from '../../controllers';
 import { getUserByEmail } from '../../controllers/private-gig';
 
 const {
@@ -8,7 +8,7 @@ const {
   createPrivateDataUser,
   updatePrivateDataUserById,
   deletePrivateDataUserById,
-} = PrivateGig;
+} = PrivateGigController;
 
 const prefix = 'private-gig/users';
 
