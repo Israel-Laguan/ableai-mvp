@@ -8,13 +8,13 @@ const { throwError } = Errors.makeErrorRunner({
     Errors.InternalServerError.create(message, 'NODEMALIER_ERROR'),
 });
 
-export function makeNodemailerSendEmailService({
+export function makeNodemailerSendEmailLinkService({
   pass,
   user,
 }: {
   user: string;
   pass: string;
-}): DependencyInjection.SendEmailService {
+}): DependencyInjection.Services.SendEmailLinkService {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -23,13 +23,14 @@ export function makeNodemailerSendEmailService({
     },
   });
 
-  return async ({ to, subject, html }) => {
+  return async ({ to, link }) => {
     try {
       await transporter.sendMail({
         from: user,
         to,
-        subject,
-        html,
+        subject: 'Verify your email address',
+        html: `<p>Click the link below to verify your email address:</p>
+                 <a href="${link}">Verify Email</a>`,
       });
     } catch (error) {
       throwError('transporter-error', error instanceof Error ? error.message : 'Unknown error');

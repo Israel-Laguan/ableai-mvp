@@ -14,7 +14,7 @@ Content-Type: application/json
 
 {
   "fullName": "your name",
-  "email": "andresortiz9402@gmail.com",
+  "email": "example_email@email.com",
   "password": "your_awesome_password",
   "phoneNumber": "+1234567898"
 }
@@ -53,7 +53,7 @@ Content-Type: application/json
 }
 
 ### DELETE by id
-DELETE {{baseUrl}}/private-gig/users/26
+DELETE {{baseUrl}}/private-gig/users/27
 
 ############################################################################
 
@@ -90,5 +90,5 @@ Content-Type: application/json
 }
 
 ### DELETE by id
-DELETE {{baseUrl}}/gig/users/18
+DELETE {{baseUrl}}/gig/users/19
 
