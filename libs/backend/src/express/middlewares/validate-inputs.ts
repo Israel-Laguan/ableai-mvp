@@ -1,4 +1,6 @@
 import { ZodType } from 'zod';
+
+import { CONSTANTS } from '@shared';
 import { NextFunction, Request, Response } from 'express';
 import { ExpressHandlerMiddleware } from './types';
 
@@ -10,9 +12,11 @@ type ValidationInput = {
 
 type ValidateInputMiddleware = (input: ValidationInput) => ExpressHandlerMiddleware;
 
+const { HTTP_STATUS_CODE } = CONSTANTS;
+
 export const validateInputMiddleware: ValidateInputMiddleware =
   ({ bodySchema, paramsSchema, querySchema }) =>
-  (req: Request, _: Response, next: NextFunction) => {
+  (req: Request, res: Response, next: NextFunction) => {
     const errors = [];
 
     if (bodySchema) {
@@ -37,7 +41,15 @@ export const validateInputMiddleware: ValidateInputMiddleware =
     }
 
     if (errors.length) {
-      throw errors;
+      const errorMessages = errors.map(error => {
+        return error.issues.map(issue => {
+          return {
+            field: issue.path,
+            message: issue.message,
+          };
+        });
+      });
+      return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json(errorMessages);
     }
 
     return next();

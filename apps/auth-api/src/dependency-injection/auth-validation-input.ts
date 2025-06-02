@@ -7,8 +7,8 @@ const {
   Middlewares: { validateInputMiddleware },
 } = Express;
 
-export const validateBodyEmail = validateInputMiddleware({
-  bodySchema: ValidateEmailSchema,
+export const validateQueryEmail = validateInputMiddleware({
+  querySchema: ValidateEmailSchema,
 });
 
 export const validateRegisterUser = validateInputMiddleware({

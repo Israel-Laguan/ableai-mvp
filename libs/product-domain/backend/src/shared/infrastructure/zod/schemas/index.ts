@@ -10,5 +10,5 @@ export const ValidateIdSchema = z.object({
 });
 
 export const ValidateEmailSchema = z.object({
-  email: z.string().email(),
+  email: z.string(),
 });

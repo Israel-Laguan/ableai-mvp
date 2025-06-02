@@ -21,6 +21,6 @@ initDatabase()
       onClose: [gigDb.$client.end, privateGigDb.$client.end],
     });
     app.listen(Number(port), host, () => {
-      console.log(`::: [ ${appName} ready 🚀 ] http://${host}:${port}/${globalPrefix}`);
+      console.log(`::: [ ${appName} ready 🚀 ] http://${host}:${port}${globalPrefix}`);
     });
   });
