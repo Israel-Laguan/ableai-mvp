@@ -7,3 +7,5 @@ export const HTTP_STATUS_CODE = {
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
 };
+
+export const NODE_ENV = ['development', 'production', 'test'] as const;
