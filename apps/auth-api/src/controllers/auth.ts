@@ -9,8 +9,14 @@ const { HTTP_STATUS_CODE } = CONSTANTS;
 
 const { tryCatchAndNext } = Express;
 
+export const emailVerification = tryCatchAndNext(async (req: Request, res: Response) => {
+  await UseCases.verifyEmailUseCase(req.query.email as string);
+
+  res.status(HTTP_STATUS_CODE.OK).end();
+});
+
 export const register = tryCatchAndNext(async (req: Request, res: Response) => {
   await UseCases.registerUseCase(req.body);
 
-  res.status(HTTP_STATUS_CODE.CREATED).json();
+  res.status(HTTP_STATUS_CODE.CREATED).end();
 });

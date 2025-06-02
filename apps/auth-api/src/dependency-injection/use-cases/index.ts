@@ -1,1 +1,2 @@
-export * from './register.use-case';
+export * from './register';
+export * from './verify-email';

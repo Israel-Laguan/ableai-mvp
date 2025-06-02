@@ -5,8 +5,7 @@ import { AuthValidation } from '../../dependency-injection';
 
 const authRouter = Router();
 
-// authRouter.post('/login', AuthValidation.validateBodyEmail, AuthController.auth);
-
+authRouter.get('/email-verification', AuthController.emailVerification);
 authRouter.post('/register', AuthValidation.validateRegisterUser, AuthController.register);
 
 export default authRouter;

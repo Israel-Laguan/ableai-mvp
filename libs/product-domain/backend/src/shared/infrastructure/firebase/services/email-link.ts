@@ -10,17 +10,15 @@ interface FirebaseError {
 
 export function makeFirebaseEmailLinkService({
   auth,
+  createEmailToken,
   redirectAfterRegisterUrl,
-  sendEmailLinkService,
+  sendEmailLink,
 }: {
   auth: admin.auth.Auth;
+  createEmailToken: DependencyInjection.Services.CreateEmailTokenService;
   redirectAfterRegisterUrl: string;
-  sendEmailLinkService: DependencyInjection.Services.SendEmailLinkService;
+  sendEmailLink: DependencyInjection.Services.SendEmailLinkService;
 }): AuthDependencyInjection.ThirdPartyEmailLinkServices {
-  const actionCodeSettings: admin.auth.ActionCodeSettings = {
-    url: redirectAfterRegisterUrl,
-  };
-
   return async ({ email }: { email: string }) => {
     let user: admin.auth.UserRecord | null = null;
 
@@ -41,7 +39,6 @@ export function makeFirebaseEmailLinkService({
       try {
         await auth.deleteUser(user?.uid || '');
       } catch (error: unknown) {
-        console.log(error);
         throwError((error as FirebaseError)?.code, {
           email,
         });
@@ -50,10 +47,13 @@ export function makeFirebaseEmailLinkService({
 
     const sendVerificationEmailLink = async () => {
       try {
-        const link = await auth.generateEmailVerificationLink(email, actionCodeSettings);
-        await sendEmailLinkService({
+        const emailToken = createEmailToken({
+          email,
+        });
+
+        await sendEmailLink({
           to: email,
-          link,
+          link: redirectAfterRegisterUrl + `?email=${encodeURIComponent(emailToken)}`,
         });
       } catch (error: unknown) {
         throwError((error as FirebaseError)?.code, {

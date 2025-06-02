@@ -1,6 +1,7 @@
 import { Shared } from '@product-domain/backend';
 import { env } from '../../config/env.config';
-import { sendEmailLinkService } from './nodemailer';
+import { sendEmailLink } from './nodemailer';
+import { jwtService } from '.';
 
 const auth = Shared.Infra.Firebase.Modules.makeFirebaseAuthModule({
   appName: 'auth-api',
@@ -14,6 +15,11 @@ const auth = Shared.Infra.Firebase.Modules.makeFirebaseAuthModule({
 export const emailLinkService = Shared.Infra.Firebase.Services.makeFirebaseEmailLinkService({
   auth,
   redirectAfterRegisterUrl: env.REDIRECT_AFTER_REGISTER_URL,
-
-  sendEmailLinkService,
+  sendEmailLink,
+  createEmailToken: input => jwtService.createToken(input, '1 hour'),
 });
+
+export const thirdPartyEmailVerification =
+  Shared.Infra.Firebase.Services.makeFirebaseEmailVerificationService({
+    auth,
+  });
