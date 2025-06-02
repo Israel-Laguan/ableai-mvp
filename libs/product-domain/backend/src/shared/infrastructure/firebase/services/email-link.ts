@@ -19,7 +19,6 @@ export function makeFirebaseEmailLinkService({
 }): AuthDependencyInjection.ThirdPartyEmailLinkServices {
   const actionCodeSettings: admin.auth.ActionCodeSettings = {
     url: redirectAfterRegisterUrl,
-    handleCodeInApp: true,
   };
 
   return async ({ email }: { email: string }) => {
@@ -42,6 +41,7 @@ export function makeFirebaseEmailLinkService({
       try {
         await auth.deleteUser(user?.uid || '');
       } catch (error: unknown) {
+        console.log(error);
         throwError((error as FirebaseError)?.code, {
           email,
         });
@@ -56,7 +56,6 @@ export function makeFirebaseEmailLinkService({
           link,
         });
       } catch (error: unknown) {
-        await rollbackThirdPartyEmailRegistration();
         throwError((error as FirebaseError)?.code, {
           email,
         });

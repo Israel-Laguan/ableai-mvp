@@ -15,11 +15,8 @@ export const { throwError } = Errors.makeErrorRunner<FirebaseErrorInputs>({
   'auth/invalid-email': ({ email }) =>
     Errors.BadRequestError.create(`The email '${email}' is not valid.`, 'FIREBASE_REGISTER'),
 
-  'auth/user-not-found': () =>
-    Errors.NotFoundResourceError.create(
-      'No user found with the provided email address.',
-      'FIREBASE_REGISTER'
-    ),
+  'auth/user-not-found': ({ email }) =>
+    Errors.NotFoundResourceError.create(`User ${email} not found.`, 'FIREBASE_REGISTER'),
 
   'auth/unauthorized-continue-uri': ({ uri }) =>
     Errors.InternalServerError.create(
