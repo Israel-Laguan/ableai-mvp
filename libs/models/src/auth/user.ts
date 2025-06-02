@@ -7,9 +7,14 @@ export interface PrivateDataUser extends IBase {
 }
 
 export interface User extends IBase {
+  avatarUrl?: string | null;
   enabled: boolean;
-  roleId: number;
+  displayName?: string | null;
+  lastAppRole?: string | null;
+  lastViewBuyer?: string | null;
+  lastViewWorker?: string | null;
   privateDataUserId: number;
+  roleId: number;
 }
 
 export type UserWithPassword = User & { password: string };
