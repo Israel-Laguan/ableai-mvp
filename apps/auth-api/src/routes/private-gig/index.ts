@@ -14,7 +14,7 @@ const prefix = 'private-gig/users';
 
 const router = Router();
 
-router.get(`/${prefix}/id/:id`, getPrivateDataUserById);
+router.get(`/${prefix}/:id`, getPrivateDataUserById);
 router.get(`/${prefix}`, getPrivateDataUsers);
 router.get(`/${prefix}/email`, getUserByEmail);
 router.post(`/${prefix}`, createPrivateDataUser);

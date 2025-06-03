@@ -27,7 +27,7 @@ Content-Type: application/json
 GET {{baseUrl}}/private-gig/users?sort=asc:fullName
 
 ### GET by id
-GET {{baseUrl}}/private-gig/users/id/5
+GET {{baseUrl}}/private-gig/users/5
 
 ### GET by email
 GET {{baseUrl}}/private-gig/users/email?email=nuevoII@ejemplo.com
