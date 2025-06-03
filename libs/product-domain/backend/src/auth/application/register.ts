@@ -1,9 +1,11 @@
 import * as bcrypt from 'bcrypt';
 
-import { Errors } from '@shared';
-import type { Infra as AuthInfra, DependencyInjection } from '@models/auth';
-import { SharedDictionary } from '@models/shared';
+import type { Infra as AuthInfra } from '@models/auth';
 import type { Repositories } from '../domain';
+import type { Domain } from '../../shared';
+
+import { Errors } from '@shared';
+import { SharedDictionary } from '@models/shared';
 
 interface RegisterErrorInputs {
   email?: string;
@@ -41,24 +43,19 @@ async function hashPassword(plainPassword: string) {
 
 export const makeRegisterUserUseCase = (config: {
   runInTransaction: Repositories.RegisterTransaction;
-  emailLinkService: DependencyInjection.ThirdPartyEmailLinkServices;
+  sendEmailLink: Domain.DependencyInjection.Services.SendEmailLink;
 }) => {
-  const { runInTransaction, emailLinkService } = config;
+  const { runInTransaction, sendEmailLink } = config;
 
   return async ({ email, password, fullName, phoneNumber = null }: AuthInfra.RegisterInput) => {
-    const { success } = await runInTransaction(async repositoryManager => {
+    await runInTransaction(async repositoryManager => {
       const privateDataUserRepository = repositoryManager.getRepository(
         PRIVATE_USER_DATA_REPOSITORY
       );
 
-      const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
-
       const userExist = await privateDataUserRepository.getByEmail({ email });
 
       if (userExist) throwError('already-exist', { email });
-
-      const { sendVerificationEmailLink, rollbackThirdPartyEmailRegistration } =
-        await emailLinkService({ email });
 
       await Promise.all([
         hashPassword(password),
@@ -69,7 +66,6 @@ export const makeRegisterUserUseCase = (config: {
         }),
       ])
         .catch(async error => {
-          await rollbackThirdPartyEmailRegistration();
           throw error;
         })
         .then(async ([hashedPassword, [privateDataUser]]) => {
@@ -77,19 +73,17 @@ export const makeRegisterUserUseCase = (config: {
 
           if (!id) throwError('private-data-user-creation-failed');
 
+          const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
+
           const user = await userRepository.create({
             password: hashedPassword,
             privateDataUserId: id,
           });
 
           if (!user) throwError('user-creation-failed');
-
-          await sendVerificationEmailLink();
         });
-
-      return { success: true };
     });
 
-    return { success };
+    await sendEmailLink({ email });
   };
 };

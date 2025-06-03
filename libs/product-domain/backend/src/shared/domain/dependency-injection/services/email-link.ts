@@ -1,3 +1,5 @@
-export type SendEmailLinkService = ({ to, link }: { to: string; link: string }) => Promise<void>;
+import { Infra } from '@models/auth';
 
-export type CreateEmailTokenService = ({ email }: { email: string }) => string;
+export type SendEmailLink = (input: Pick<Infra.RegisterInput, 'email'>) => Promise<void>;
+
+export type CreateEmailToken = (input: Pick<Infra.RegisterInput, 'email'>) => string;

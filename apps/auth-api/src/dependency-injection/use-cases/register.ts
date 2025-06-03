@@ -1,7 +1,7 @@
 import { Shared, Auth } from '@product-domain/backend';
 import { SharedDictionary } from '@models/shared';
 import { gigDb, privateGigDb } from '../../db';
-import { emailLinkService } from '../services';
+import { sendEmailLink } from '../services';
 
 const { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } = SharedDictionary;
 
@@ -21,5 +21,5 @@ const runInTransaction: Auth.Domain.Repositories.RegisterTransaction =
 
 export const registerUseCase = Auth.App.makeRegisterUserUseCase({
   runInTransaction,
-  emailLinkService,
+  sendEmailLink,
 });

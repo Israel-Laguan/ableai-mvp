@@ -155,4 +155,4 @@ public
 postgres
 tmp
 .vscode
-GOOGLE_APPLICATION_CREDENTIALS.*.json
+credentials.*.json

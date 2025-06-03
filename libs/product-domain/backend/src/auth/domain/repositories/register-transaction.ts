@@ -6,5 +6,5 @@ export type RegisterTransaction = Transaction.RunInTransaction<
     PRIVATE_USER_DATA_REPOSITORY: PrivateDataUserRepository;
     USER_REPOSITORY: UserRepository;
   },
-  { success: boolean }
+  void
 >;

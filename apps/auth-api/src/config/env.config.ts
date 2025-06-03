@@ -14,6 +14,7 @@ const envSchema = z.object({
     .refine(v =>
       z
         .object({
+          service: z.string(),
           user: z.string().email(),
           pass: z.string(),
         })
