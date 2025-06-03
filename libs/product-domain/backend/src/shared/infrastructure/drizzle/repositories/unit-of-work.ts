@@ -5,14 +5,22 @@ import { Errors } from '@shared';
 import { Drizzle } from '../../../domain';
 import { Schemas } from '../../zod';
 
-type TransactionRepositoryConfig<Repository> = Pick<
-  Drizzle.Repositories.BaseRepositoryConfig<Repository>,
+type TransactionRepositoryConfig<
+  Repository extends object,
+  RepositoryName extends string | number | symbol = string
+> = Pick<
+  Drizzle.Repositories.BaseRepositoryConfig<Repository, RepositoryName>,
   'db' | 'repositoryMaker' | 'repositoryName'
 >;
 
-type RepositoryMap<Repositories> = Map<string, Repositories>;
+type RepositoryMap<Repositories extends Record<string, object>> = Map<
+  keyof Repositories,
+  Repositories[keyof Repositories]
+>;
 
-const { throwError } = Errors.makeErrorRunner<Partial<TransactionRepositoryConfig<unknown>>>({
+const { throwError } = Errors.makeErrorRunner<
+  Partial<TransactionRepositoryConfig<Record<string, unknown>>>
+>({
   'invalid-repository-config': ({ repositoryName }) => {
     return Errors.InternalServerError.create(
       `Invalid repository configuration:
@@ -47,16 +55,18 @@ function executeRollback(rollbackStack: (() => never)[]): void {
   throwError('rollback-error');
 }
 
-function makeRepositoryManager<Repositories>(repositoryMap: RepositoryMap<Repositories>) {
+function makeRepositoryManager<Repositories extends Record<string, object>>(
+  repositoryMap: RepositoryMap<Repositories>
+) {
   const repositoryManager: Transaction.RepositoryManager<Repositories> = {
-    getRepository: (repositoryName: string): Repositories => {
+    getRepository: <K extends keyof Repositories>(repositoryName: K): Repositories[K] => {
       const repository = repositoryMap.get(repositoryName);
 
       if (!repository) {
-        throwError('repository-not-found', { repositoryName });
+        throwError('repository-not-found', { repositoryName: String(repositoryName) });
       }
 
-      return repository as Repositories;
+      return repository as Repositories[K];
     },
   };
 
@@ -65,9 +75,9 @@ function makeRepositoryManager<Repositories>(repositoryMap: RepositoryMap<Reposi
 
 const { NodePgDatabaseSchema } = Schemas;
 
-export function makeDrizzleUnitOfWork<Repositories>(
-  repositories: TransactionRepositoryConfig<Repositories>[]
-): Transaction.RunInTransaction<Repositories> {
+export function makeDrizzleUnitOfWork<Repositories extends Record<string, object>, R = unknown>(
+  repositories: TransactionRepositoryConfig<Repositories[keyof Repositories], keyof Repositories>[]
+): Transaction.RunInTransaction<Repositories, R> {
   repositories.forEach(({ db, repositoryMaker, repositoryName }) => {
     const isValidDb = NodePgDatabaseSchema.safeParse(db).success;
     const isValidRepositoryMaker = z.function().safeParse(repositoryMaker).success;
@@ -75,17 +85,17 @@ export function makeDrizzleUnitOfWork<Repositories>(
 
     if (!isValidDb || !isValidRepositoryMaker || !isValidRepositoryName) {
       throwError('invalid-repository-config', {
-        repositoryName,
+        repositoryName: String(repositoryName),
       });
     }
   });
 
   const execute = async (
-    work: Transaction.Work<Repositories>,
+    work: Transaction.Work<Repositories, R>,
     repositoryMap: RepositoryMap<Repositories> = new Map(),
     rollbackStack: (() => never)[] = [],
     stackIndex = 0
-  ): Promise<{ success: boolean }> => {
+  ): Promise<R> => {
     if (repositoryMap.size !== repositories.length) {
       const { db, repositoryName, repositoryMaker } = repositories[stackIndex];
       try {
