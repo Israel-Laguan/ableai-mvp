@@ -60,30 +60,33 @@ export const makeRegisterUserUseCase = (config: {
       const { sendVerificationEmailLink, rollbackThirdPartyEmailRegistration } =
         await emailLinkService({ email });
 
-      try {
-        const hashedPassword = await hashPassword(password);
-
-        const privateDataUser = await privateDataUserRepository.create({
+      await Promise.all([
+        hashPassword(password),
+        privateDataUserRepository.create({
           fullName,
           email,
           phoneNumber,
+        }),
+      ])
+        .catch(async error => {
+          await rollbackThirdPartyEmailRegistration();
+          throw error;
+        })
+        .then(async ([hashedPassword, [privateDataUser]]) => {
+          const { id } = privateDataUser;
+
+          if (!id) throwError('private-data-user-creation-failed');
+
+          const user = await userRepository.create({
+            password: hashedPassword,
+            privateDataUserId: id,
+          });
+
+          if (!user) throwError('user-creation-failed');
+
+          await sendVerificationEmailLink();
         });
 
-        if (!privateDataUser || privateDataUser.length === 0)
-          throwError('private-data-user-creation-failed');
-
-        const user = await userRepository.create({
-          password: hashedPassword,
-          privateDataUserId: privateDataUser[0].id,
-        });
-
-        if (!user) throwError('user-creation-failed');
-
-        await sendVerificationEmailLink();
-      } catch (error) {
-        await rollbackThirdPartyEmailRegistration();
-        throw error;
-      }
       return { success: true };
     });
 
