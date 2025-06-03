@@ -15,7 +15,7 @@ type ConfigWithJustSchema = Pick<Drizzle.Repositories.BaseRepositoryConfig, 'sch
 
 type RepositoryConfigJustEm = Pick<Drizzle.Repositories.BaseRepositoryConfig, 'db'>;
 
-type BaseRepositoryConfig = Pick<Drizzle.Repositories.BaseRepositoryConfig, 'db' | 'schema'>;
+type BaseRepositoryConfig = Drizzle.Repositories.BaseRepositoryConfig;
 
 export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
   schema,

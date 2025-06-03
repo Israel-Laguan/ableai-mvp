@@ -9,7 +9,7 @@ type TransactionRepositoryConfig<
   Repository extends object,
   RepositoryName extends string | number | symbol = string
 > = Pick<
-  Drizzle.Repositories.BaseRepositoryConfig<Repository, RepositoryName>,
+  Drizzle.Repositories.TransactionBaseConfig<Repository, RepositoryName>,
   'db' | 'repositoryMaker' | 'repositoryName'
 >;
 
