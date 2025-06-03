@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
-import auth from './auth';
-import gig from './gig';
-import privateGig from './private-gig';
+import authRouter from './auth';
+import gigRouter from './gig';
+import privateGigRouter from './private-gig';
 
 const apiV1 = Router();
 
-apiV1.use(gig);
-apiV1.use(privateGig);
-apiV1.use(auth);
+apiV1.use(gigRouter);
+apiV1.use(privateGigRouter);
+apiV1.use(authRouter);
 
 export default apiV1;
