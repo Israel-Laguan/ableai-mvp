@@ -64,7 +64,9 @@ export const makeRegisterUserUseCase = (config: {
         PRIVATE_USER_DATA_REPOSITORY
       );
 
-      const userExist = await privateDataUserRepository.getByEmail({ email });
+      const userExist = await privateDataUserRepository
+        .getByEmail({ email })
+        .catch(() => throwError(USER_CREATION_FAILED));
 
       if (userExist) throwError(ALREADY_EXIST);
 
