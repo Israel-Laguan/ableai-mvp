@@ -21,7 +21,7 @@ export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgD
     ...repository,
 
     create: async (userInput: ModelsAutInfra.UserCreateInput) => {
-      const result = db
+      return await db
         .insert(users)
         .values({
           roleId: 1,
@@ -36,11 +36,12 @@ export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgD
           createdAt: users.createdAt,
           updatedAt: users.updatedAt,
         });
-
-      return result;
+    },
+    getByPrivateDataUserId: async (id: number) => {
+      return await db.select().from(users).where(eq(users.privateDataUserId, id)).limit(1);
     },
     updateByPrivateDataUserId: async (id: number, input: UpdateEntityInput<User>) => {
-      const result = db.update(users).set(input).where(eq(users.privateDataUserId, id)).returning({
+      return await db.update(users).set(input).where(eq(users.privateDataUserId, id)).returning({
         id: users.id,
         roleId: users.roleId,
         enabled: users.enabled,
@@ -48,8 +49,6 @@ export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgD
         createdAt: users.createdAt,
         updatedAt: users.updatedAt,
       });
-
-      return result;
     },
   };
 };
