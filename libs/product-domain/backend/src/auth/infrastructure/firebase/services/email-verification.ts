@@ -20,14 +20,18 @@ export function makeFirebaseEmailVerificationService({ auth }: { auth: FirebaseA
     await auth
       .getUserByEmail(email)
       .catch(async (error: unknown) => {
-        if ((error as FirebaseError)?.code === USER_NOT_FOUND) throwError(USER_NOT_FOUND);
-        else throwUnknownFirebaseError(error);
+        if ((error as FirebaseError)?.code === USER_NOT_FOUND) {
+          throwError(USER_NOT_FOUND);
+        } else {
+          throwUnknownFirebaseError(error);
+        }
       })
       .then(async user => {
-        if (user)
+        if (user) {
           await auth.updateUser(user.uid, { emailVerified: true }).catch((error: unknown) => {
             throwUnknownFirebaseError(error);
           });
+        }
       });
   };
 }

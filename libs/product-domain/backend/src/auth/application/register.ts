@@ -44,12 +44,9 @@ const { throwError } = Errors.makeErrorRunner<RegisterErrorInputs, RegisterStatu
 async function hashPassword(plainPassword: string) {
   const saltRounds = 10;
 
-  try {
-    const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
-    return hashedPassword;
-  } catch {
+  return await bcrypt.hash(plainPassword, saltRounds).catch(() => {
     return throwError(COULD_NOT_HASH);
-  }
+  });
 }
 
 export const makeRegisterUserUseCase = (config: {
@@ -68,7 +65,9 @@ export const makeRegisterUserUseCase = (config: {
         .getByEmail({ email })
         .catch(() => throwError(USER_CREATION_FAILED));
 
-      if (userExist) throwError(ALREADY_EXIST);
+      if (userExist) {
+        throwError(ALREADY_EXIST);
+      }
 
       await Promise.all([
         hashPassword(password),
@@ -84,7 +83,9 @@ export const makeRegisterUserUseCase = (config: {
         .then(async ([hashedPassword, [privateDataUser]]) => {
           const { id } = privateDataUser;
 
-          if (!id) throwError(PRIVATE_DATA_USER_CREATION_FAILED);
+          if (!id) {
+            throwError(PRIVATE_DATA_USER_CREATION_FAILED);
+          }
 
           const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
 
@@ -93,7 +94,9 @@ export const makeRegisterUserUseCase = (config: {
             privateDataUserId: id,
           });
 
-          if (!user) throwError(USER_CREATION_FAILED);
+          if (!user) {
+            throwError(USER_CREATION_FAILED);
+          }
         });
     });
 

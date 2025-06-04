@@ -23,7 +23,9 @@ export function MakeVerifyEmailUseCase(config: {
 
     const user = await privateDataUserRepository.getByEmail({ email });
 
-    if (!user) throwError(NOT_FOUND);
+    if (!user) {
+      throwError(NOT_FOUND);
+    }
 
     const result = await userRepository.updateByPrivateDataUserId((user as PrivateDataUser).id, {
       enabled: USER_STATUS.ENABLE,
