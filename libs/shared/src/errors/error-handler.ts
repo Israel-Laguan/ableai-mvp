@@ -38,8 +38,8 @@ export function makeErrorRunner<TErrorInputs>(
   return {
     throwError: (errorCode: string, errorInputs?: TErrorInputs): never => {
       throw (
-        errorStack[errorCode](errorInputs || ({} as TErrorInputs)) ||
-        InternalServerError.create(`Unknown error: ${errorCode}`, 'ERROR_HANDLER')
+        errorStack[errorCode]?.(errorInputs || ({} as TErrorInputs)) ||
+        InternalServerError.create(`Unknown error`, 'ERROR_HANDLER')
       );
     },
   };
