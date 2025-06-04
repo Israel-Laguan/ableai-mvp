@@ -9,4 +9,8 @@ export const HTTP_STATUS_CODE = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+export type HTTPStatusCode = (typeof HTTP_STATUS_CODE)[keyof typeof HTTP_STATUS_CODE];
+
 export const NODE_ENV = ['development', 'production', 'test'] as const;
+
+export const DEFAULT_ERROR_MESSAGE = 'An unexpected error occurred';

@@ -32,11 +32,11 @@ export const ErrorHandler: ErrorHandler = {
   },
 };
 
-export function makeErrorRunner<TErrorInputs>(
-  errorStack: Record<string, (errorInputs: TErrorInputs) => Error>
+export function makeErrorRunner<TErrorInputs, Keys extends string | number | symbol = string>(
+  errorStack: Record<Keys, (errorInputs: TErrorInputs) => Error>
 ) {
   return {
-    throwError: (errorCode: string, errorInputs?: TErrorInputs): never => {
+    throwError: (errorCode: Keys, errorInputs?: TErrorInputs): never => {
       throw (
         errorStack[errorCode]?.(errorInputs || ({} as TErrorInputs)) ||
         InternalServerError.create(`Unknown error`, 'ERROR_HANDLER')
