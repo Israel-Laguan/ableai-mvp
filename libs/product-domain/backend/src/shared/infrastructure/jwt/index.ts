@@ -1,18 +1,18 @@
 import * as jwt from 'jsonwebtoken';
 
+import type { VerifyToken } from '../../domain/services';
+
 import { Errors } from '@shared';
-import { Services } from '@models/shared';
+import { JWT_ERROR_CODES } from '../../domain/constants';
 
-type ExpiresIn = jwt.SignOptions['expiresIn'];
+const { TOKEN_EXPIRED } = JWT_ERROR_CODES;
 
-export type TokenVerificationOutput = string | jwt.JwtPayload;
-
-const { throwError } = Errors.makeErrorRunner({
-  'jwt expired': () => Errors.UnauthorizeError.create('Token has expired', 'JWT_SERVICES'),
+const { throwError } = Errors.makeErrorRunner<undefined, string>({
+  [TOKEN_EXPIRED]: () => Errors.UnauthorizeError.create('Token has expired', 'JWT_SERVICES'),
 });
 
 export const makeJwtService = (secret: string) => {
-  const verifyToken: Services.VerifyTokenService<TokenVerificationOutput> = (token: string) => {
+  const verifyToken: VerifyToken<string | jwt.JwtPayload> = (token: string) => {
     try {
       return jwt.verify(token, secret);
     } catch (error) {
@@ -21,7 +21,7 @@ export const makeJwtService = (secret: string) => {
   };
 
   return {
-    createToken: (payload: object, expiresIn: ExpiresIn = '1 day') => {
+    createToken: (payload: object, expiresIn: jwt.SignOptions['expiresIn'] = '1 day') => {
       return jwt.sign(payload, secret, {
         expiresIn,
       });

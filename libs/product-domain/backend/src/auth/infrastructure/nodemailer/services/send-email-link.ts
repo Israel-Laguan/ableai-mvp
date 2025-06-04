@@ -1,11 +1,13 @@
 import * as nodemailer from 'nodemailer';
 import { z } from 'zod';
 
-import { DependencyInjection } from '../../../domain';
-import { throwError } from '../errors';
+import type { Services } from '../../../domain';
+import { Infra, Domain } from '../../../../shared';
+
+const { TRANSPORTER_ERROR } = Domain.Constants.NODEMAILER_ERROR_CODES;
 
 interface NodemailerSendEmailLinkServiceConfig {
-  createEmailToken: DependencyInjection.Services.CreateEmailToken;
+  createEmailToken: Services.CreateEmailToken;
   from: string;
   redirectUrl: string;
   transporter: nodemailer.Transporter;
@@ -23,7 +25,7 @@ const configSchema = z.object({
 
 export function MakeNodemailerSendEmailLinkService(
   config: NodemailerSendEmailLinkServiceConfig
-): DependencyInjection.Services.SendEmailLink {
+): Services.SendEmailLink {
   const { createEmailToken, from, redirectUrl, transporter } = configSchema.parse(config);
 
   return async ({ email }) => {
@@ -42,7 +44,7 @@ export function MakeNodemailerSendEmailLinkService(
                  <a href="${link}">Verify Email</a>`,
       });
     } catch (error) {
-      throwError('transporter-error', error instanceof Error ? error.message : 'Unknown error');
+      Infra.Nodemailer.Errors.throwError(TRANSPORTER_ERROR, { error });
     }
   };
 }

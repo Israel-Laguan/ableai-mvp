@@ -9,17 +9,13 @@ import type {
   PaginationResult,
   UpdateEntityInput,
 } from '@models/shared';
-import type { Drizzle } from '../../../domain';
-
-type ConfigWithJustSchema = Pick<Drizzle.Repositories.BaseRepositoryConfig, 'schema'>;
-
-type RepositoryConfigJustEm = Pick<Drizzle.Repositories.BaseRepositoryConfig, 'db'>;
-
-type BaseRepositoryConfig = Drizzle.Repositories.BaseRepositoryConfig;
+import type { DrizzleBaseRepositoryConfig } from '../../../domain/interfaces';
 
 export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
   schema,
-}: ConfigWithJustSchema): (({ db }: RepositoryConfigJustEm) => ISQLBaseRepository<TSchema>) => {
+}: Pick<DrizzleBaseRepositoryConfig, 'schema'>): (({
+  db,
+}: Pick<DrizzleBaseRepositoryConfig, 'db'>) => ISQLBaseRepository<TSchema>) => {
   const repository = {
     create: async function (
       db: NodePgDatabase,
@@ -159,7 +155,7 @@ export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
 export const makeDrizzleBaseRepository = <TSchema>({
   db,
   schema,
-}: BaseRepositoryConfig): ISQLBaseRepository<TSchema> => {
+}: DrizzleBaseRepositoryConfig): ISQLBaseRepository<TSchema> => {
   return makeDrizzleBaseRepositoryWithSettlesEm<TSchema>({ schema })({
     db: db,
   });

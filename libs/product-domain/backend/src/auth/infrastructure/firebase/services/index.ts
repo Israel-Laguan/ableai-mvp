@@ -1,2 +1,2 @@
-export * from './email-link';
+export * from './register';
 export * from './email-verification';

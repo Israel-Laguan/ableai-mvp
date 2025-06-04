@@ -1,33 +1,44 @@
 import * as bcrypt from 'bcrypt';
 
 import type { Infra as AuthInfra } from '@models/auth';
-import type { Repositories } from '../domain';
-import type { Domain } from '../../shared';
+import type { RegisterStatusKeys } from '../domain/constants';
+import type { RegisterTransaction } from '../domain/repositories';
+import type { SendEmailLink } from '../domain/services';
 
 import { Errors } from '@shared';
-import { SharedDictionary } from '@models/shared';
+import { Constants } from '../domain';
 
 interface RegisterErrorInputs {
   email?: string;
 }
 
-const { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } = SharedDictionary;
+const {
+  AUTH_DICTIONARY: { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY },
+  REGISTER_STATUS_CODE: {
+    ALREADY_EXIST,
+    COULD_NOT_HASH,
+    PRIVATE_DATA_USER_CREATION_FAILED,
+    USER_CREATION_FAILED,
+  },
+  AUTH_ERROR_MESSAGES: {
+    ALREADY_EXIST_MESSAGE,
+    COULD_NOT_HASH_MESSAGE,
+    PRIVATE_DATA_USER_CREATION_FAILED_MESSAGE,
+    USER_CREATION_FAILED_MESSAGE,
+  },
+} = Constants;
 
-const { throwError } = Errors.makeErrorRunner<RegisterErrorInputs>({
-  'already-exist': ({ email }) =>
-    Errors.AlreadyExistError.create(`The user ${email} already exist`, 'AUTH_REGISTER'),
+const { throwError } = Errors.makeErrorRunner<RegisterErrorInputs, RegisterStatusKeys>({
+  [ALREADY_EXIST]: () => Errors.AlreadyExistError.create(ALREADY_EXIST_MESSAGE, 'AUTH_REGISTER'),
 
-  'could-not-hash': () =>
-    Errors.InternalServerError.create('Could not hash the password.', 'AUTH_REGISTER'),
+  [COULD_NOT_HASH]: () =>
+    Errors.InternalServerError.create(COULD_NOT_HASH_MESSAGE, 'AUTH_REGISTER'),
 
-  'private-data-user-creation-failed': () =>
-    Errors.InternalServerError.create(`Could not create the user private data.`, 'AUTH_REGISTER'),
+  [PRIVATE_DATA_USER_CREATION_FAILED]: () =>
+    Errors.InternalServerError.create(PRIVATE_DATA_USER_CREATION_FAILED_MESSAGE, 'AUTH_REGISTER'),
 
-  'user-creation-failed': () =>
-    Errors.InternalServerError.create(
-      `Could not create the user in the repository.`,
-      'AUTH_REGISTER'
-    ),
+  [USER_CREATION_FAILED]: () =>
+    Errors.InternalServerError.create(USER_CREATION_FAILED_MESSAGE, 'AUTH_REGISTER'),
 });
 
 async function hashPassword(plainPassword: string) {
@@ -37,13 +48,13 @@ async function hashPassword(plainPassword: string) {
     const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
     return hashedPassword;
   } catch {
-    return throwError('could-not-hash');
+    return throwError(COULD_NOT_HASH);
   }
 }
 
 export const makeRegisterUserUseCase = (config: {
-  runInTransaction: Repositories.RegisterTransaction;
-  sendEmailLink: Domain.DependencyInjection.Services.SendEmailLink;
+  runInTransaction: RegisterTransaction;
+  sendEmailLink: SendEmailLink;
 }) => {
   const { runInTransaction, sendEmailLink } = config;
 
@@ -55,7 +66,7 @@ export const makeRegisterUserUseCase = (config: {
 
       const userExist = await privateDataUserRepository.getByEmail({ email });
 
-      if (userExist) throwError('already-exist', { email });
+      if (userExist) throwError(ALREADY_EXIST);
 
       await Promise.all([
         hashPassword(password),
@@ -71,7 +82,7 @@ export const makeRegisterUserUseCase = (config: {
         .then(async ([hashedPassword, [privateDataUser]]) => {
           const { id } = privateDataUser;
 
-          if (!id) throwError('private-data-user-creation-failed');
+          if (!id) throwError(PRIVATE_DATA_USER_CREATION_FAILED);
 
           const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
 
@@ -80,7 +91,7 @@ export const makeRegisterUserUseCase = (config: {
             privateDataUserId: id,
           });
 
-          if (!user) throwError('user-creation-failed');
+          if (!user) throwError(USER_CREATION_FAILED);
         });
     });
 

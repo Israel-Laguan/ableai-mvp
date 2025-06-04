@@ -1,26 +1,26 @@
-import { Errors } from '@shared';
+import type { FirebaseErrorInputs } from '../../../domain/interfaces';
 
-interface FirebaseErrorInputs {
-  email?: string;
-  uri?: string;
-}
+import { Errors, Utils } from '@shared';
+import { FIREBASE_ERROR_CODES } from '../../../domain/constants';
+
+const { EMAIL_ALREADY_EXISTS, INVALID_EMAIL, UNAUTHORIZED_CONTINUE_URI, USER_NOT_FOUND } =
+  FIREBASE_ERROR_CODES;
+
+const { getCustomOrDefaultMessage } = Utils;
 
 export const { throwError } = Errors.makeErrorRunner<FirebaseErrorInputs>({
-  'auth/email-already-exists': ({ email }) =>
-    Errors.AlreadyExistError.create(
-      `The email '${email}' is already in use by another account.`,
-      'FIREBASE_REGISTER'
-    ),
+  [EMAIL_ALREADY_EXISTS]: ({ message }) =>
+    Errors.AlreadyExistError.create(getCustomOrDefaultMessage(message), 'FIREBASE_REGISTER'),
 
-  'auth/invalid-email': ({ email }) =>
-    Errors.BadRequestError.create(`The email '${email}' is not valid.`, 'FIREBASE_REGISTER'),
+  [INVALID_EMAIL]: ({ message }) =>
+    Errors.BadRequestError.create(getCustomOrDefaultMessage(message), 'FIREBASE_REGISTER'),
 
-  'auth/user-not-found': ({ email }) =>
-    Errors.NotFoundResourceError.create(`User ${email} not found.`, 'FIREBASE_REGISTER'),
-
-  'auth/unauthorized-continue-uri': ({ uri }) =>
+  [UNAUTHORIZED_CONTINUE_URI]: ({ uri }) =>
     Errors.InternalServerError.create(
       `The continue URL '${uri}' is not authorized.`,
       'FIREBASE_REGISTER'
     ),
+
+  [USER_NOT_FOUND]: ({ message }) =>
+    Errors.NotFoundResourceError.create(getCustomOrDefaultMessage(message), 'FIREBASE_REGISTER'),
 });

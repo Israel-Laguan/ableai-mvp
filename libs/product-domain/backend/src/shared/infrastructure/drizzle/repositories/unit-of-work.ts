@@ -1,15 +1,17 @@
 import z from 'zod';
 
 import type { Transaction } from '@models/shared';
+import type { DrizzleTransactionConfig } from '../../../domain/interfaces';
+
 import { Errors } from '@shared';
-import { Drizzle } from '../../../domain';
+import { DRIZZLE_ERROR_CODES } from '../../../domain/constants';
 import { Schemas } from '../../zod';
 
 type TransactionRepositoryConfig<
   Repository extends object,
   RepositoryName extends string | number | symbol = string
 > = Pick<
-  Drizzle.Repositories.TransactionBaseConfig<Repository, RepositoryName>,
+  DrizzleTransactionConfig<Repository, RepositoryName>,
   'db' | 'repositoryMaker' | 'repositoryName'
 >;
 
@@ -18,10 +20,12 @@ type RepositoryMap<Repositories extends Record<string, object>> = Map<
   Repositories[keyof Repositories]
 >;
 
+const { INVALID_CONFIG, REPOSITORY_NOT_FOUND, ROLLBACK_ERROR } = DRIZZLE_ERROR_CODES;
+
 const { throwError } = Errors.makeErrorRunner<
   Partial<TransactionRepositoryConfig<Record<string, unknown>>>
 >({
-  'invalid-repository-config': ({ repositoryName }) => {
+  [INVALID_CONFIG]: ({ repositoryName }) => {
     return Errors.InternalServerError.create(
       `Invalid repository configuration:
       ${repositoryName ? `Repository name: ${repositoryName}` : 'No repository name provided'}`,
@@ -29,13 +33,13 @@ const { throwError } = Errors.makeErrorRunner<
     );
   },
 
-  'repository-not-found': ({ repositoryName }) =>
+  [REPOSITORY_NOT_FOUND]: ({ repositoryName }) =>
     Errors.InternalServerError.create(
       `Repository for schema ${repositoryName} not found`,
       'DRIZZLE_TRANSACTION'
     ),
 
-  'rollback-error': () =>
+  [ROLLBACK_ERROR]: () =>
     Errors.InternalServerError.create(
       'Rollback Error: The rollback stack is empty.',
       'DRIZZLE_TRANSACTION'
@@ -52,7 +56,7 @@ function executeRollback(rollbackStack: (() => never)[]): void {
       }
     });
   }
-  throwError('rollback-error');
+  throwError(ROLLBACK_ERROR);
 }
 
 function makeRepositoryManager<Repositories extends Record<string, object>>(
@@ -63,7 +67,7 @@ function makeRepositoryManager<Repositories extends Record<string, object>>(
       const repository = repositoryMap.get(repositoryName);
 
       if (!repository) {
-        throwError('repository-not-found', { repositoryName: String(repositoryName) });
+        throwError(REPOSITORY_NOT_FOUND, { repositoryName: String(repositoryName) });
       }
 
       return repository as Repositories[K];
@@ -84,7 +88,7 @@ export function makeDrizzleUnitOfWork<Repositories extends Record<string, object
     const isValidRepositoryName = z.string().safeParse(repositoryName).success;
 
     if (!isValidDb || !isValidRepositoryMaker || !isValidRepositoryName) {
-      throwError('invalid-repository-config', {
+      throwError(INVALID_CONFIG, {
         repositoryName: String(repositoryName),
       });
     }
