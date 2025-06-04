@@ -1,9 +1,8 @@
 import { Shared, Auth } from '@product-domain/backend';
-import { SharedDictionary } from '@models/shared';
 import { gigDb, privateGigDb } from '../../db';
 import { sendEmailLink } from '../services';
 
-const { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } = SharedDictionary;
+const { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } = Auth.Domain.Constants.AUTH_DICTIONARY;
 
 const runInTransaction: Auth.Domain.Repositories.RegisterTransaction =
   Shared.Infra.Drizzle.Repositories.makeDrizzleUnitOfWork([

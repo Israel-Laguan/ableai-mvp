@@ -1,14 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 
+import { Shared } from '@product-domain/backend';
+
 import { Errors } from '@shared';
-import { Services } from '@models/shared';
+
 import { ExpressHandlerMiddleware } from './types';
 
 type AuthorizationMiddleware = ExpressHandlerMiddleware;
 
 export const makeAuthorizationMiddleware =
   <TTokenVerificationOutput>(
-    verifyToken: Services.VerifyTokenService<TTokenVerificationOutput>
+    verifyToken: Shared.Domain.Services.VerifyToken<TTokenVerificationOutput>
   ): AuthorizationMiddleware =>
   (req: Request, _: Response, next: NextFunction) => {
     const path = 'AUTHORIZATION_MIDDLEWARE';
