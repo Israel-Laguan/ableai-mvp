@@ -24,7 +24,6 @@ const { throwError } = Errors.makeErrorRunner<
 export function MakeVerifyEmailUseCase({
   userRepository,
   privateDataUserRepository,
-  runInEmailVerification,
 }: MakeVerifyEmailUseCaseConfig): VerifyEmailUseCase {
   return async ({ email }: Pick<Infra.RegisterInput, 'email'>): Promise<void> => {
     await privateDataUserRepository
@@ -44,8 +43,6 @@ export function MakeVerifyEmailUseCase({
         } else {
           throwError(NOT_FOUND);
         }
-
-        await runInEmailVerification({ email });
       });
   };
 }
