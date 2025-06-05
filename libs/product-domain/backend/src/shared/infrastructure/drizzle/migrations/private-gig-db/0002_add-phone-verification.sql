@@ -1,0 +1,1 @@
+ALTER TABLE "private_data_user" ADD COLUMN "phone_verified" boolean DEFAULT false;

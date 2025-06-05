@@ -4,6 +4,7 @@ export interface PrivateDataUser extends IBase {
   fullName: string;
   email: string;
   phoneNumber: string | null;
+  phoneVerified?: boolean;
 }
 
 export enum LAST_APP_ROLE {
