@@ -1,4 +1,5 @@
 import { Infra } from '@models/auth';
+
 import { Services, UseCases } from '../../dependency-injection';
 
 async function register(input: Infra.RegisterInput) {
