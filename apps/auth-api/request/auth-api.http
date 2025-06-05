@@ -8,15 +8,24 @@ GET {{baseUrl}}/health
 ############################################################################
 ### AUTH
 
+### POST Login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "your_awesome_email@gmail.com",
+  "password": "your_awesome_password"
+}
+
 ### POST Register
 POST {{baseUrl}}/register
 Content-Type: application/json
 
 {
   "fullName": "your name",
-  "email": "example_email@email.com",
+  "email": "your_awesome_email@email.com",
   "password": "your_awesome_password",
-  "phoneNumber": "+1234567898"
+  "phoneNumber": "+1234567890"
 }
 
 ############################################################################
@@ -27,18 +36,18 @@ Content-Type: application/json
 GET {{baseUrl}}/private-gig/users?sort=asc:fullName
 
 ### GET by id
-GET {{baseUrl}}/private-gig/users/5
+GET {{baseUrl}}/private-gig/users/1
 
 ### GET by email
-GET {{baseUrl}}/private-gig/users/email?email=nuevoII@ejemplo.com
+GET {{baseUrl}}/private-gig/users/email?email=your_awesome_email@email.com
 
 ### CREATE
 POST {{baseUrl}}/private-gig/users
 Content-Type: application/json
 
 {
-  "fullName": "Nuevo Usuario IV",
-  "email": "nuevoIV@ejemplo.com",
+  "fullName": "your name",
+  "email": "your_awesome_email@email.com",
   "phoneNumber": "+1234567890"
 }
 
@@ -47,13 +56,13 @@ PUT {{baseUrl}}/private-gig/users/1
 Content-Type: application/json
 
 {
-  "fullName": "Usuario Actualizado II",
-  "email": "actualizado@ejemplo.com",
+  "fullName": "your name",
+  "email": "your_awesome_email@email.com",
   "phoneNumber": "+1234567891"
 }
 
 ### DELETE by id
-DELETE {{baseUrl}}/private-gig/users/27
+DELETE {{baseUrl}}/private-gig/users/1
 
 ############################################################################
 
@@ -73,7 +82,7 @@ Content-Type: application/json
   "password": "your_awesome_password",
   "private_data_user_id": 1,
   "enabled": true,
-  "role_id": "gig"
+  "role_id": 1
 }
 
 ### UPDATE by id
@@ -85,10 +94,10 @@ Content-Type: application/json
   "password": "your_awesome_password",
   "private_data_user_id": 1,
   "enabled": true,
-  "role_id": "gig"
+  "role_id": 1
 }
 }
 
 ### DELETE by id
-DELETE {{baseUrl}}/gig/users/19
+DELETE {{baseUrl}}/gig/users/1
 

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import authRouter from './auth';
+import authRouter from '../modules/auth/routes';
 import gigRouter from './gig';
 import privateGigRouter from './private-gig';
 

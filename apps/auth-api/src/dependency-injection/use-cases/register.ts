@@ -18,7 +18,7 @@ const runInTransaction: Auth.Domain.Repositories.RegisterTransaction =
     },
   ]);
 
-export const registerUseCase = Auth.App.makeRegisterUserUseCase({
+export const register = Auth.App.makeRegisterUserUseCase({
   runInTransaction,
   sendEmailLink,
 });
