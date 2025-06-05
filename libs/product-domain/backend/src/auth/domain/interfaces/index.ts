@@ -1,8 +1,8 @@
 import { Infra, UserWithPassword } from '@models/auth';
 import { CONSTANTS } from '@shared';
 import { LoginStatusKeys } from '../constants';
-import { PrivateDataUserRepository, UserRepository } from '../repositories';
-import { GetGeoLocation, ParseUserAgent } from '../services';
+import { PrivateDataUserRepository, RegisterTransaction, UserRepository } from '../repositories';
+import { GetGeoLocation, ParseUserAgent, SendEmailLink } from '../services';
 
 export interface LogAttemptAndNextInputs {
   loginStatus: LoginStatusKeys;
@@ -23,6 +23,16 @@ export interface MakeLoginUseCaseConfig {
   parseUserAgent: ParseUserAgent;
   privateDataUserRepository: PrivateDataUserRepository;
   userRepository: UserRepository;
+}
+
+export interface MakeVerifyEmailUseCaseConfig {
+  userRepository: UserRepository;
+  privateDataUserRepository: PrivateDataUserRepository;
+}
+
+export interface MakeRegisterUseCaseConfig {
+  runInTransaction: RegisterTransaction;
+  sendEmailLink: SendEmailLink;
 }
 
 export interface LogAttemptAndNextConfig extends UserAgent {

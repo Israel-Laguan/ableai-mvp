@@ -1,9 +1,8 @@
 import * as bcrypt from 'bcrypt';
 
-import type { Infra as AuthInfra } from '@models/auth';
 import type { RegisterStatusKeys } from '../domain/constants';
-import type { RegisterTransaction } from '../domain/repositories';
-import type { SendEmailLink } from '../domain/services';
+import type { MakeRegisterUseCaseConfig } from '../domain/interfaces';
+import type { RegisterUseCase } from '../domain/use-cases';
 
 import { Errors } from '@shared';
 import { Constants } from '../domain';
@@ -49,13 +48,11 @@ async function hashPassword(plainPassword: string) {
   });
 }
 
-export const makeRegisterUserUseCase = (config: {
-  runInTransaction: RegisterTransaction;
-  sendEmailLink: SendEmailLink;
-}) => {
-  const { runInTransaction, sendEmailLink } = config;
-
-  return async ({ email, password, fullName, phoneNumber = null }: AuthInfra.RegisterInput) => {
+export const makeRegisterUserUseCase = ({
+  runInTransaction,
+  sendEmailLink,
+}: MakeRegisterUseCaseConfig): RegisterUseCase => {
+  return async ({ email, password, fullName, phoneNumber = null }) => {
     await runInTransaction(async repositoryManager => {
       const privateDataUserRepository = repositoryManager.getRepository(
         PRIVATE_USER_DATA_REPOSITORY
