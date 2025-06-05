@@ -13,25 +13,29 @@ const {
 
 const { getCustomOrDefaultMessage } = Utils;
 
-export const { throwError } = Errors.makeErrorRunner<FirebaseErrorInputs, FIREBASE_ERROR_CODES>({
-  [EMAIL_ALREADY_EXISTS]: ({ message }) =>
-    Errors.AlreadyExistError.create(getCustomOrDefaultMessage(message), 'FIREBASE_REGISTER'),
+export const MakeThrowError = ({ path }: { path: string }) => {
+  const firebaseErrorPath = `FIREBASE: ${path}`;
 
-  [INVALID_EMAIL]: ({ message }) =>
-    Errors.BadRequestError.create(getCustomOrDefaultMessage(message), 'FIREBASE_REGISTER'),
+  return Errors.makeErrorRunner<FirebaseErrorInputs, FIREBASE_ERROR_CODES>({
+    [EMAIL_ALREADY_EXISTS]: ({ message }) =>
+      Errors.AlreadyExistError.create(getCustomOrDefaultMessage(message), firebaseErrorPath),
 
-  [UNAUTHORIZED_CONTINUE_URI]: ({ uri }) =>
-    Errors.InternalServerError.create(
-      `The continue URL '${uri}' is not authorized.`,
-      'FIREBASE_REGISTER'
-    ),
+    [INVALID_EMAIL]: ({ message }) =>
+      Errors.BadRequestError.create(getCustomOrDefaultMessage(message), firebaseErrorPath),
 
-  [USER_NOT_FOUND]: ({ message }) =>
-    Errors.NotFoundResourceError.create(getCustomOrDefaultMessage(message), 'FIREBASE_REGISTER'),
+    [UNAUTHORIZED_CONTINUE_URI]: ({ uri }) =>
+      Errors.InternalServerError.create(
+        `The continue URL '${uri}' is not authorized.`,
+        firebaseErrorPath
+      ),
 
-  [UNKNOWN_ERROR]: () =>
-    Errors.InternalServerError.create(
-      'An unknown error occurred while processing the Firebase request.',
-      'FIREBASE_REGISTER'
-    ),
-});
+    [USER_NOT_FOUND]: ({ message }) =>
+      Errors.NotFoundResourceError.create(getCustomOrDefaultMessage(message), firebaseErrorPath),
+
+    [UNKNOWN_ERROR]: () =>
+      Errors.InternalServerError.create(
+        'An unknown error occurred while processing the Firebase request.',
+        firebaseErrorPath
+      ),
+  }).throwError;
+};

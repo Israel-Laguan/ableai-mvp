@@ -6,6 +6,7 @@ import { VerifyEmail } from '../../../domain/services';
 import { throwError, throwNotFoundError } from '../errors';
 
 const { USER_NOT_FOUND, UNKNOWN_ERROR } = FIREBASE_ERROR_CODES;
+const ERROR_PATH = 'AUTH_EMAIL_VERIFICATION_SERVICE';
 
 export function makeFirebaseEmailVerificationService({
   auth,
@@ -17,15 +18,15 @@ export function makeFirebaseEmailVerificationService({
       .getUserByEmail(email)
       .catch(async (error: unknown) => {
         if ((error as FirebaseError)?.code === USER_NOT_FOUND) {
-          throwNotFoundError();
+          throwNotFoundError(ERROR_PATH);
         } else {
-          throwError(UNKNOWN_ERROR);
+          throwError(UNKNOWN_ERROR, ERROR_PATH);
         }
       })
       .then(async user => {
         if (user) {
           await auth.updateUser(user.uid, { emailVerified: true }).catch(() => {
-            throwError(UNKNOWN_ERROR);
+            throwError(UNKNOWN_ERROR, ERROR_PATH);
           });
         }
       });

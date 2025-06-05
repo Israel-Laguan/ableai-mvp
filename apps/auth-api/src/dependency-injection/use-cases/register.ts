@@ -1,6 +1,6 @@
 import { Shared, Auth } from '@product-domain/backend';
 import { gigDb, privateGigDb } from '../../db';
-import { sendEmailLink } from '../services';
+import { firebaseService } from '../services';
 
 const { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } = Auth.Domain.Constants.AUTH_DICTIONARY;
 
@@ -20,5 +20,7 @@ const runInTransaction: Auth.Domain.Repositories.RegisterTransaction =
 
 export const register = Auth.App.makeRegisterUserUseCase({
   runInTransaction,
-  sendEmailLink,
+  runInRegister: async ({ email }) => {
+    await firebaseService.register({ email });
+  },
 });

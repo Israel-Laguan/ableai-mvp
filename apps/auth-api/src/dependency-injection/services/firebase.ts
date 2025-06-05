@@ -6,15 +6,11 @@ const auth = Shared.Infra.Firebase.Modules.makeFirebaseAuthModule({
   appName: 'auth-api',
 });
 
-export const register = Auth.Infra.Firebase.Services.makeFirebaseRegisterService({
-  auth,
-});
-
-export const verifyEmail = Auth.Infra.Firebase.Services.makeFirebaseEmailVerificationService({
-  auth,
-});
-
 export const firebaseService = {
-  register,
-  verifyEmail,
+  register: Auth.Infra.Firebase.Services.makeFirebaseRegisterService({
+    auth,
+  }),
+  verifyEmail: Auth.Infra.Firebase.Services.makeFirebaseEmailVerificationService({
+    auth,
+  }),
 };

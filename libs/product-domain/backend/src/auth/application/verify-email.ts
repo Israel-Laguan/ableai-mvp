@@ -1,4 +1,4 @@
-import type { Infra, PrivateDataUser } from '@models/auth';
+import type { Infra } from '@models/auth';
 import type { MakeVerifyEmailUseCaseConfig } from '../domain/interfaces';
 import type { VerifyEmailUseCase } from '../domain/use-cases';
 
@@ -24,20 +24,28 @@ const { throwError } = Errors.makeErrorRunner<
 export function MakeVerifyEmailUseCase({
   userRepository,
   privateDataUserRepository,
+  runInEmailVerification,
 }: MakeVerifyEmailUseCaseConfig): VerifyEmailUseCase {
   return async ({ email }: Pick<Infra.RegisterInput, 'email'>): Promise<void> => {
-    const user = await privateDataUserRepository.getByEmail({ email });
-
-    if (!user) {
-      throwError(NOT_FOUND);
-    }
-
-    await userRepository
-      .updateByPrivateDataUserId((user as PrivateDataUser).id, {
-        enabled: USER_STATUS.ENABLE,
-      })
+    await privateDataUserRepository
+      .getByEmail({ email })
       .catch(() => {
         throwError(INTERNAL_SERVER_ERROR);
+      })
+      .then(async user => {
+        if (user) {
+          await userRepository
+            .updateByPrivateDataUserId(user.id, {
+              enabled: USER_STATUS.ENABLE,
+            })
+            .catch(() => {
+              throwError(INTERNAL_SERVER_ERROR);
+            });
+        } else {
+          throwError(NOT_FOUND);
+        }
+
+        await runInEmailVerification({ email });
       });
   };
 }

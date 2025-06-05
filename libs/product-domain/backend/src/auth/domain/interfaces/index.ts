@@ -2,7 +2,7 @@ import { Infra, UserWithPassword } from '@models/auth';
 import { CONSTANTS } from '@shared';
 import { LoginStatusKeys } from '../constants';
 import { PrivateDataUserRepository, RegisterTransaction, UserRepository } from '../repositories';
-import { GetGeoLocation, ParseUserAgent, SendEmailLink } from '../services';
+import { GetGeoLocation, ParseUserAgent, RunInEmailVerification, RunInRegister } from '../services';
 export interface LogAttemptAndNextInputs {
   loginStatus: LoginStatusKeys;
   HTTPStatusCode: CONSTANTS.HTTPStatusCode;
@@ -27,11 +27,12 @@ export interface MakeLoginUseCaseConfig {
 export interface MakeVerifyEmailUseCaseConfig {
   userRepository: UserRepository;
   privateDataUserRepository: PrivateDataUserRepository;
+  runInEmailVerification: RunInEmailVerification;
 }
 
 export interface MakeRegisterUseCaseConfig {
   runInTransaction: RegisterTransaction;
-  sendEmailLink: SendEmailLink;
+  runInRegister: RunInRegister;
 }
 
 export interface LogAttemptAndNextConfig extends UserAgent {

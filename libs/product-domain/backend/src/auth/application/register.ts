@@ -50,7 +50,7 @@ async function hashPassword(plainPassword: string) {
 
 export const makeRegisterUserUseCase = ({
   runInTransaction,
-  sendEmailLink,
+  runInRegister,
 }: MakeRegisterUseCaseConfig): RegisterUseCase => {
   return async ({ email, password, fullName, phoneNumber = null }) => {
     await runInTransaction(async repositoryManager => {
@@ -73,30 +73,26 @@ export const makeRegisterUserUseCase = ({
           email,
           phoneNumber,
         }),
-      ])
-        .catch(async error => {
-          throw error;
-        })
-        .then(async ([hashedPassword, [privateDataUser]]) => {
-          const { id } = privateDataUser;
+      ]).then(async ([hashedPassword, [privateDataUser]]) => {
+        const { id } = privateDataUser;
 
-          if (!id) {
-            throwError(PRIVATE_DATA_USER_CREATION_FAILED);
-          }
+        if (!id) {
+          throwError(PRIVATE_DATA_USER_CREATION_FAILED);
+        }
 
-          const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
+        const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
 
-          const user = await userRepository.create({
-            password: hashedPassword,
-            privateDataUserId: id,
-          });
-
-          if (!user) {
-            throwError(USER_CREATION_FAILED);
-          }
+        const user = await userRepository.create({
+          password: hashedPassword,
+          privateDataUserId: id,
         });
-    });
 
-    await sendEmailLink({ email });
+        await runInRegister({ email, password, fullName, phoneNumber });
+
+        if (!user) {
+          throwError(USER_CREATION_FAILED);
+        }
+      });
+    });
   };
 };
