@@ -3,7 +3,6 @@ import { CONSTANTS } from '@shared';
 import { LoginStatusKeys } from '../constants';
 import { PrivateDataUserRepository, RegisterTransaction, UserRepository } from '../repositories';
 import { GetGeoLocation, ParseUserAgent, SendEmailLink } from '../services';
-
 export interface LogAttemptAndNextInputs {
   loginStatus: LoginStatusKeys;
   HTTPStatusCode: CONSTANTS.HTTPStatusCode;
@@ -45,3 +44,7 @@ export type UserAgent = {
   device: string;
   os: string;
 };
+
+export type VerifyEmailInputs = Pick<Infra.RegisterInput, 'email'>;
+
+export type VerifyPhoneNumberInputs = Pick<Infra.RegisterInput, 'email' | 'phoneNumber'>;

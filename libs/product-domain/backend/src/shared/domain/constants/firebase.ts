@@ -3,4 +3,5 @@ export enum FIREBASE_ERROR_CODES {
   INVALID_EMAIL = 'auth/invalid-email',
   USER_NOT_FOUND = 'auth/user-not-found',
   UNAUTHORIZED_CONTINUE_URI = 'auth/unauthorized-continue-uri',
+  UNKNOWN_ERROR = 'auth/unknown-error',
 }
