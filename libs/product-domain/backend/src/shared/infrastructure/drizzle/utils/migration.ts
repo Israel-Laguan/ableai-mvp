@@ -85,7 +85,8 @@ export async function runMigrations({
     );
   } catch (error) {
     throw Errors.InternalServerError.create(
-      `Failed to run migrations: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to run migrations: ${error instanceof Error ? error.message : String(error)}`,
+      'DRIZZLE_MIGRATION'
     );
   }
 }

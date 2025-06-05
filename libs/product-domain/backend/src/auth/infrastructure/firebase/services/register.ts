@@ -1,13 +1,10 @@
 import type { FirebaseError } from '../../../../shared/domain/interfaces';
 import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
 
-import { AUTH_ERROR_MESSAGES } from '../../../domain/constants';
 import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
 import { Errors } from '../../../../shared/infrastructure/firebase';
 
-const { ERROR_MESSAGE } = AUTH_ERROR_MESSAGES;
-
-const { USER_NOT_FOUND } = FIREBASE_ERROR_CODES;
+const { USER_NOT_FOUND, UNKNOWN_ERROR } = FIREBASE_ERROR_CODES;
 
 const { throwError } = Errors;
 
@@ -20,7 +17,7 @@ export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule
           emailVerified: false,
         });
       } else {
-        throwError((error as FirebaseError)?.code, { message: ERROR_MESSAGE });
+        throwError(UNKNOWN_ERROR);
       }
     });
   };

@@ -8,7 +8,7 @@ const {
   INVALID_EMAIL,
   UNAUTHORIZED_CONTINUE_URI,
   USER_NOT_FOUND,
-  UNKNOWN_ERROR: UNKNOWN_ERROR_CODE,
+  UNKNOWN_ERROR,
 } = FIREBASE_ERROR_CODES;
 
 const { getCustomOrDefaultMessage } = Utils;
@@ -29,7 +29,7 @@ export const { throwError } = Errors.makeErrorRunner<FirebaseErrorInputs, FIREBA
   [USER_NOT_FOUND]: ({ message }) =>
     Errors.NotFoundResourceError.create(getCustomOrDefaultMessage(message), 'FIREBASE_REGISTER'),
 
-  [UNKNOWN_ERROR_CODE]: () =>
+  [UNKNOWN_ERROR]: () =>
     Errors.InternalServerError.create(
       'An unknown error occurred while processing the Firebase request.',
       'FIREBASE_REGISTER'
