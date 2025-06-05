@@ -5,21 +5,8 @@ import { CONSTANTS } from '@shared';
 const { NODE_ENV } = CONSTANTS;
 
 const envSchema = z.object({
-  EMAIL_CREDENTIALS: z
-    .string()
-    .transform(v => {
-      const decoded = Buffer.from(v, 'base64').toString('utf8');
-      return JSON.parse(decoded);
-    })
-    .refine(v =>
-      z
-        .object({
-          service: z.string(),
-          user: z.string().email(),
-          pass: z.string(),
-        })
-        .parse(v)
-    ),
+  EMAIL: z.string().email(),
+  EMAIL_API_KEY: z.string(),
 
   ENV_JWT_SECRET: z.string(),
 

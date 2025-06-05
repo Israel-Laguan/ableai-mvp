@@ -49,6 +49,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.18",
     "@types/express": "^4.17.21",
+    "@types/geoip-lite": "^1.4.4",
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/morgan": "^1.9.9",
@@ -100,6 +101,7 @@
     "drizzle-orm": "^0.43.1",
     "express": "^4.21.2",
     "firebase-admin": "^13.4.0",
+    "geoip-lite": "^1.4.10",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^7.0.3",
@@ -107,7 +109,9 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "reflect-metadata": "^0.1.13",
+    "resend": "^4.5.2",
     "rxjs": "^7.8.0",
+    "ua-parser-js": "^2.0.3",
     "zod": "^3.25.20"
   },
   "lint-staged": {

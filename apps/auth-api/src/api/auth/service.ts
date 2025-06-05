@@ -1,12 +1,16 @@
-import { Infra } from '@models/auth';
 import { Services, UseCases } from '../../dependency-injection';
+import { RegisterInput, verifyPhoneNumberInputs } from '../../interfaces';
 
 export const authService = {
-  async register(input: Infra.RegisterInput) {
+  async register(input: RegisterInput) {
     await UseCases.register(input);
   },
   async verifyEmail(token: string) {
     const email = Services.jwtService.verifyToken(token)['email'];
     await UseCases.verifyEmail({ email });
+  },
+
+  async verifyPhoneNumber(input: verifyPhoneNumberInputs) {
+    return await UseCases.verifyPhone(input);
   },
 };

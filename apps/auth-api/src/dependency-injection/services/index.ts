@@ -1,3 +1,3 @@
 export * from './firebase';
 export * from './jwt';
-export * from './nodemailer';
+export * from './resend';

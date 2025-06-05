@@ -22,5 +22,6 @@ export const register = Auth.App.makeRegisterUserUseCase({
   runInTransaction,
   runInRegister: async ({ email }) => {
     await firebaseService.register({ email });
+    await firebaseService.sendEmailLink({ email });
   },
 });
