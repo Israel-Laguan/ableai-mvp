@@ -3,7 +3,7 @@ import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
 
 import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
 import { VerifyEmail } from '../../../domain/services';
-import { throwError, throwNotFoundError } from './errors';
+import { throwError, throwNotFoundError } from '../errors';
 
 const { USER_NOT_FOUND, UNKNOWN_ERROR } = FIREBASE_ERROR_CODES;
 

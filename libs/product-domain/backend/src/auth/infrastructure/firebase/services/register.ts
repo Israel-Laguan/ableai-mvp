@@ -2,11 +2,9 @@ import type { FirebaseError } from '../../../../shared/domain/interfaces';
 import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
 
 import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
-import { Errors } from '../../../../shared/infrastructure/firebase';
+import { throwError } from '../errors';
 
 const { USER_NOT_FOUND, UNKNOWN_ERROR } = FIREBASE_ERROR_CODES;
-
-const { throwError } = Errors;
 
 export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule }) {
   return async ({ email }: { email: string }) => {
