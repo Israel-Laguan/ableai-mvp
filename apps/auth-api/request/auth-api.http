@@ -13,7 +13,7 @@ POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
-  "email": "your_awesome_email@gmail.com",
+  "email": "your_awesome_email@email.com",
   "password": "your_awesome_password"
 }
 
@@ -24,6 +24,6 @@ Content-Type: application/json
 {
   "fullName": "your name",
   "email": "your_awesome_email@email.com",
-  "password": "your_awesome_password",
+  "password": "Your_Awesome_p4$$word",
   "phoneNumber": "+1234567890"
 }
