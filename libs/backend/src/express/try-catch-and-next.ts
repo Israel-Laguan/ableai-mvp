@@ -8,14 +8,19 @@ export const tryCatchAndNext =
     try {
       await cb(req, res, next);
     } catch (error) {
-      if (error instanceof Errors.CustomError) {
+      if (error instanceof Errors.CustomError && error.statusCode !== 500) {
         const { message } = error;
 
         res.status(error.statusCode).json({
           message,
         });
-        return next(error);
+        return next();
       }
+
+      res.status(500).json({
+        message: 'Internal Server Error',
+      });
+
       return next(error);
     }
   };
