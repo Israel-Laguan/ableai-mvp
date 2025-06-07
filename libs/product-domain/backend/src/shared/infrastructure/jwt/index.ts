@@ -21,7 +21,10 @@ export const makeJwtService = (secret: string) => {
   };
 
   return {
-    createToken: (payload: object, expiresIn: jwt.SignOptions['expiresIn'] = '1 day') => {
+    createToken: <T extends object>(
+      payload: T,
+      expiresIn: jwt.SignOptions['expiresIn'] = '1 day'
+    ) => {
       return jwt.sign(payload, secret, {
         expiresIn,
       });
