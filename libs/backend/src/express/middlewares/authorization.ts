@@ -9,8 +9,8 @@ import { ExpressHandlerMiddleware } from './types';
 type AuthorizationMiddleware = ExpressHandlerMiddleware;
 
 export const makeAuthorizationMiddleware =
-  <TTokenVerificationOutput>(
-    verifyToken: Shared.Domain.Services.VerifyToken<TTokenVerificationOutput>
+  <TokenVerificationOutput>(
+    verifyToken: Shared.Domain.Services.VerifyToken<TokenVerificationOutput>
   ): AuthorizationMiddleware =>
   (req: Request, _: Response, next: NextFunction) => {
     const path = 'AUTHORIZATION_MIDDLEWARE';

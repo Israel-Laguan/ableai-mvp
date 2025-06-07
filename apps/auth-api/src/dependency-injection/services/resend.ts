@@ -7,6 +7,6 @@ const resend = new Resend(env.EMAIL_API_KEY);
 
 export const resendService = {
   sendEmail: async ({ subject, to, html }: SendEmailInput) => {
-    await resend.emails.send({ from: env.EMAIL, subject, to, html });
+    return await resend.emails.send({ from: env.EMAIL, subject, to, html });
   },
 };

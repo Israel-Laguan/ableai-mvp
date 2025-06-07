@@ -1,33 +1,37 @@
+import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
+
 import type { FirebaseError } from '../../../../shared/domain/interfaces';
 import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
+import type { VerifyEmail } from '../../../domain/services';
 
 import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
-import { VerifyEmail } from '../../../domain/services';
-import { throwError, throwNotFoundError } from '../errors';
+import { throwError, throwInvalidCredentialsError } from '../errors';
 
-const { USER_NOT_FOUND, UNKNOWN_ERROR } = FIREBASE_ERROR_CODES;
+const { INVALID_CREDENTIALS, UNKNOWN_ERROR } = FIREBASE_ERROR_CODES;
 const ERROR_PATH = 'AUTH_EMAIL_VERIFICATION_SERVICE';
 
 export function makeFirebaseEmailVerificationService({
   auth,
 }: {
   auth: FirebaseAuthModule;
-}): VerifyEmail {
+}): VerifyEmail<null | UserRecord | void> {
   return async ({ email }) => {
-    await auth
+    return await auth
       .getUserByEmail(email)
       .catch(async (error: unknown) => {
-        if ((error as FirebaseError)?.code === USER_NOT_FOUND) {
-          throwNotFoundError(ERROR_PATH);
+        if ((error as FirebaseError)?.code === INVALID_CREDENTIALS) {
+          throwInvalidCredentialsError(ERROR_PATH);
         } else {
           throwError(UNKNOWN_ERROR, ERROR_PATH);
         }
       })
       .then(async user => {
         if (user) {
-          await auth.updateUser(user.uid, { emailVerified: true }).catch(() => {
+          return await auth.updateUser(user.uid, { emailVerified: true }).catch(() => {
             throwError(UNKNOWN_ERROR, ERROR_PATH);
           });
+        } else {
+          return null;
         }
       });
   };

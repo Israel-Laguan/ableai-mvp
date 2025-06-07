@@ -5,7 +5,7 @@ import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
 import { VerifyEmail } from '../../../domain/services';
 import { throwError } from '../errors';
 
-const { USER_NOT_FOUND, UNKNOWN_ERROR } = FIREBASE_ERROR_CODES;
+const { INVALID_CREDENTIALS, UNKNOWN_ERROR } = FIREBASE_ERROR_CODES;
 const ERROR_PATH = 'AUTH_REGISTER_SERVICE';
 
 export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule }): VerifyEmail {
@@ -13,7 +13,7 @@ export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule
     const user: FirebaseUserRecord | null = await auth
       .getUserByEmail(email)
       .catch(async (error: unknown) => {
-        if ((error as FirebaseError)?.code === USER_NOT_FOUND) {
+        if ((error as FirebaseError)?.code === INVALID_CREDENTIALS) {
           return null;
         } else {
           return throwError(UNKNOWN_ERROR, ERROR_PATH);

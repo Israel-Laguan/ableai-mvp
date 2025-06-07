@@ -26,7 +26,7 @@ export function makeFirebaseSendEmailLinkService({
   redirectionUrl: string;
   sendEmail: SendEmail;
   subject: string;
-}): SendEmailLink {
+}): SendEmailLink<void> {
   return async ({ email }) => {
     const emailToken = createEmailVerificationToken({ email });
     const link = await auth

@@ -19,7 +19,7 @@ const { throwError } = Errors.makeErrorRunner<
     Errors.InternalServerError.create(ERROR_MESSAGE, 'PHONE_VERIFICATION'),
 });
 
-export function MakeVerifyPhoneNumberUseCase<T, R>({
+export function MakeVerifyPhoneNumberUseCase<T extends object = object, R extends object = object>({
   privateDataUserRepository,
   runInPhoneVerification,
 }: MakeVerifyPhoneNumberUseCaseConfig<T, R>): VerifyPhoneNumberUseCase<T, R> {
@@ -27,15 +27,16 @@ export function MakeVerifyPhoneNumberUseCase<T, R>({
     const result = await runInPhoneVerification(input);
 
     if (result.verified) {
+      const { email, phoneNumber } = result;
       await privateDataUserRepository
-        .getByEmail({ email: result.email })
+        .getByEmail({ email })
         .catch(() => {
           throwError(INTERNAL_SERVER_ERROR);
         })
         .then(async user => {
           if (user) {
             await privateDataUserRepository.updateById(String(user.id), {
-              phoneNumber: result.phoneNumber,
+              phoneNumber,
               phoneVerified: true,
             });
           } else {
@@ -43,9 +44,9 @@ export function MakeVerifyPhoneNumberUseCase<T, R>({
           }
         });
 
-      return { ...result, email: '', phoneNumber: '', verified: true };
+      return { ...result, verified: true };
     }
 
-    return { ...result, phoneNumber: '', email: '' };
+    return { ...result, phoneNumber: '', email: '', verified: false };
   };
 }

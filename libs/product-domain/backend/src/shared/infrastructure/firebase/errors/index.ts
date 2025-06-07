@@ -7,7 +7,7 @@ const {
   EMAIL_ALREADY_EXISTS,
   INVALID_EMAIL,
   UNAUTHORIZED_CONTINUE_URI,
-  USER_NOT_FOUND,
+  INVALID_CREDENTIALS,
   UNKNOWN_ERROR,
 } = FIREBASE_ERROR_CODES;
 
@@ -29,12 +29,12 @@ export const MakeThrowError = ({ path }: { path: string }) => {
         firebaseErrorPath
       ),
 
-    [USER_NOT_FOUND]: ({ message }) =>
+    [INVALID_CREDENTIALS]: ({ message }) =>
       Errors.NotFoundResourceError.create(getCustomOrDefaultMessage(message), firebaseErrorPath),
 
     [UNKNOWN_ERROR]: () =>
       Errors.InternalServerError.create(
-        'An unknown error occurred while processing the Firebase request.',
+        'An unknown error occurred while processing the request.',
         firebaseErrorPath
       ),
   }).throwError;

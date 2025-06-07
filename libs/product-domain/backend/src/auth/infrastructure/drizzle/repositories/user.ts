@@ -9,8 +9,6 @@ import { users } from '../schemas';
 
 export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgDatabase> = ({
   db,
-}: {
-  db: NodePgDatabase;
 }) => {
   const repository = Infra.Drizzle.Repositories.makeDrizzleBaseRepository<User>({
     db,

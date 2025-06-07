@@ -1,12 +1,9 @@
 import { Auth } from '@product-domain/backend';
-import { FirebaseCustomToken } from '../../interfaces';
+import { verifyPhoneNumberInputs } from '../../interfaces';
 import { privateDataUserRepository } from '../repositories';
 import { firebaseService } from '../services';
 
-export const verifyPhone = Auth.App.MakeVerifyPhoneNumberUseCase<
-  FirebaseCustomToken,
-  FirebaseCustomToken
->({
+export const verifyPhone = Auth.App.MakeVerifyPhoneNumberUseCase<verifyPhoneNumberInputs>({
   privateDataUserRepository,
   runInPhoneVerification: async input => {
     return await firebaseService.verifyPhone(input);
