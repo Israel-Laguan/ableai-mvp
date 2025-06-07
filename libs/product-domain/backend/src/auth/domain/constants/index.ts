@@ -16,6 +16,7 @@ export enum AUTH_ERROR_MESSAGES {
   PRIVATE_DATA_USER_CREATION_FAILED_MESSAGE = `Could not create the user private data.`,
   USER_CREATION_FAILED_MESSAGE = `Could not create the user.`,
   TO_MANY_ATTEMPTS_MESSAGE = `Your account is temporarily locked due to multiple failed attempts. Please try again in 15 minutes or reset your password.`,
+  WEAK_PASSWORD_MESSAGE = 'Weak password. Please choose a stronger password.',
 }
 
 export enum LOGIN_STATUS_CODE {
@@ -32,6 +33,7 @@ export enum REGISTER_STATUS_CODE {
   COULD_NOT_HASH = 'COULD_NOT_HASH',
   PRIVATE_DATA_USER_CREATION_FAILED = 'PRIVATE_DATA_USER_CREATION_FAILED',
   USER_CREATION_FAILED = 'USER_CREATION_FAILED',
+  WEAK_PASSWORD = 'WEAK_PASSWORD',
 }
 
 export type LoginStatusKeys = keyof typeof LOGIN_STATUS_CODE;

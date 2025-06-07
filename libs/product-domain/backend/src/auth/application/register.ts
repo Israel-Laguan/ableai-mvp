@@ -1,4 +1,6 @@
 import * as bcrypt from 'bcrypt';
+import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core';
+import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
 
 import type { RegisterStatusKeys } from '../domain/constants';
 import type { MakeRegisterUseCaseConfig } from '../domain/interfaces';
@@ -18,12 +20,14 @@ const {
     COULD_NOT_HASH,
     PRIVATE_DATA_USER_CREATION_FAILED,
     USER_CREATION_FAILED,
+    WEAK_PASSWORD,
   },
   AUTH_ERROR_MESSAGES: {
     ALREADY_EXIST_MESSAGE,
     COULD_NOT_HASH_MESSAGE,
     PRIVATE_DATA_USER_CREATION_FAILED_MESSAGE,
     USER_CREATION_FAILED_MESSAGE,
+    WEAK_PASSWORD_MESSAGE,
   },
 } = Constants;
 
@@ -38,6 +42,8 @@ const { throwError } = Errors.makeErrorRunner<RegisterErrorInputs, RegisterStatu
 
   [USER_CREATION_FAILED]: () =>
     Errors.InternalServerError.create(USER_CREATION_FAILED_MESSAGE, 'AUTH_REGISTER'),
+
+  [WEAK_PASSWORD]: () => Errors.BadRequestError.create(WEAK_PASSWORD_MESSAGE, 'AUTH_REGISTER'),
 });
 
 async function hashPassword(plainPassword: string) {
@@ -48,11 +54,24 @@ async function hashPassword(plainPassword: string) {
   });
 }
 
+zxcvbnOptions.setOptions({
+  dictionary: {
+    ...zxcvbnCommonPackage.dictionary,
+  },
+  graphs: zxcvbnCommonPackage.adjacencyGraphs,
+});
+
 export const makeRegisterUserUseCase = ({
   runInTransaction,
   runInRegister,
 }: MakeRegisterUseCaseConfig): RegisterUseCase => {
   return async ({ email, password, fullName, phoneNumber = null }) => {
+    const passwordStrength = zxcvbn(password).score;
+
+    if (passwordStrength < 3) {
+      throwError(WEAK_PASSWORD);
+    }
+
     await runInTransaction(async repositoryManager => {
       const privateDataUserRepository = repositoryManager.getRepository(
         PRIVATE_USER_DATA_REPOSITORY
@@ -66,33 +85,37 @@ export const makeRegisterUserUseCase = ({
         throwError(ALREADY_EXIST);
       }
 
-      await Promise.all([
+      const [hashedPassword, privateDataUser] = await Promise.all([
         hashPassword(password),
         privateDataUserRepository.create({
           fullName,
           email,
           phoneNumber,
         }),
-      ]).then(async ([hashedPassword, [privateDataUser]]) => {
-        const { id } = privateDataUser;
+      ]);
 
-        if (!id) {
-          throwError(PRIVATE_DATA_USER_CREATION_FAILED);
-        }
+      const { id } = privateDataUser[0];
 
-        const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
+      if (!id) {
+        throwError(PRIVATE_DATA_USER_CREATION_FAILED);
+      }
 
-        const user = await userRepository.create({
+      const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
+
+      const user = await userRepository
+        .create({
           password: hashedPassword,
           privateDataUserId: id,
+        })
+        .catch(() => {
+          throwError(USER_CREATION_FAILED);
         });
 
-        await runInRegister({ email, password, fullName, phoneNumber });
+      if (!user || !user[0]?.id) {
+        throwError(USER_CREATION_FAILED);
+      }
 
-        if (!user) {
-          throwError(USER_CREATION_FAILED);
-        }
-      });
+      await runInRegister({ email, password, fullName, phoneNumber });
     });
   };
 };
