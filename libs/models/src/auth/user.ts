@@ -27,7 +27,7 @@ export interface User extends IBase {
   avatarUrl?: string | null;
   enabled: USER_STATUS_TYPE;
   displayName?: string | null;
-  lastAppRole?: LAST_APP_ROLE_TYPE;
+  lastAppRole?: LAST_APP_ROLE_TYPE | null;
   lastViewBuyer?: string | null;
   lastViewWorker?: string | null;
   privateDataUserId: number;

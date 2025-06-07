@@ -15,10 +15,7 @@ export const users = Schemas.withBaseSchema('users', {
     })
     .notNull()
     .default(NOT_VERIFIED),
-  lastAppRole: p
-    .varchar('last_app_role', { enum: [BUYER, WORKER] })
-    .notNull()
-    .default(BUYER),
+  lastAppRole: p.varchar('last_app_role', { enum: [BUYER, WORKER] }),
   lastViewBuyer: p.varchar('last_view_buyer'),
   lastViewWorker: p.varchar('last_view_worker'),
   password: p.varchar().notNull(),
