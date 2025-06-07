@@ -3,11 +3,11 @@ import { RegisterInput, verifyPhoneNumberInputs } from '../../interfaces';
 
 export const authService = {
   async register(input: RegisterInput) {
-    await UseCases.register(input);
+    return await UseCases.register(input);
   },
   async verifyEmail(token: string) {
     const email = Services.jwtService.verifyToken(token)['email'];
-    await UseCases.verifyEmail({ email });
+    return await UseCases.verifyEmail({ email });
   },
 
   async verifyPhoneNumber(input: verifyPhoneNumberInputs) {
