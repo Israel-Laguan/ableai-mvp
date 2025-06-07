@@ -1,16 +1,22 @@
 import { Router } from 'express';
 
 import { authController } from './controller';
-import { AuthValidation } from '../../dependency-injection';
+import { AuthValidationInput } from '../../dependency-injection';
 
 const authRouter = Router();
 
 authRouter.get(
   '/email-verification',
-  AuthValidation.validateQueryEmail,
+  AuthValidationInput.validateQueryEmail,
   authController.verifyEmail
 );
 
-authRouter.post('/register', AuthValidation.validateRegisterUser, authController.register);
+authRouter.post('/register', AuthValidationInput.validateRegisterUser, authController.register);
+
+authRouter.post(
+  '/verify-phone-number',
+  AuthValidationInput.validatePhoneVerification,
+  authController.verifyPhoneNumber
+);
 
 export default authRouter;

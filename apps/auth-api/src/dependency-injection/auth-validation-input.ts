@@ -1,16 +1,23 @@
 import { Express } from '@backend';
-import { Auth, Shared } from '@product-domain/backend';
+import { Auth } from '@product-domain/backend';
 
-const { ValidateEmailSchema } = Shared.Infra.Zod.Schemas;
+const { EmailVerificationSchema, PhoneVerificationSchema, RegisterUserSchema } =
+  Auth.Infra.Zod.Schemas;
 
 const {
   Middlewares: { validateInputMiddleware },
 } = Express;
 
-export const validateQueryEmail = validateInputMiddleware({
-  querySchema: ValidateEmailSchema,
-});
+export const AuthValidationInput = {
+  validatePhoneVerification: validateInputMiddleware({
+    bodySchema: PhoneVerificationSchema,
+  }),
 
-export const validateRegisterUser = validateInputMiddleware({
-  bodySchema: Auth.Infra.Zod.Schemas.RegisterUserSchema,
-});
+  validateQueryEmail: validateInputMiddleware({
+    querySchema: EmailVerificationSchema,
+  }),
+
+  validateRegisterUser: validateInputMiddleware({
+    bodySchema: RegisterUserSchema,
+  }),
+};
