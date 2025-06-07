@@ -1,11 +1,10 @@
 import { Infra } from '@models/auth';
 import {
   MakeVerifyEmailHTMLInput,
+  RunInPhoneVerificationOutput,
   SendEmailInput,
   UserAgent,
   VerifyEmailInputs,
-  VerifyPhoneNumberInputs,
-  VerifyPhoneNumberOutputs,
 } from '../interfaces';
 
 export type CreateEmailToken = (input: Pick<Infra.RegisterInput, 'email'>) => string;
@@ -18,20 +17,16 @@ export type ParseUserAgent = (userAgent: string) => UserAgent;
 
 export type RunInEmailVerification = (input: Pick<Infra.RegisterInput, 'email'>) => Promise<void>;
 
-export type RunInPhoneVerification<T, R> = (
-  input: VerifyPhoneNumberInputs<T>
-) => Promise<VerifyPhoneNumberOutputs<R>>;
+export type RunInPhoneVerification<T extends object = object, R extends object = object> = (
+  input: T
+) => Promise<RunInPhoneVerificationOutput<R>>;
 
 export type RunInRegister = (input: Infra.RegisterInput) => Promise<void>;
 
-export type SendEmail = (input: SendEmailInput) => Promise<void>;
+export type SendEmail<R = unknown> = (input: SendEmailInput) => Promise<R>;
 
-export type SendEmailLink = (input: Pick<Infra.RegisterInput, 'email'>) => Promise<void>;
+export type SendEmailLink<R = unknown> = (input: Pick<Infra.RegisterInput, 'email'>) => Promise<R>;
 
 export type VerifyPassword = (token: string) => boolean;
 
-export type VerifyEmail = (input: VerifyEmailInputs) => Promise<void>;
-
-export type VerifyPhoneNumber<T, R> = (
-  input: VerifyPhoneNumberInputs<T>
-) => Promise<VerifyPhoneNumberOutputs<R>>;
+export type VerifyEmail<R = unknown> = (input: VerifyEmailInputs) => Promise<R>;

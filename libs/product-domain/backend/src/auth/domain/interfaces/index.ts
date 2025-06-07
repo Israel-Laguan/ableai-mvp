@@ -41,8 +41,8 @@ export interface MakeLoginUseCaseConfig {
 }
 
 export interface MakeRegisterUseCaseConfig {
-  runInTransaction: RegisterTransaction;
   runInRegister: RunInRegister;
+  runInTransaction: RegisterTransaction;
 }
 
 export interface MakeVerifyEmailUseCaseConfig {
@@ -51,10 +51,16 @@ export interface MakeVerifyEmailUseCaseConfig {
   runInEmailVerification?: RunInEmailVerification;
 }
 
-export interface MakeVerifyPhoneNumberUseCaseConfig<T, R> {
+export interface MakeVerifyPhoneNumberUseCaseConfig<
+  T extends object = object,
+  R extends object = object
+> {
   privateDataUserRepository: PrivateDataUserRepository;
   runInPhoneVerification: RunInPhoneVerification<T, R>;
 }
+
+export type RunInPhoneVerificationOutput<R extends object = object> = VerifyPhoneNumberOutput<R> &
+  Pick<Infra.RegisterInput, 'email' | 'phoneNumber'>;
 
 export interface SendEmailInput {
   to: string;
@@ -70,8 +76,6 @@ export type UserAgent = {
 
 export type VerifyEmailInputs = Pick<Infra.RegisterInput, 'email'>;
 
-export type VerifyPhoneNumberInputs<T> = Pick<Infra.RegisterInput, 'email' | 'phoneNumber'> & T;
-
-export type VerifyPhoneNumberOutputs<R> = Pick<Infra.RegisterInput, 'email' | 'phoneNumber'> & {
+export type VerifyPhoneNumberOutput<R extends object = object> = {
   verified: boolean;
 } & R;

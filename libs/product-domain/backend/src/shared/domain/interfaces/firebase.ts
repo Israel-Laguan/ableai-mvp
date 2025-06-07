@@ -1,6 +1,6 @@
 import type { auth, ServiceAccount } from 'firebase-admin';
 
-export interface FirebaseCustomToken {
+export interface FirebasePhoneVerificationInput {
   idToken: string;
 }
 
