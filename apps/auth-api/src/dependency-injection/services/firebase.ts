@@ -5,7 +5,7 @@ import { makeVerifyEmailHTML } from '../html';
 import { jwtService } from './jwt';
 
 const auth = Shared.Infra.Firebase.Modules.makeFirebaseAuthModule({
-  serviceAccount: env.GOOGLE_APPLICATION_CREDENTIALS,
+  serviceAccount: env.GOOGLE_SERVICE_ACCOUNT,
   appName: 'auth-api',
 });
 

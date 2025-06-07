@@ -12,7 +12,7 @@ const envSchema = z.object({
 
   GIG_DB_URL: z.string(),
 
-  GOOGLE_APPLICATION_CREDENTIALS: z
+  GOOGLE_SERVICE_ACCOUNT: z
     .string()
     .transform(v => {
       const decoded = Buffer.from(v, 'base64').toString('utf8');
