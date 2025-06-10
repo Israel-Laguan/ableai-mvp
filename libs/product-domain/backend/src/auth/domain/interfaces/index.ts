@@ -1,42 +1,59 @@
-import { Infra, UserWithPassword } from '@models/auth';
-import { CONSTANTS } from '@shared';
+import { Infra, User, UserWithPassword } from '@models/auth';
 import { LoginStatusKeys } from '../constants';
 import { PrivateDataUserRepository, RegisterTransaction, UserRepository } from '../repositories';
 import {
+  GenerateTokenPair,
   GetGeoLocation,
   ParseUserAgent,
   RunInEmailVerification,
+  RunInLogin,
   RunInPhoneVerification,
   RunInRegister,
 } from '../services';
+
+export interface AccessTokenPayload extends GenerateTokenPairInput {
+  type: 'access';
+  exp: number;
+  iat: number;
+}
+
+export type GenerateTokenPairInput = Pick<User, 'id' | 'roleId'>;
 
 export interface LogAttemptAndNextConfig extends UserAgent {
   geoLocation: string;
   IP: string;
 }
 
-export interface LogAttemptAndNextInputs {
+export interface LogAttemptAndNextInputs extends Pick<User, 'blockId'> {
   loginStatus: LoginStatusKeys;
-  HTTPStatusCode: CONSTANTS.HTTPStatusCode;
+  retryAfter?: Date;
 }
 
-export interface LoginInputs extends Infra.LoginInput {
+export type LoginInputs<CustomInput extends object = object> = Infra.LoginInput & {
   IP: string;
   userAgent: string;
-}
+} & CustomInput;
 
-export interface LoginUseCaseResult extends Pick<UserWithPassword, 'lastAppRole'> {
-  session: string;
-}
+export type LoginOutput<CustomOutput extends object = object> = Pick<
+  UserWithPassword,
+  'lastAppRole'
+> &
+  TokenPair &
+  CustomOutput;
 
 export interface MakeVerifyEmailHTMLInput {
   link: string;
 }
 
-export interface MakeLoginUseCaseConfig {
+export interface MakeLoginUseCaseConfig<
+  CustomInput extends object = object,
+  CustomOutput extends object = object
+> {
   getGeoLocation: GetGeoLocation;
+  generateTokenPair: GenerateTokenPair;
   parseUserAgent: ParseUserAgent;
   privateDataUserRepository: PrivateDataUserRepository;
+  runInLogin?: RunInLogin<CustomInput, CustomOutput>;
   userRepository: UserRepository;
 }
 
@@ -59,6 +76,17 @@ export interface MakeVerifyPhoneNumberUseCaseConfig<
   runInPhoneVerification: RunInPhoneVerification<T, R>;
 }
 
+export interface RefreshTokenPayload extends Pick<GenerateTokenPairInput, 'id'> {
+  type: 'refresh';
+  exp: number;
+  iat: number;
+}
+
+export type RunInLoginInput<CustomInput extends object = object> = LoginInputs<CustomInput> & {
+  userRepository: UserRepository;
+  privateDataUserRepository: PrivateDataUserRepository;
+};
+
 export type RunInPhoneVerificationOutput<R extends object = object> = VerifyPhoneNumberOutput<R> &
   Pick<Infra.RegisterInput, 'email' | 'phoneNumber'>;
 
@@ -68,13 +96,18 @@ export interface SendEmailInput {
   html: string;
 }
 
+export type TokenPair = {
+  accessToken: string;
+  refreshToken: string;
+};
+
 export type UserAgent = {
   browser: string;
   device: string;
   os: string;
 };
 
-export type VerifyEmailInputs = Pick<Infra.RegisterInput, 'email'>;
+export type VerifyEmailInput = Pick<Infra.RegisterInput, 'email'>;
 
 export type VerifyPhoneNumberOutput<R extends object = object> = {
   verified: boolean;
