@@ -11,7 +11,6 @@ export type RegisterInput = {
 };
 
 export type UserCreateInput = {
-  password: string;
   privateDataUserId: number;
 };
 

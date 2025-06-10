@@ -4,7 +4,6 @@ export interface PrivateDataUser extends IBase {
   fullName: string;
   email: string;
   phoneNumber: string | null;
-  phoneVerified?: boolean;
 }
 
 export enum LAST_APP_ROLE {
@@ -25,7 +24,6 @@ export type LAST_APP_ROLE_TYPE = (typeof LAST_APP_ROLE)[keyof typeof LAST_APP_RO
 
 export interface User extends IBase {
   avatarUrl?: string | null;
-  enabled: USER_STATUS_TYPE;
   displayName?: string | null;
   lastAppRole?: LAST_APP_ROLE_TYPE | null;
   lastViewBuyer?: string | null;
@@ -35,5 +33,3 @@ export interface User extends IBase {
   privateDataUserId: number;
   roleId: number;
 }
-
-export type UserWithPassword = User & { password: string };

@@ -43,6 +43,13 @@
       "when": 1749588396440,
       "tag": "0005_update-login-attemps",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1749595843411,
+      "tag": "0006_remove-enable-and-password",
+      "breakpoints": true
     }
   ]
 }

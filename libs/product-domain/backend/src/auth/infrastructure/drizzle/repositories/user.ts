@@ -23,13 +23,11 @@ export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgD
         .insert(users)
         .values({
           roleId: 1,
-          password: userInput.password,
           privateDataUserId: userInput.privateDataUserId,
         })
         .returning({
           id: users.id,
           roleId: users.roleId,
-          enabled: users.enabled,
           privateDataUserId: users.privateDataUserId,
           createdAt: users.createdAt,
           updatedAt: users.updatedAt,
@@ -42,7 +40,6 @@ export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgD
       return await db.update(users).set(input).where(eq(users.privateDataUserId, id)).returning({
         id: users.id,
         roleId: users.roleId,
-        enabled: users.enabled,
         privateDataUserId: users.privateDataUserId,
         createdAt: users.createdAt,
         updatedAt: users.updatedAt,
