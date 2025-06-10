@@ -1,13 +1,18 @@
 import { Infra } from '@models/auth';
 import {
+  GenerateTokenPairInput,
   MakeVerifyEmailHTMLInput,
+  RunInLoginInput,
   RunInPhoneVerificationOutput,
   SendEmailInput,
+  TokenPair,
   UserAgent,
-  VerifyEmailInputs,
+  VerifyEmailInput,
 } from '../interfaces';
 
 export type CreateEmailToken = (input: Pick<Infra.RegisterInput, 'email'>) => string;
+
+export type GenerateTokenPair = (input: GenerateTokenPairInput) => TokenPair | Promise<TokenPair>;
 
 export type GetGeoLocation = (IP: string) => Promise<string>;
 
@@ -16,6 +21,11 @@ export type MakeVerifyEmailHTML = (inputs: MakeVerifyEmailHTMLInput) => string;
 export type ParseUserAgent = (userAgent: string) => UserAgent;
 
 export type RunInEmailVerification = (input: Pick<Infra.RegisterInput, 'email'>) => Promise<void>;
+
+export type RunInLogin<
+  CustomOInput extends object = object,
+  CustomOutput extends object = object
+> = (input: RunInLoginInput<CustomOInput>) => Promise<CustomOutput>;
 
 export type RunInPhoneVerification<T extends object = object, R extends object = object> = (
   input: T
@@ -29,4 +39,4 @@ export type SendEmailLink<R = unknown> = (input: Pick<Infra.RegisterInput, 'emai
 
 export type VerifyPassword = (token: string) => boolean;
 
-export type VerifyEmail<R = unknown> = (input: VerifyEmailInputs) => Promise<R>;
+export type VerifyEmail<R = unknown> = (input: VerifyEmailInput) => Promise<R>;

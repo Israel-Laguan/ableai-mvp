@@ -30,6 +30,8 @@ export interface User extends IBase {
   lastAppRole?: LAST_APP_ROLE_TYPE | null;
   lastViewBuyer?: string | null;
   lastViewWorker?: string | null;
+  loginAttempts?: number;
+  blockId?: string | null;
   privateDataUserId: number;
   roleId: number;
 }
