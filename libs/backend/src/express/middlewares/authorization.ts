@@ -1,18 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
-
-import { Shared } from '@product-domain/backend';
+import type { ExpressHandlerAuthorizationMiddleware } from './types';
 
 import { Errors } from '@shared';
 
-import { ExpressHandlerMiddleware } from './types';
-
-type AuthorizationMiddleware = ExpressHandlerMiddleware;
-
 export const makeAuthorizationMiddleware =
-  <TokenVerificationOutput>(
-    verifyToken: Shared.Domain.Services.VerifyToken<TokenVerificationOutput>
-  ): AuthorizationMiddleware =>
-  (req: Request, _: Response, next: NextFunction) => {
+  <TokenVerificationOutput extends object = object>(
+    verifyToken: (token: string) => TokenVerificationOutput
+  ): ExpressHandlerAuthorizationMiddleware<TokenVerificationOutput> =>
+  (req, _, next) => {
     const path = 'AUTHORIZATION_MIDDLEWARE';
     try {
       const header = req.headers['authorization'] || false;
@@ -31,6 +25,8 @@ export const makeAuthorizationMiddleware =
       if (!decode) {
         throw Errors.UnauthorizeError.create('Token is not valid', path);
       }
+
+      req.user = { ...decode };
 
       return next();
     } catch (error) {
