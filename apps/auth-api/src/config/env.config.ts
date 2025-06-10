@@ -5,11 +5,6 @@ import { CONSTANTS } from '@shared';
 const { NODE_ENV } = CONSTANTS;
 
 const envSchema = z.object({
-  EMAIL: z.string().email(),
-  EMAIL_API_KEY: z.string(),
-
-  ENV_JWT_SECRET: z.string(),
-
   GIG_DB_URL: z.string(),
 
   GOOGLE_SERVICE_ACCOUNT: z
@@ -37,8 +32,6 @@ const envSchema = z.object({
   PORT: z.string().default('3001'),
 
   PRIVATE_GIG_DB_URL: z.string(),
-
-  REDIRECT_AFTER_REGISTER_URL: z.string().url(),
 });
 
 export const env = envSchema.parse(process.env);
