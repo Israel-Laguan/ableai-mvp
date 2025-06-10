@@ -31,7 +31,10 @@ const {
   },
 } = Constants;
 
-const { throwError } = Errors.makeErrorRunner<RegisterErrorInputs, RegisterStatusKeys>({
+const { throwError } = Errors.makeErrorRunner<
+  RegisterErrorInputs & { feedback?: string },
+  RegisterStatusKeys
+>({
   [ALREADY_EXIST]: () => Errors.AlreadyExistError.create(ALREADY_EXIST_MESSAGE, 'AUTH_REGISTER'),
 
   [COULD_NOT_HASH]: () =>
@@ -43,7 +46,12 @@ const { throwError } = Errors.makeErrorRunner<RegisterErrorInputs, RegisterStatu
   [USER_CREATION_FAILED]: () =>
     Errors.InternalServerError.create(USER_CREATION_FAILED_MESSAGE, 'AUTH_REGISTER'),
 
-  [WEAK_PASSWORD]: () => Errors.BadRequestError.create(WEAK_PASSWORD_MESSAGE, 'AUTH_REGISTER'),
+  [WEAK_PASSWORD]: ({ feedback }) =>
+    Errors.BadRequestError.create(
+      `${WEAK_PASSWORD_MESSAGE}
+    ${feedback || 'No feedback provided'}.`,
+      'AUTH_REGISTER'
+    ),
 });
 
 async function hashPassword(plainPassword: string) {
@@ -66,10 +74,10 @@ export const makeRegisterUserUseCase = ({
   runInRegister,
 }: MakeRegisterUseCaseConfig): RegisterUseCase => {
   return async ({ email, password, fullName, phoneNumber = null }) => {
-    const passwordStrength = zxcvbn(password).score;
+    const { score: passwordStrength, feedback } = zxcvbn(password);
 
     if (passwordStrength < 3) {
-      throwError(WEAK_PASSWORD);
+      throwError(WEAK_PASSWORD, { feedback: feedback.warning || 'No feedback provided' });
     }
 
     await runInTransaction(async repositoryManager => {
