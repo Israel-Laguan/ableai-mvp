@@ -1,16 +1,24 @@
-import { Services, UseCases } from '../../dependency-injection';
-import { RegisterInput, verifyPhoneNumberInputs } from '../../interfaces';
+import { UseCases } from '../../dependency-injection';
+import {
+  LoginInputs,
+  RegisterInput,
+  VerifyPhoneNumberInputs,
+  VerifyEmailInput,
+} from '../../interfaces';
 
 export const authService = {
+  async login(input: LoginInputs) {
+    return await UseCases.login(input);
+  },
+
   async register(input: RegisterInput) {
     return await UseCases.register(input);
   },
-  async verifyEmail(token: string) {
-    const email = Services.jwtService.verifyToken(token)['email'];
-    return await UseCases.verifyEmail({ email });
+  async verifyEmail(input: VerifyEmailInput) {
+    return await UseCases.verifyEmail(input);
   },
 
-  async verifyPhoneNumber(input: verifyPhoneNumberInputs) {
+  async verifyPhoneNumber(input: VerifyPhoneNumberInputs) {
     return await UseCases.verifyPhone(input);
   },
 };

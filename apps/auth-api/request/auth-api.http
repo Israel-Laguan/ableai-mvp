@@ -8,6 +8,15 @@ GET {{baseUrl}}/health
 ############################################################################
 ### AUTH
 
+### POST Login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "your_awesome_email@email.com",
+  "password": "Your_Awesome_p4$$word"
+}
+
 ### POST Register
 POST {{baseUrl}}/register
 Content-Type: application/json

@@ -11,6 +11,8 @@ authRouter.get(
   authController.verifyEmail
 );
 
+authRouter.post('/login', AuthValidationInput.validateLoginUser, authController.login);
+
 authRouter.post('/register', AuthValidationInput.validateRegisterUser, authController.register);
 
 authRouter.post(
