@@ -1,4 +1,3 @@
-import * as bcrypt from 'bcrypt';
 import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core';
 import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
 
@@ -54,14 +53,6 @@ const { throwError } = Errors.makeErrorRunner<
     ),
 });
 
-async function hashPassword(plainPassword: string) {
-  const saltRounds = 10;
-
-  return await bcrypt.hash(plainPassword, saltRounds).catch(() => {
-    return throwError(COULD_NOT_HASH);
-  });
-}
-
 zxcvbnOptions.setOptions({
   dictionary: {
     ...zxcvbnCommonPackage.dictionary,
@@ -69,10 +60,10 @@ zxcvbnOptions.setOptions({
   graphs: zxcvbnCommonPackage.adjacencyGraphs,
 });
 
-export const makeRegisterUserUseCase = ({
+export const makeRegisterUserUseCase = <R>({
   runInTransaction,
   runInRegister,
-}: MakeRegisterUseCaseConfig): RegisterUseCase => {
+}: MakeRegisterUseCaseConfig<R>): RegisterUseCase<R> => {
   return async ({ email, password, fullName, phoneNumber = null }) => {
     const { score: passwordStrength, feedback } = zxcvbn(password);
 
@@ -80,10 +71,12 @@ export const makeRegisterUserUseCase = ({
       throwError(WEAK_PASSWORD, { feedback: feedback.warning || 'No feedback provided' });
     }
 
-    await runInTransaction(async repositoryManager => {
+    return await runInTransaction(async repositoryManager => {
       const privateDataUserRepository = repositoryManager.getRepository(
         PRIVATE_USER_DATA_REPOSITORY
       );
+
+      const runInRegisterResult = await runInRegister({ email, password, fullName, phoneNumber });
 
       const userExist = await privateDataUserRepository
         .getByEmail({ email })
@@ -93,14 +86,11 @@ export const makeRegisterUserUseCase = ({
         throwError(ALREADY_EXIST);
       }
 
-      const [hashedPassword, privateDataUser] = await Promise.all([
-        hashPassword(password),
-        privateDataUserRepository.create({
-          fullName,
-          email,
-          phoneNumber,
-        }),
-      ]);
+      const privateDataUser = await privateDataUserRepository.create({
+        fullName,
+        email,
+        phoneNumber,
+      });
 
       const { id } = privateDataUser[0];
 
@@ -112,7 +102,6 @@ export const makeRegisterUserUseCase = ({
 
       const user = await userRepository
         .create({
-          password: hashedPassword,
           privateDataUserId: id,
         })
         .catch(() => {
@@ -123,7 +112,7 @@ export const makeRegisterUserUseCase = ({
         throwError(USER_CREATION_FAILED);
       }
 
-      await runInRegister({ email, password, fullName, phoneNumber });
+      return runInRegisterResult;
     });
   };
 };
