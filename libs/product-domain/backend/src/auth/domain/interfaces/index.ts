@@ -1,14 +1,7 @@
-import { Infra, User, UserWithPassword } from '@models/auth';
+import { Infra, User } from '@models/auth';
 import { LoginStatusKeys } from '../constants';
 import { PrivateDataUserRepository, RegisterTransaction, UserRepository } from '../repositories';
-import {
-  GenerateTokenPair,
-  ParseUserAgent,
-  RunInEmailVerification,
-  RunInLogin,
-  RunInPhoneVerification,
-  RunInRegister,
-} from '../services';
+import { GenerateTokenPair, ParseUserAgent, RunInLogin, RunInRegister } from '../services';
 
 export interface AccessTokenPayload extends GenerateTokenPairInput {
   type: 'access';
@@ -32,16 +25,9 @@ export type LoginInputs<CustomInput extends object = object> = Infra.LoginInput 
   userAgent: string;
 } & CustomInput;
 
-export type LoginOutput<CustomOutput extends object = object> = Pick<
-  UserWithPassword,
-  'lastAppRole'
-> &
+export type LoginOutput<CustomOutput extends object = object> = Pick<User, 'lastAppRole'> &
   TokenPair &
   CustomOutput;
-
-export interface MakeVerifyEmailHTMLInput {
-  link: string;
-}
 
 export interface MakeLoginUseCaseConfig<
   CustomInput extends object = object,
@@ -54,23 +40,9 @@ export interface MakeLoginUseCaseConfig<
   userRepository: UserRepository;
 }
 
-export interface MakeRegisterUseCaseConfig {
-  runInRegister: RunInRegister;
-  runInTransaction: RegisterTransaction;
-}
-
-export interface MakeVerifyEmailUseCaseConfig {
-  userRepository: UserRepository;
-  privateDataUserRepository: PrivateDataUserRepository;
-  runInEmailVerification?: RunInEmailVerification;
-}
-
-export interface MakeVerifyPhoneNumberUseCaseConfig<
-  T extends object = object,
-  R extends object = object
-> {
-  privateDataUserRepository: PrivateDataUserRepository;
-  runInPhoneVerification: RunInPhoneVerification<T, R>;
+export interface MakeRegisterUseCaseConfig<R> {
+  runInRegister: RunInRegister<R>;
+  runInTransaction: RegisterTransaction<R>;
 }
 
 export interface RefreshTokenPayload extends Pick<GenerateTokenPairInput, 'id'> {
@@ -84,15 +56,6 @@ export type RunInLoginInput<CustomInput extends object = object> = LoginInputs<C
   privateDataUserRepository: PrivateDataUserRepository;
 };
 
-export type RunInPhoneVerificationOutput<R extends object = object> = VerifyPhoneNumberOutput<R> &
-  Pick<Infra.RegisterInput, 'email' | 'phoneNumber'>;
-
-export interface SendEmailInput {
-  to: string;
-  subject: string;
-  html: string;
-}
-
 export type TokenPair = {
   accessToken: string;
   refreshToken: string;
@@ -103,9 +66,3 @@ export type UserAgent = {
   device: string;
   os: string;
 };
-
-export type VerifyEmailInput = Pick<Infra.RegisterInput, 'email'>;
-
-export type VerifyPhoneNumberOutput<R extends object = object> = {
-  verified: boolean;
-} & R;
