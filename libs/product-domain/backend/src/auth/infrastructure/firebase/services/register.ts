@@ -5,18 +5,18 @@ import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
 import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
 import { throwError, throwInvalidCredentialsError } from '../errors';
 
-const { INVALID_CREDENTIALS, UNKNOWN_ERROR } = FIREBASE_ERROR_CODES;
+const { INVALID_CREDENTIALS } = FIREBASE_ERROR_CODES;
 const ERROR_PATH = 'AUTH_REGISTER_SERVICE';
 
 export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule }) {
   return async ({ email, fullName, password, phoneNumber }: Infra.RegisterInput) => {
     const user: FirebaseUserRecord | null = await auth
       .getUserByEmail(email)
-      .catch(async (error: unknown) => {
-        if ((error as FirebaseError)?.code === INVALID_CREDENTIALS) {
+      .catch(async (error: FirebaseError) => {
+        if (error.code === INVALID_CREDENTIALS) {
           return null;
         } else {
-          return throwError(UNKNOWN_ERROR, ERROR_PATH);
+          return throwError(error.code as FIREBASE_ERROR_CODES, ERROR_PATH);
         }
       });
 
@@ -24,11 +24,16 @@ export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule
       throwInvalidCredentialsError(ERROR_PATH);
     }
 
-    return await auth.createUser({
-      displayName: fullName,
-      email,
-      password,
-      phoneNumber,
-    });
+    return await auth
+      .createUser({
+        displayName: fullName,
+        email,
+        emailVerified: false,
+        password,
+        phoneNumber,
+      })
+      .catch((error: FirebaseError) => {
+        throwError(error.code as FIREBASE_ERROR_CODES, ERROR_PATH);
+      });
   };
 }

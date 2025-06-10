@@ -9,6 +9,7 @@ const {
   UNAUTHORIZED_CONTINUE_URI,
   INVALID_CREDENTIALS,
   UNKNOWN_ERROR,
+  INVALID_PHONE_NUMBER,
 } = FIREBASE_ERROR_CODES;
 
 const { getCustomOrDefaultMessage } = Utils;
@@ -21,6 +22,9 @@ export const MakeThrowError = ({ path }: { path: string }) => {
       Errors.AlreadyExistError.create(getCustomOrDefaultMessage(message), firebaseErrorPath),
 
     [INVALID_EMAIL]: ({ message }) =>
+      Errors.BadRequestError.create(getCustomOrDefaultMessage(message), firebaseErrorPath),
+
+    [INVALID_PHONE_NUMBER]: ({ message }) =>
       Errors.BadRequestError.create(getCustomOrDefaultMessage(message), firebaseErrorPath),
 
     [UNAUTHORIZED_CONTINUE_URI]: ({ uri }) =>
