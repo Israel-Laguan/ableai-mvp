@@ -7,4 +7,6 @@ export type RegisterInput = Infra.RegisterInput;
 
 export type SendEmailInput = Auth.Domain.interfaces.SendEmailInput;
 
-export type verifyPhoneNumberInputs = Shared.Domain.Interfaces.FirebasePhoneVerificationInput;
+export type VerifyEmailInput = Auth.Domain.interfaces.VerifyEmailInput;
+
+export type VerifyPhoneNumberInputs = Shared.Domain.Interfaces.FirebasePhoneVerificationInput;
