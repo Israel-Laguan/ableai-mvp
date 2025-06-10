@@ -11,7 +11,6 @@ export enum AUTH_ERROR_MESSAGES {
   COULD_NOT_HASH_MESSAGE = `Could not hash the password.`,
   DISABLED_PERM_MESSAGE = `This account has been disabled. If you believe this is an error, please contact us via Discord with reference ID`,
   ERROR_MESSAGE = `An error occurred during the authentication process.`,
-  GEOLOCATION_ERROR_MESSAGE = `Unable to retrieve geo location.`,
   INVALID_CREDENTIALS_MESSAGE = `Incorrect email or password`,
   PRIVATE_DATA_USER_CREATION_FAILED_MESSAGE = `Could not create the user private data.`,
   USER_CREATION_FAILED_MESSAGE = `Could not create the user.`,

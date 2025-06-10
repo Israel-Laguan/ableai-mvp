@@ -14,8 +14,6 @@ export type CreateEmailToken = (input: Pick<Infra.RegisterInput, 'email'>) => st
 
 export type GenerateTokenPair = (input: GenerateTokenPairInput) => TokenPair | Promise<TokenPair>;
 
-export type GetGeoLocation = (IP: string) => Promise<string>;
-
 export type MakeVerifyEmailHTML = (inputs: MakeVerifyEmailHTMLInput) => string;
 
 export type ParseUserAgent = (userAgent: string) => UserAgent;

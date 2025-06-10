@@ -34,13 +34,10 @@ function generateTokenPair({ id, roleId }: Auth.Domain.interfaces.GenerateTokenP
   };
 }
 
-const getGeoLocation = Auth.Infra.GeoLite.getGeoLocation;
-
 const parseUserAgent = Auth.Infra.UaParseJs.parseUserAgent;
 
 export const login = Auth.App.makeLoginUseCase({
   generateTokenPair,
-  getGeoLocation,
   parseUserAgent,
   privateDataUserRepository,
   userRepository,

@@ -22,7 +22,6 @@ const {
   ACCOUNT_DISABLED_MESSAGE,
   DISABLED_PERM_MESSAGE,
   ERROR_MESSAGE,
-  GEOLOCATION_ERROR_MESSAGE,
   INVALID_CREDENTIALS_MESSAGE,
   TO_MANY_ATTEMPTS_MESSAGE,
 } = AUTH_ERROR_MESSAGES;
@@ -68,12 +67,12 @@ const statusCodeStack = {
   [LOGIN]: 200,
 };
 
-function makeLogAndResult({ IP, browser, device, geoLocation, os }: LogAttemptAndNextConfig) {
+function makeLogAndResult({ IP, browser, device, os }: LogAttemptAndNextConfig) {
   return ({ loginStatus, blockId, retryAfter }: LogAttemptAndNextInputs) => {
     console.log(
       `POST / [ LOGIN ATTEMPT ] : ${new Date().toUTCString()} status: ${
         statusCodeStack[loginStatus]
-      }/${loginStatus} IP: ${IP} UserAgent: ${device} ${os} ${browser} GeoLocation: ${geoLocation}`
+      }/${loginStatus} IP: ${IP} UserAgent: ${device} ${os} ${browser}`
     );
 
     if (loginStatus !== LOGIN) {
@@ -88,7 +87,6 @@ export function makeLoginUseCase<
   CustomInput extends object = object,
   CustomOutput extends object = object
 >({
-  getGeoLocation,
   generateTokenPair,
   parseUserAgent,
   privateDataUserRepository,
@@ -100,13 +98,8 @@ export function makeLoginUseCase<
 
     const parsedUserAgent = parseUserAgent(userAgent);
 
-    const geoLocation = await getGeoLocation(IP).catch(() => {
-      return GEOLOCATION_ERROR_MESSAGE;
-    });
-
     const logAndResult = makeLogAndResult({
       ...parsedUserAgent,
-      geoLocation,
       IP,
     });
 

@@ -3,7 +3,6 @@ import { LoginStatusKeys } from '../constants';
 import { PrivateDataUserRepository, RegisterTransaction, UserRepository } from '../repositories';
 import {
   GenerateTokenPair,
-  GetGeoLocation,
   ParseUserAgent,
   RunInEmailVerification,
   RunInLogin,
@@ -20,7 +19,6 @@ export interface AccessTokenPayload extends GenerateTokenPairInput {
 export type GenerateTokenPairInput = Pick<User, 'id' | 'roleId'>;
 
 export interface LogAttemptAndNextConfig extends UserAgent {
-  geoLocation: string;
   IP: string;
 }
 
@@ -49,7 +47,6 @@ export interface MakeLoginUseCaseConfig<
   CustomInput extends object = object,
   CustomOutput extends object = object
 > {
-  getGeoLocation: GetGeoLocation;
   generateTokenPair: GenerateTokenPair;
   parseUserAgent: ParseUserAgent;
   privateDataUserRepository: PrivateDataUserRepository;
