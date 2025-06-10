@@ -29,6 +29,20 @@
       "when": 1749243533052,
       "tag": "0003_nullable-last-app-role",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1749588101050,
+      "tag": "0004_add-login-attemp-and-block-id",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1749588396440,
+      "tag": "0005_update-login-attemps",
+      "breakpoints": true
     }
   ]
 }
