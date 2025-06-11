@@ -29,10 +29,24 @@ const envSchema = z.object({
 
   NODE_ENV: z.enum(NODE_ENV).default(NODE_ENV[0]),
 
-  REDIS_HOST: z.string().default('localhost'),
-
-  REDIS_PORT: z.string().default('6379'),
-
+  REDIS_CREDENTIALS: z
+    .string()
+    .transform(v => {
+      const decoded = Buffer.from(v, 'base64').toString('utf8');
+      return JSON.parse(decoded);
+    })
+    .refine(v =>
+      z
+        .object({
+          username: z.string().default('default'),
+          password: z.string(),
+          socket: z.object({
+            host: z.string().default('localhost'),
+            port: z.number().default(6379),
+          }),
+        })
+        .parse(v)
+    ),
   PORT: z.string().default('3001'),
 
   PRIVATE_GIG_DB_URL: z.string(),

@@ -13,7 +13,5 @@ export const limiterMiddleware = Express.Middlewares.makeRedisExpressRateLimiter
     standardHeaders: true,
     legacyHeaders: false,
   },
-  redisClientConfig: {
-    url: `redis://${env.REDIS_HOST || 'localhost'}:${env.REDIS_PORT || '6379'}`,
-  },
+  redisClientConfig: env.REDIS_CREDENTIALS,
 });
