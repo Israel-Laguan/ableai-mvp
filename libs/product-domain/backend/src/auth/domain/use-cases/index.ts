@@ -6,4 +6,6 @@ export type LoginUseCase<
   CustomOutput extends object = object
 > = (input: LoginInput<CustomInput>) => Promise<LoginOutput<CustomOutput>>;
 
-export type RegisterUseCase<R> = (input: Infra.RegisterInput) => Promise<R>;
+export type RegisterUseCase<CustomOutput extends object = object> = (
+  input: Infra.RegisterInput
+) => Promise<CustomOutput>;

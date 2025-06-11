@@ -32,9 +32,9 @@ export interface MakeLoginUseCaseConfig<
   userRepository: UserRepository;
 }
 
-export interface MakeRegisterUseCaseConfig<R> {
-  runInRegister: RunInRegister<R>;
-  runInTransaction: RegisterTransaction<R>;
+export interface MakeRegisterUseCaseConfig<CustomOutput extends object = object> {
+  runInRegister: RunInRegister<CustomOutput>;
+  runInTransaction: RegisterTransaction<CustomOutput>;
 }
 
 export type RunInLoginInput<CustomInput extends object = object> = LoginInput<CustomInput> & {
@@ -44,6 +44,10 @@ export type RunInLoginInput<CustomInput extends object = object> = LoginInput<Cu
   user: User;
   userRepository: UserRepository;
 };
+
+export type RunInRegisterOutput<CustomInput extends object = object> = {
+  rollback: () => Promise<void>;
+} & CustomInput;
 
 export type UserAgent = {
   browser: string;

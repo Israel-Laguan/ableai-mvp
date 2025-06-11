@@ -3,14 +3,19 @@ import type { FirebaseError, FirebaseUserRecord } from '../../../../shared/domai
 import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
 
 import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
-import { throwError } from '../errors';
 import { AUTH_ERROR_MESSAGES } from '../../../domain/constants';
+import { RunInRegister } from '../../../domain/services';
+import { throwError } from '../errors';
 
 const { INVALID_CREDENTIALS, EMAIL_ALREADY_EXISTS } = FIREBASE_ERROR_CODES;
 const { ALREADY_EXIST_MESSAGE } = AUTH_ERROR_MESSAGES;
 const ERROR_PATH = 'AUTH_REGISTER_SERVICE';
 
-export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule }) {
+export function makeFirebaseRegisterService({
+  auth,
+}: {
+  auth: FirebaseAuthModule;
+}): RunInRegister<Omit<FirebaseUserRecord, 'toJSON'>> {
   return async ({ email, fullName, password, phoneNumber }: Infra.RegisterInput) => {
     const user: FirebaseUserRecord | null = await auth
       .getUserByEmail(email)
@@ -28,7 +33,7 @@ export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule
       });
     }
 
-    return await auth
+    const newUser = (await auth
       .createUser({
         displayName: fullName,
         email,
@@ -38,6 +43,17 @@ export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule
       })
       .catch((error: FirebaseError) => {
         throwError(error.code as FIREBASE_ERROR_CODES, ERROR_PATH);
-      });
+      })) as FirebaseUserRecord;
+
+    return {
+      ...newUser,
+      async rollback() {
+        return auth.deleteUser(newUser.uid).catch((error: FirebaseError) => {
+          throwError(error.code as FIREBASE_ERROR_CODES, ERROR_PATH, {
+            message: 'Failed to rollback user creation',
+          });
+        });
+      },
+    };
   };
 }

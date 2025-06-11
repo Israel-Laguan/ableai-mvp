@@ -1,5 +1,10 @@
 import { Infra } from '@models/auth';
-import { LogAttemptAndNextInputs, RunInLoginInput, UserAgent } from '../interfaces';
+import {
+  LogAttemptAndNextInputs,
+  RunInLoginInput,
+  RunInRegisterOutput,
+  UserAgent,
+} from '../interfaces';
 
 export type logAndResultLogin = (input: LogAttemptAndNextInputs) => void | never;
 
@@ -10,4 +15,6 @@ export type RunInLogin<
   CustomOutput extends object = object
 > = (input: RunInLoginInput<CustomInput>) => Promise<CustomOutput>;
 
-export type RunInRegister<R> = (input: Infra.RegisterInput) => Promise<R>;
+export type RunInRegister<CustomOutput extends object = object> = (
+  input: Infra.RegisterInput
+) => Promise<RunInRegisterOutput<CustomOutput>>;

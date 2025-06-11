@@ -62,10 +62,10 @@ zxcvbnOptions.setOptions({
   graphs: zxcvbnCommonPackage.adjacencyGraphs,
 });
 
-export const makeRegisterUserUseCase = <R>({
+export const makeRegisterUserUseCase = <CustomOutput extends object = object>({
   runInTransaction,
   runInRegister,
-}: MakeRegisterUseCaseConfig<R>): RegisterUseCase<R> => {
+}: MakeRegisterUseCaseConfig<CustomOutput>): RegisterUseCase<CustomOutput> => {
   return async ({ email, password, fullName, phoneNumber = null }) => {
     const { score: passwordStrength, feedback } = zxcvbn(password);
 
@@ -78,43 +78,55 @@ export const makeRegisterUserUseCase = <R>({
         PRIVATE_USER_DATA_REPOSITORY
       );
 
-      const runInRegisterResult = await runInRegister({ email, password, fullName, phoneNumber });
-
-      const userExist = await privateDataUserRepository
-        .getByEmail({ email })
-        .catch(() => throwError(USER_CREATION_FAILED));
-
-      if (userExist) {
-        throwError(ALREADY_EXIST);
-      }
-
-      const [privateDataUser] = await privateDataUserRepository.create({
-        fullName,
+      const runInRegisterReturn = await runInRegister({
         email,
+        password,
+        fullName,
         phoneNumber,
       });
 
-      const { id } = privateDataUser;
+      try {
+        const userExist = await privateDataUserRepository
+          .getByEmail({ email })
+          .catch(() => throwError(USER_CREATION_FAILED));
 
-      if (!id) {
-        throwError(PRIVATE_DATA_USER_CREATION_FAILED);
-      }
+        if (userExist) {
+          throwError(ALREADY_EXIST);
+        }
 
-      const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
-
-      const user = await userRepository
-        .create({
-          privateDataUserId: id,
-        })
-        .catch(() => {
-          throwError(USER_CREATION_FAILED);
+        const [privateDataUser] = await privateDataUserRepository.create({
+          fullName,
+          email,
+          phoneNumber,
         });
 
-      if (!user || !user[0]?.id) {
-        throwError(USER_CREATION_FAILED);
-      }
+        const { id } = privateDataUser;
 
-      return runInRegisterResult;
+        if (!id) {
+          throwError(PRIVATE_DATA_USER_CREATION_FAILED);
+        }
+
+        const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
+
+        const user = await userRepository
+          .create({
+            privateDataUserId: id,
+          })
+          .catch(() => {
+            throwError(USER_CREATION_FAILED);
+          });
+
+        if (!user || !user[0]?.id) {
+          throwError(USER_CREATION_FAILED);
+        }
+
+        throw new Error('User creation failed, but this should not happen as we checked earlier.');
+
+        return runInRegisterReturn;
+      } catch (error) {
+        await runInRegisterReturn.rollback();
+        throw error;
+      }
     });
   };
 };
