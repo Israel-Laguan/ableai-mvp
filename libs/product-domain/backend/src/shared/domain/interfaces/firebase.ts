@@ -1,9 +1,5 @@
 import type { auth, ServiceAccount } from 'firebase-admin';
 
-export interface FirebasePhoneVerificationInput {
-  idToken: string;
-}
-
 export interface FirebaseError {
   code: string;
 }
