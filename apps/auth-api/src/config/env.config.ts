@@ -27,6 +27,8 @@ const envSchema = z.object({
 
   HOST: z.string().default('localhost'),
 
+  ENV_JWT_SECRET: z.string(),
+
   NODE_ENV: z.enum(NODE_ENV).default(NODE_ENV[0]),
 
   PORT: z.string().default('3001'),
