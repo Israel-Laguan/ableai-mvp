@@ -20,7 +20,7 @@ export interface LogAttemptAndNextInputs extends Pick<User, 'blockId'> {
   retryAfter?: Date;
 }
 
-export type LoginInputs<CustomInput extends object = object> = Infra.LoginInput & {
+export type LoginInput<CustomInput extends object = object> = Infra.LoginInput & {
   IP: string;
   userAgent: string;
 } & CustomInput;
@@ -51,7 +51,7 @@ export interface RefreshTokenPayload extends Pick<GenerateTokenPairInput, 'id'> 
   iat: number;
 }
 
-export type RunInLoginInput<CustomInput extends object = object> = LoginInputs<CustomInput> & {
+export type RunInLoginInput<CustomInput extends object = object> = LoginInput<CustomInput> & {
   userRepository: UserRepository;
   privateDataUserRepository: PrivateDataUserRepository;
 };
