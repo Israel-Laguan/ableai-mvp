@@ -7,7 +7,7 @@ export interface LogAttemptAndNextConfig extends UserAgent {
   IP: string;
 }
 
-export interface LogAttemptAndNextInputs extends Pick<User, 'blockId'> {
+export interface LogAttemptAndNextInputs {
   loginStatus: LOGIN_STATUS_CODE;
   retryAfter?: Date;
 }
@@ -26,16 +26,6 @@ export interface MakeLoginUseCaseConfig<
   CustomInput extends object = object,
   CustomOutput extends object = object
 > {
-  /**
-   * in milliseconds, default is 15 * 60 * 1000 (15 minutes).
-   */
-  loginCooldown?: number;
-  /**
-   * Maximum number of login attempts before the user is blocked.
-   *
-   * Default is 3 attempts.
-   */
-  maxLoginAttempts?: number;
   parseUserAgent: ParseUserAgent;
   privateDataUserRepository: PrivateDataUserRepository;
   runInLogin?: RunInLogin<CustomInput, CustomOutput>;

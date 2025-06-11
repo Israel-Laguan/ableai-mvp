@@ -88,13 +88,13 @@ export const makeRegisterUserUseCase = <R>({
         throwError(ALREADY_EXIST);
       }
 
-      const privateDataUser = await privateDataUserRepository.create({
+      const [privateDataUser] = await privateDataUserRepository.create({
         fullName,
         email,
         phoneNumber,
       });
 
-      const { id } = privateDataUser[0];
+      const { id } = privateDataUser;
 
       if (!id) {
         throwError(PRIVATE_DATA_USER_CREATION_FAILED);

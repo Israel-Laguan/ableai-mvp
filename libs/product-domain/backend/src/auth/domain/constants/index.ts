@@ -6,10 +6,8 @@ export enum AUTH_DICTIONARY {
 }
 
 export enum AUTH_ERROR_MESSAGES {
-  ACCOUNT_DISABLED_MESSAGE = `account disable.`,
   ALREADY_EXIST_MESSAGE = `User already exists.`,
   COULD_NOT_HASH_MESSAGE = `Could not hash the password.`,
-  DISABLED_PERM_MESSAGE = `This account has been disabled. If you believe this is an error, please contact us via Discord with reference ID`,
   ERROR_MESSAGE = `An error occurred during the authentication process.`,
   INVALID_CREDENTIALS_MESSAGE = `Incorrect email or password`,
   PRIVATE_DATA_USER_CREATION_FAILED_MESSAGE = `Could not create the user private data.`,
@@ -19,10 +17,8 @@ export enum AUTH_ERROR_MESSAGES {
 }
 
 export enum LOGIN_STATUS_CODE {
-  DISABLED_PERM,
   ERROR,
   LOGIN,
-  TO_MANY_ATTEMPTS,
   UNAUTHORIZED,
 }
 

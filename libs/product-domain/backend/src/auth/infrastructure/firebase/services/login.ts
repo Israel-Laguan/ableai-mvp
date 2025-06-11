@@ -21,13 +21,9 @@ export function makeFirebaseLoginService({
 
     const { user, email } = input;
 
-    const { id, loginAttempts = 0 } = user;
+    const { id } = user;
 
     if (FirebaseAuthEmail !== email) {
-      await input.userRepository.updateById(String(id), {
-        loginAttempts: loginAttempts + 1,
-      });
-
       logAndResultLogin({
         loginStatus: UNAUTHORIZED,
       });

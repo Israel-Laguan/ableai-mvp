@@ -3,9 +3,11 @@ import type { FirebaseError, FirebaseUserRecord } from '../../../../shared/domai
 import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
 
 import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
-import { throwError, throwInvalidCredentialsError } from '../errors';
+import { throwError } from '../errors';
+import { AUTH_ERROR_MESSAGES } from '../../../domain/constants';
 
-const { INVALID_CREDENTIALS } = FIREBASE_ERROR_CODES;
+const { INVALID_CREDENTIALS, EMAIL_ALREADY_EXISTS } = FIREBASE_ERROR_CODES;
+const { ALREADY_EXIST_MESSAGE } = AUTH_ERROR_MESSAGES;
 const ERROR_PATH = 'AUTH_REGISTER_SERVICE';
 
 export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule }) {
@@ -21,7 +23,9 @@ export function makeFirebaseRegisterService({ auth }: { auth: FirebaseAuthModule
       });
 
     if (user) {
-      throwInvalidCredentialsError(ERROR_PATH);
+      throwError(EMAIL_ALREADY_EXISTS, ERROR_PATH, {
+        message: ALREADY_EXIST_MESSAGE,
+      });
     }
 
     return await auth
