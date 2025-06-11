@@ -1,7 +1,4 @@
-import { compare } from 'bcrypt';
-
 import type { PrivateDataUser } from '@models/auth';
-import type { LoginStatusKeys } from '../domain/constants';
 import type {
   MakeLoginUseCaseConfig,
   LogAttemptAndNextConfig,
@@ -9,14 +6,12 @@ import type {
 } from '../domain/interfaces';
 import type { LoginUseCase } from '../domain/use-cases';
 
-import { USER_STATUS } from '@models/auth';
 import { Errors, CONSTANTS } from '@shared';
 import { AUTH_ERROR_MESSAGES, LOGIN_STATUS_CODE } from '../domain/constants';
 
 const { HTTP_STATUS_CODE } = CONSTANTS;
 
-const { DISABLED_PERM, ERROR, LOGIN, NOT_VERIFIED, TO_MANY_ATTEMPTS, UNAUTHORIZED } =
-  LOGIN_STATUS_CODE;
+const { DISABLED_PERM, ERROR, LOGIN, TO_MANY_ATTEMPTS, UNAUTHORIZED } = LOGIN_STATUS_CODE;
 
 const {
   ACCOUNT_DISABLED_MESSAGE,
@@ -26,18 +21,16 @@ const {
   TO_MANY_ATTEMPTS_MESSAGE,
 } = AUTH_ERROR_MESSAGES;
 
-const makeUnauthorizedError = () =>
-  Errors.UnauthorizeError.create(INVALID_CREDENTIALS_MESSAGE, 'AUTH_LOGIN');
-
 const { throwError } = Errors.makeErrorRunner<
   Partial<LogAttemptAndNextInputs>,
-  Exclude<LoginStatusKeys, 'ENABLE' | 'LOGIN'>
+  Exclude<LOGIN_STATUS_CODE, LOGIN_STATUS_CODE.LOGIN>
 >({
   [DISABLED_PERM]: ({ blockId }) => {
     return Errors.ForbiddenError.create(
       JSON.stringify({
         error: ACCOUNT_DISABLED_MESSAGE,
-        message: `${DISABLED_PERM_MESSAGE}: ${blockId}.`,
+        message: DISABLED_PERM_MESSAGE,
+        blockId,
       }),
       'AUTH_LOGIN'
     );
@@ -45,15 +38,11 @@ const { throwError } = Errors.makeErrorRunner<
 
   [ERROR]: () => Errors.InternalServerError.create(ERROR_MESSAGE, 'AUTH_LOGIN'),
 
-  [UNAUTHORIZED]: makeUnauthorizedError,
-
-  [NOT_VERIFIED]: makeUnauthorizedError,
+  [UNAUTHORIZED]: () => Errors.UnauthorizeError.create(INVALID_CREDENTIALS_MESSAGE, 'AUTH_LOGIN'),
 
   [TO_MANY_ATTEMPTS]: ({ retryAfter }) =>
     Errors.UnauthorizeError.create(
-      `${TO_MANY_ATTEMPTS_MESSAGE}
-      Can retry after: ${retryAfter?.toUTCString()}
-      `,
+      JSON.stringify({ message: TO_MANY_ATTEMPTS_MESSAGE, retryAfter: retryAfter?.toUTCString() }),
       'AUTH_LOGIN'
     ),
 });
@@ -62,13 +51,12 @@ const statusCodeStack = {
   [DISABLED_PERM]: HTTP_STATUS_CODE.FORBIDDEN,
   [ERROR]: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
   [UNAUTHORIZED]: HTTP_STATUS_CODE.UNAUTHORIZED,
-  [NOT_VERIFIED]: HTTP_STATUS_CODE.UNAUTHORIZED,
   [TO_MANY_ATTEMPTS]: HTTP_STATUS_CODE.UNAUTHORIZED,
   [LOGIN]: 200,
 };
 
 function makeLogAndResult({ IP, browser, device, os }: LogAttemptAndNextConfig) {
-  return ({ loginStatus, blockId, retryAfter }: LogAttemptAndNextInputs) => {
+  return ({ loginStatus, blockId, retryAfter }: LogAttemptAndNextInputs): void | never => {
     console.log(
       `POST / [ LOGIN ATTEMPT ] : ${new Date().toUTCString()} status: ${
         statusCodeStack[loginStatus]
@@ -87,14 +75,15 @@ export function makeLoginUseCase<
   CustomInput extends object = object,
   CustomOutput extends object = object
 >({
-  generateTokenPair,
+  loginCooldown = 15 * 60 * 1000,
+  maxLoginAttempts = 3,
   parseUserAgent,
   privateDataUserRepository,
   userRepository,
   runInLogin,
 }: MakeLoginUseCaseConfig<CustomInput, CustomOutput>): LoginUseCase<CustomInput, CustomOutput> {
   return async input => {
-    const { email, password: currentPassword, IP, userAgent } = input;
+    const { email, IP, userAgent } = input;
 
     const parsedUserAgent = parseUserAgent(userAgent);
 
@@ -103,41 +92,37 @@ export function makeLoginUseCase<
       IP,
     });
 
-    const { id: privateUserId } = (await privateDataUserRepository
-      .getByEmail({ email })
-      .catch(() => {
-        logAndResult({
-          loginStatus: ERROR,
-        });
-      })) as PrivateDataUser;
+    const privateDataUser = (await privateDataUserRepository.getByEmail({ email }).catch(() => {
+      logAndResult({
+        loginStatus: ERROR,
+      });
+    })) as PrivateDataUser;
+
+    const privateUserId = privateDataUser.id;
 
     if (!privateUserId) {
       logAndResult({ loginStatus: UNAUTHORIZED });
     }
 
-    const [
-      {
-        id: userId,
-        enabled,
-        password: storedPassword,
-        loginAttempts = 0,
-        blockId,
-        updatedAt,
-        lastAppRole,
-        roleId,
-      },
-    ] = await userRepository.getByPrivateDataUserId(privateUserId);
+    const [user] = await userRepository.getByPrivateDataUserId(privateUserId);
 
-    const stringifyUserId = String(userId);
+    if (!user) {
+      logAndResult({ loginStatus: UNAUTHORIZED });
+    }
 
-    if (enabled === USER_STATUS.TO_MANY_ATTEMPTS) {
-      const canRetryAfter = new Date(updatedAt.getTime() + 15 * 60 * 1000);
+    if (user.blockId) {
+      logAndResult({
+        loginStatus: DISABLED_PERM,
+        blockId: user.blockId,
+      });
+    }
 
-      if (new Date() > canRetryAfter) {
-        await userRepository.updateById(stringifyUserId, {
-          loginAttempts: 0,
-        });
-      } else {
+    const { loginAttempts = 0 } = user;
+
+    if (loginAttempts >= maxLoginAttempts) {
+      const canRetryAfter = new Date(user.updatedAt.getTime() + loginCooldown);
+
+      if (new Date() < canRetryAfter) {
         logAndResult({
           loginStatus: TO_MANY_ATTEMPTS,
           retryAfter: new Date(new Date().getTime() - canRetryAfter.getTime()),
@@ -145,61 +130,28 @@ export function makeLoginUseCase<
       }
     }
 
-    if (loginAttempts >= 3) {
-      await userRepository.updateById(stringifyUserId, {
-        enabled: USER_STATUS.TO_MANY_ATTEMPTS,
-      });
-
-      logAndResult({
-        loginStatus: TO_MANY_ATTEMPTS,
-        retryAfter: new Date(new Date().getTime() + 15 * 60 * 1000),
-      });
-    }
-
-    if (enabled !== USER_STATUS.ENABLE) {
-      logAndResult({
-        loginStatus: enabled,
-        blockId,
-      });
-    }
-
-    const isValidPassword = compare(currentPassword, storedPassword);
-
-    if (!isValidPassword) {
-      await userRepository.updateById(stringifyUserId, {
-        loginAttempts: loginAttempts + 1,
-      });
-
-      logAndResult({
-        loginStatus: UNAUTHORIZED,
-      });
-    }
-
-    if (loginAttempts > 0) {
-      await userRepository.updateById(stringifyUserId, {
-        loginAttempts: 0,
-      });
-    }
-
     const runInLoginResult = (await runInLogin?.({
       ...input,
-      userRepository,
+      logAndResultLogin: logAndResult,
+      privateDataUser,
       privateDataUserRepository,
+      user,
+      userRepository,
     })) as CustomOutput;
 
     logAndResult({
       loginStatus: LOGIN,
     });
 
-    const { accessToken, refreshToken } = await generateTokenPair({
-      id: userId,
-      roleId,
-    });
+    if (loginAttempts > 0) {
+      await userRepository.updateById(String(user.id), {
+        loginAttempts: 0,
+      });
+    }
 
     return {
-      lastAppRole,
-      accessToken,
-      refreshToken,
+      user,
+      privateDataUser,
       ...runInLoginResult,
     };
   };
