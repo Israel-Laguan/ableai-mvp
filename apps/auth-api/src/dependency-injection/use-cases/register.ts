@@ -1,10 +1,11 @@
 import { Shared, Auth } from '@product-domain/backend';
 import { gigDb, privateGigDb } from '../../db';
 import { firebaseService } from '../services';
+import { RegisterOutput } from '../../interfaces';
 
 const { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } = Auth.Domain.Constants.AUTH_DICTIONARY;
 
-const runInTransaction: Auth.Domain.Repositories.RegisterTransaction =
+const runInTransaction: Auth.Domain.Repositories.RegisterTransaction<RegisterOutput> =
   Shared.Infra.Drizzle.Repositories.makeDrizzleUnitOfWork([
     {
       db: privateGigDb,
@@ -20,8 +21,7 @@ const runInTransaction: Auth.Domain.Repositories.RegisterTransaction =
 
 export const register = Auth.App.makeRegisterUserUseCase({
   runInTransaction,
-  runInRegister: async ({ email }) => {
-    await firebaseService.register({ email });
-    await firebaseService.sendEmailLink({ email });
+  runInRegister: async input => {
+    return await firebaseService.register(input);
   },
 });
