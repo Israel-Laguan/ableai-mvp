@@ -1,4 +1,5 @@
 @baseUrl = http://localhost:3001/api/auth/v1
+@accessToken = "your_access_token_here"
 
 ### ROOT Auth API
 
@@ -6,15 +7,16 @@
 GET {{baseUrl}}/health
 
 ############################################################################
-### AUTH
+### AUTH ###################################################################
+############################################################################
 
 ### POST Login
 POST {{baseUrl}}/login
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "email": "your_awesome_email@email.com",
-  "password": "Your_Awesome_p4$$word"
 }
 
 ### POST Register
@@ -25,5 +27,5 @@ Content-Type: application/json
   "fullName": "your name",
   "email": "your_awesome_email@email.com",
   "password": "Your_Awesome_p4$$word",
-  "phoneNumber": "+1234567890"
+  "phoneNumber": "+123456789012"
 }
