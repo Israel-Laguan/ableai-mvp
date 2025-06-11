@@ -1,4 +1,5 @@
 import { USER_STATUS } from '@models/auth';
+export { top10k10plus } from './top10k10plus';
 
 export enum AUTH_DICTIONARY {
   USER_REPOSITORY = 'USER_REPOSITORY',

@@ -28,6 +28,7 @@ const {
     USER_CREATION_FAILED_MESSAGE,
     WEAK_PASSWORD_MESSAGE,
   },
+  top10k10plus,
 } = Constants;
 
 const { throwError } = Errors.makeErrorRunner<
@@ -56,6 +57,7 @@ const { throwError } = Errors.makeErrorRunner<
 zxcvbnOptions.setOptions({
   dictionary: {
     ...zxcvbnCommonPackage.dictionary,
+    'top-10k-10plus': top10k10plus,
   },
   graphs: zxcvbnCommonPackage.adjacencyGraphs,
 });
