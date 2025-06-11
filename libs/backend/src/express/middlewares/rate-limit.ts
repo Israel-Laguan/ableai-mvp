@@ -32,8 +32,11 @@ export function makeRedisExpressRateLimiter({
     sendCommand: (...args: string[]) => redisClient.sendCommand(args),
   });
 
-  return rateLimit({
-    ...rateLimitConfig,
-    store: redisStore,
-  });
+  return {
+    middleware: rateLimit({
+      ...rateLimitConfig,
+      store: redisStore,
+    }),
+    closeRedisClientConnection: async () => await redisClient.close(),
+  };
 }
