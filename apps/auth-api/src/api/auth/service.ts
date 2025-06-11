@@ -1,8 +1,8 @@
 import { UseCases } from '../../dependency-injection';
-import { LoginInputs, RegisterInput } from '../../interfaces';
+import { LoginInput, RegisterInput } from '../../interfaces';
 
 export const authService = {
-  async login(input: LoginInputs) {
+  async login(input: LoginInput) {
     return await UseCases.login(input);
   },
 
