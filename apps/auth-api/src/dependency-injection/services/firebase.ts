@@ -7,6 +7,10 @@ const auth = Shared.Infra.Firebase.Modules.makeFirebaseAuthModule({
 });
 
 export const firebaseService = {
+  login: Auth.Infra.Firebase.Services.makeFirebaseLoginService({
+    auth,
+  }),
+
   register: Auth.Infra.Firebase.Services.makeFirebaseRegisterService({
     auth,
   }),
