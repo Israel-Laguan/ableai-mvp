@@ -1,22 +1,14 @@
-import { Infra, User } from '@models/auth';
-import { LoginStatusKeys } from '../constants';
+import { Infra, PrivateDataUser, User } from '@models/auth';
+import { LOGIN_STATUS_CODE } from '../constants';
 import { PrivateDataUserRepository, RegisterTransaction, UserRepository } from '../repositories';
-import { GenerateTokenPair, ParseUserAgent, RunInLogin, RunInRegister } from '../services';
-
-export interface AccessTokenPayload extends GenerateTokenPairInput {
-  type: 'access';
-  exp: number;
-  iat: number;
-}
-
-export type GenerateTokenPairInput = Pick<User, 'id' | 'roleId'>;
+import { logAndResultLogin, ParseUserAgent, RunInLogin, RunInRegister } from '../services';
 
 export interface LogAttemptAndNextConfig extends UserAgent {
   IP: string;
 }
 
 export interface LogAttemptAndNextInputs extends Pick<User, 'blockId'> {
-  loginStatus: LoginStatusKeys;
+  loginStatus: LOGIN_STATUS_CODE;
   retryAfter?: Date;
 }
 
@@ -25,15 +17,25 @@ export type LoginInput<CustomInput extends object = object> = Infra.LoginInput &
   userAgent: string;
 } & CustomInput;
 
-export type LoginOutput<CustomOutput extends object = object> = Pick<User, 'lastAppRole'> &
-  TokenPair &
-  CustomOutput;
+export type LoginOutput<CustomOutput extends object = object> = {
+  privateDataUser: PrivateDataUser;
+  user: User;
+} & CustomOutput;
 
 export interface MakeLoginUseCaseConfig<
   CustomInput extends object = object,
   CustomOutput extends object = object
 > {
-  generateTokenPair: GenerateTokenPair;
+  /**
+   * in milliseconds, default is 15 * 60 * 1000 (15 minutes).
+   */
+  loginCooldown?: number;
+  /**
+   * Maximum number of login attempts before the user is blocked.
+   *
+   * Default is 3 attempts.
+   */
+  maxLoginAttempts?: number;
   parseUserAgent: ParseUserAgent;
   privateDataUserRepository: PrivateDataUserRepository;
   runInLogin?: RunInLogin<CustomInput, CustomOutput>;
@@ -45,20 +47,12 @@ export interface MakeRegisterUseCaseConfig<R> {
   runInTransaction: RegisterTransaction<R>;
 }
 
-export interface RefreshTokenPayload extends Pick<GenerateTokenPairInput, 'id'> {
-  type: 'refresh';
-  exp: number;
-  iat: number;
-}
-
 export type RunInLoginInput<CustomInput extends object = object> = LoginInput<CustomInput> & {
-  userRepository: UserRepository;
+  logAndResultLogin: logAndResultLogin;
+  privateDataUser: PrivateDataUser;
   privateDataUserRepository: PrivateDataUserRepository;
-};
-
-export type TokenPair = {
-  accessToken: string;
-  refreshToken: string;
+  user: User;
+  userRepository: UserRepository;
 };
 
 export type UserAgent = {

@@ -1,13 +1,13 @@
 import { Infra } from '@models/auth';
-import { GenerateTokenPairInput, RunInLoginInput, TokenPair, UserAgent } from '../interfaces';
+import { LogAttemptAndNextInputs, RunInLoginInput, UserAgent } from '../interfaces';
 
-export type GenerateTokenPair = (input: GenerateTokenPairInput) => TokenPair | Promise<TokenPair>;
+export type logAndResultLogin = (input: LogAttemptAndNextInputs) => void | never;
 
 export type ParseUserAgent = (userAgent: string) => UserAgent;
 
 export type RunInLogin<
-  CustomOInput extends object = object,
+  CustomInput extends object = object,
   CustomOutput extends object = object
-> = (input: RunInLoginInput<CustomOInput>) => Promise<CustomOutput>;
+> = (input: RunInLoginInput<CustomInput>) => Promise<CustomOutput>;
 
 export type RunInRegister<R> = (input: Infra.RegisterInput) => Promise<R>;
