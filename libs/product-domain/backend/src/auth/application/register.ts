@@ -120,8 +120,6 @@ export const makeRegisterUserUseCase = <CustomOutput extends object = object>({
           throwError(USER_CREATION_FAILED);
         }
 
-        throw new Error('User creation failed, but this should not happen as we checked earlier.');
-
         return runInRegisterReturn;
       } catch (error) {
         await runInRegisterReturn.rollback();
