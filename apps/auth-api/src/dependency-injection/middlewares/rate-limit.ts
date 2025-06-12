@@ -13,5 +13,12 @@ export const limiterMiddleware = Express.Middlewares.makeRedisExpressRateLimiter
     standardHeaders: true,
     legacyHeaders: false,
   },
-  redisClientConfig: env.REDIS_CREDENTIALS,
+  redisClientConfig: {
+    username: env.REDIS_USERNAME,
+    password: env.REDIS_PASSWORD,
+    socket: {
+      host: env.REDIS_HOST,
+      port: env.REDIS_PORT,
+    },
+  },
 });
