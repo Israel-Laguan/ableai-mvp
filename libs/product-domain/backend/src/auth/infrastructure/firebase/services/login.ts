@@ -21,7 +21,7 @@ export function makeFirebaseLoginService({
 
     const { user, email } = input;
 
-    const { id } = user;
+    const { id, roleId, lastAppRole } = user;
 
     if (FirebaseAuthEmail !== email) {
       logAndResultLogin({
@@ -29,7 +29,7 @@ export function makeFirebaseLoginService({
       });
     }
 
-    const newIdToken = await auth.createCustomToken(uid, { id, roleId: user.roleId }).catch(() => {
+    const newIdToken = await auth.createCustomToken(uid, { id, roleId, lastAppRole }).catch(() => {
       return logAndResultLogin({
         loginStatus: UNAUTHORIZED,
       }) as never;

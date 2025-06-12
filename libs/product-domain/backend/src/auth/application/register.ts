@@ -69,7 +69,9 @@ export const makeRegisterUserUseCase = <CustomOutput extends object = object>({
   return async ({ email, password, fullName, phoneNumber = null }) => {
     const { score: passwordStrength, feedback } = zxcvbn(password);
 
-    if (passwordStrength < 3) {
+    const PASSWORD_STRENGTH_SCORE = 3;
+
+    if (passwordStrength < PASSWORD_STRENGTH_SCORE) {
       throwError(WEAK_PASSWORD, { feedback: feedback.warning || 'No feedback provided' });
     }
 
@@ -78,7 +80,7 @@ export const makeRegisterUserUseCase = <CustomOutput extends object = object>({
         PRIVATE_USER_DATA_REPOSITORY
       );
 
-      const runInRegisterReturn = await runInRegister({
+      const { rollback, ...result } = await runInRegister({
         email,
         password,
         fullName,
@@ -120,9 +122,9 @@ export const makeRegisterUserUseCase = <CustomOutput extends object = object>({
           throwError(USER_CREATION_FAILED);
         }
 
-        return runInRegisterReturn;
+        return result as CustomOutput;
       } catch (error) {
-        await runInRegisterReturn.rollback();
+        await rollback();
         throw error;
       }
     });
