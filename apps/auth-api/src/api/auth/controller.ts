@@ -28,7 +28,7 @@ export const authController = {
   }),
 
   register: tryCatchAndNext(async (req: Request, res: Response) => {
-    await authService.register(req.body);
-    res.status(HTTP_STATUS_CODE.CREATED).end();
+    const result = await authService.register(req.body);
+    res.status(HTTP_STATUS_CODE.CREATED).json(result);
   }),
 };
