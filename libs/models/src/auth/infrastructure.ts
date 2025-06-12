@@ -1,6 +1,5 @@
 export type LoginInput = {
   email: string;
-  password: string;
 };
 
 export type RegisterInput = {
@@ -11,7 +10,6 @@ export type RegisterInput = {
 };
 
 export type UserCreateInput = {
-  password: string;
   privateDataUserId: number;
 };
 

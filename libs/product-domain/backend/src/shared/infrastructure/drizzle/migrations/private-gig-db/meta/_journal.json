@@ -15,6 +15,20 @@
       "when": 1748399124666,
       "tag": "0001_add-phone-number",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749145614621,
+      "tag": "0002_add-phone-verification",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1749595867376,
+      "tag": "0003_remove-phone-verified",
+      "breakpoints": true
     }
   ]
 }

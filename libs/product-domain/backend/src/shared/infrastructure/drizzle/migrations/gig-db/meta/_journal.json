@@ -8,6 +8,55 @@
       "when": 1748360143799,
       "tag": "0000_add-users-table",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1748809022607,
+      "tag": "0001_add-new-user-data",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749000667661,
+      "tag": "0002_update-enable-data-type",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1749243533052,
+      "tag": "0003_nullable-last-app-role",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1749588101050,
+      "tag": "0004_add-login-attemp-and-block-id",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1749588396440,
+      "tag": "0005_update-login-attemps",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1749595843411,
+      "tag": "0006_remove-enable-and-password",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1749659123407,
+      "tag": "0007_remove-login-attemps-and-block-id",
+      "breakpoints": true
     }
   ]
 }

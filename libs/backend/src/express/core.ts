@@ -20,13 +20,13 @@ export const makeExpressApp = ({
 }: AppConfig): Application => {
   const app = express();
 
-  app.use(helmet());
-  app.disable('x-powered-by');
-
   app.use(cors());
+  app.use(helmet());
   app.use(morgan('tiny'));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+
+  app.disable('x-powered-by');
 
   // Router
   app.use(globalPrefix, router);

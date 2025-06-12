@@ -1,14 +1,10 @@
 import { Router } from 'express';
 
-import gig from './gig';
-import privateGig from './private-gig';
-
-const globalPrefix = '/api/auth/v1';
+import authRouter from '../api/auth/routes';
+import { limiterMiddleware } from '../dependency-injection/middlewares';
 
 const apiV1 = Router();
 
-apiV1.use(globalPrefix, gig);
-apiV1.use(globalPrefix, privateGig);
+apiV1.use(limiterMiddleware.middleware, authRouter);
 
 export default apiV1;
-export { globalPrefix };

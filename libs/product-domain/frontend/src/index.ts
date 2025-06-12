@@ -1,3 +1,2 @@
-export * from './lib/product-domain/frontend';
-
-export const fromLibs = 'From Libs';
+export * as Auth from './auth';
+export * as Shared from './shared';

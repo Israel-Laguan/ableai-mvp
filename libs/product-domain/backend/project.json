@@ -14,20 +14,6 @@
         "tsConfig": "libs/product-domain/backend/tsconfig.lib.json",
         "assets": ["libs/product-domain/backend/*.md"]
       }
-    },
-    "generate-gig-migration": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "drizzle-kit generate --config=./src/shared/infrastructure/drizzle/config/gig-drizzle.config.ts --name=gig",
-        "cwd": "libs/product-domain/backend"
-      }
-    },
-    "generate-private-gig-migration": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "drizzle-kit generate --config=./src/shared/infrastructure/drizzle/config/private-gig-drizzle.config.ts --name=private_gig",
-        "cwd": "libs/product-domain/backend"
-      }
     }
   }
 }

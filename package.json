@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "prepare": "husky",
-    "generate-migration": "npx tsx  scripts/drizzle-migrations.ts"
+    "generate-migration": "npx tsx --tsconfig tsconfig.base.json scripts/drizzle-migrations.ts",
+    "base64-encode": "npx tsx scripts/base64-encoder.ts"
   },
   "repository": {
     "type": "git",
@@ -91,16 +92,24 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@modelcontextprotocol/sdk": "^1.11.4",
+    "@zxcvbn-ts/core": "^3.0.4",
+    "@zxcvbn-ts/language-common": "^3.0.4",
     "axios": "^1.6.0",
+    "cors": "^2.8.5",
     "drizzle-orm": "^0.43.1",
     "express": "^4.21.2",
+    "firebase": "^11.9.0",
+    "firebase-admin": "^13.4.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.16.0",
+    "rate-limit-redis": "^4.2.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "redis": "^5.5.6",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
+    "ua-parser-js": "^2.0.3",
     "zod": "^3.25.20"
   },
   "lint-staged": {

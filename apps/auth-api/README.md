@@ -18,3 +18,18 @@ The `auth-api` is an authentication and user management service built with Expre
 - Provides robust error handling and JSON responses.
 - Supports advanced query options for listing users (sorting, pagination, filtering).
 - Uses environment variables for configuration and database connections.
+
+## Configuration
+
+The following environment variables are required for the `auth-api` application:
+
+- **NODE_ENV**: Specifies the environment (development, production, or test).
+- **GIG_DB_URL**: Connection string for the main PostgreSQL database (gig context).
+- **PRIVATE_GIG_DB_URL**: Connection string for the private PostgreSQL database (private-gig context).
+- **ENV_JWT_SECRET**: Secret key used for JWT authentication.
+- **GOOGLE_APPLICATION_CREDENTIALS**: Base64-encoded JSON string with Google Cloud service account credentials for Firebase integration.
+- **REDIRECT_AFTER_REGISTER_URL**: URL to redirect users after successful registration.
+- **EMAIL_CREDENTIALS**: Base64-encoded JSON string with email credentials (user and pass) for sending emails.
+
+Make sure all these variables are set in your environment before starting the application.
+

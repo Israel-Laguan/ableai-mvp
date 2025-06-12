@@ -44,22 +44,22 @@
     {
       "src": "/api/ai-manager/v1/(.*)",
       "dest": "/dist/apps/ai-manager-api/main.js",
-      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH", "OPTIONS"]
     },
     {
       "src": "/api/auth/v1/(.*)",
       "dest": "/dist/apps/auth-api/main.js",
-      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH", "OPTIONS"]
     },
     {
       "src": "/api/gig/v1/(.*)",
       "dest": "/dist/apps/gig-api/main.js",
-      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH", "OPTIONS"]
     },
     {
       "src": "/api/payments/v1/(.*)",
       "dest": "/dist/apps/payments-api/main.js",
-      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH"]
+      "methods": ["POST", "GET", "PUT", "DELETE", "PATCH", "OPTIONS"]
     }
   ]
 }

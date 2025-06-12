@@ -1,77 +1,31 @@
-@baseUrl = http://localhost:3002/api/auth/v1
+@baseUrl = http://localhost:3001/api/auth/v1
+@accessToken = "your_access_token_here"
 
 ### ROOT Auth API
 
-### GET greeting
-GET {{baseUrl}}/
+### GET health
+GET {{baseUrl}}/health
 
 ############################################################################
-
-### PRIVATE GIG/ private-data-user
-
-### GET all
-GET {{baseUrl}}/private-gig/users?sort=asc:fullName
-
-### GET by id
-GET {{baseUrl}}/private-gig/users/1
-
-### CREATE
-POST {{baseUrl}}/private-gig/users
-Content-Type: application/json
-
-{
-  "fullName": "Nuevo Usuario IV",
-  "email": "nuevoIV@ejemplo.com",
-  "phoneNumber": "+1234567890"
-}
-
-### UPDATE by id
-PUT {{baseUrl}}/private-gig/users/1
-Content-Type: application/json
-
-{
-  "fullName": "Usuario Actualizado II",
-  "email": "actualizado@ejemplo.com",
-  "phoneNumber": "+1234567891"
-}
-
-### DELETE by id
-DELETE {{baseUrl}}/private-gig/users/1
-
+### AUTH ###################################################################
 ############################################################################
 
-### GIG/ users
+### POST Login
+POST {{baseUrl}}/login
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
-### GET all
-GET {{baseUrl}}/gig/users
+{
+  "email": "your_awesome_email@email.com",
+}
 
-### GET by id
-GET {{baseUrl}}/gig/users/1
-
-### CREATE
-POST {{baseUrl}}/gig/users
+### POST Register
+POST {{baseUrl}}/register
 Content-Type: application/json
 
 {
-  "password": "your_awesome_password",
-  "private_data_user_id": 1,
-  "enabled": true,
-  "role_id": "gig"
+  "fullName": "your name",
+  "email": "your_awesome_email@email.com",
+  "password": "Your_Awesome_p4$$word",
+  "phoneNumber": "+123456789012"
 }
-
-### UPDATE by id
-PUT {{baseUrl}}/gig/users/1
-Content-Type: application/json
-
-{
-  {
-  "password": "your_awesome_password",
-  "private_data_user_id": 1,
-  "enabled": true,
-  "role_id": "gig"
-}
-}
-
-### DELETE by id
-DELETE {{baseUrl}}/gig/users/1
-
