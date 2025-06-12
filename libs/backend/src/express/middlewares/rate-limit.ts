@@ -14,17 +14,21 @@ const throwInternalServerError = (err: Error): never => {
 };
 
 interface RateLimiterConfig {
+  appName?: string;
   rateLimitConfig: Partial<Options>;
   redisClientConfig: Parameters<typeof createClient>[0];
 }
 
 export function makeRedisExpressRateLimiter({
+  appName,
   rateLimitConfig,
   redisClientConfig,
 }: RateLimiterConfig) {
   const redisClient = createClient(redisClientConfig);
 
-  redisClient.on('connect', () => console.log('Connecting to Redis for Rate Limiter'));
+  redisClient.on('connect', () =>
+    console.log(`Redis rate limiter initialized ${appName ? appName : ''}`)
+  );
   redisClient.on('error', throwInternalServerError);
   redisClient.connect().catch(throwInternalServerError);
 
