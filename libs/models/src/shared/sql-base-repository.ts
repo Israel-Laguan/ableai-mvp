@@ -1,4 +1,4 @@
-import { IOmitBase, GetAllInput, PaginationResult, SafeAny } from '.';
+import { IOmitBase, GetAllInput, PaginationResult } from '.';
 
 export type CreateEntityInput<E> = Omit<E, IOmitBase>;
 export type UpdateEntityInput<E> = Omit<Partial<E>, IOmitBase>;
@@ -13,7 +13,7 @@ export interface ISQLBaseRepository<T> {
 
 export type ISQLCustomRepository<
   TSchema,
-  RepositoryExtension = SafeAny,
+  RepositoryExtension = object,
   OmittedProperties extends keyof ISQLBaseRepository<TSchema> = never,
   P extends Omit<ISQLBaseRepository<TSchema>, OmittedProperties> & RepositoryExtension = Omit<
     ISQLBaseRepository<TSchema>,
@@ -27,7 +27,7 @@ export type ISQLCustomRepository<
 export type ISQLRepositoryMaker<
   TDatabase,
   TSchema,
-  RepositoryExtension extends SafeAny = SafeAny,
+  RepositoryExtension extends object = object,
   OmittedProperties extends keyof ISQLBaseRepository<TSchema> = never
 > = ({
   db,
