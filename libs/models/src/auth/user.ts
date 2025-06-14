@@ -1,4 +1,5 @@
 import { IBase } from '../shared/';
+import { RTW_KYC_STATUS } from './constants';
 
 export interface PrivateDataUser extends IBase {
   fullName: string;
@@ -21,4 +22,12 @@ export interface User extends IBase {
   lastViewWorker?: string | null;
   privateDataUserId: number;
   roleId: number;
+  isGigWorker: boolean;
+  isBuyer: boolean;
+  stripeCustomerId?: string | null;
+  stripeConnectAccountId?: string | null;
+  rtwStatus?: RTW_KYC_STATUS | null;
+  rtwDocumentUrl?: string | null;
+  kycStatus?: RTW_KYC_STATUS | null;
+  kycDocumentUrl?: string | null;
 }

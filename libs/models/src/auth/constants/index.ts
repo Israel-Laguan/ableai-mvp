@@ -1,0 +1,13 @@
+export enum ROLES {
+  USER = 'USER',
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  ADMIN = 'ADMIN',
+  QA = 'QA',
+}
+
+export enum RTW_KYC_STATUS {
+  NOT_SUBMITTED = 'NOT_SUBMITTED',
+  PENDING = 'PENDING',
+  VERIFIED = 'VERIFIED',
+  REJECTED = 'REJECTED',
+}
