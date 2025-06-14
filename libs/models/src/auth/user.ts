@@ -22,6 +22,9 @@ export interface User extends IBase {
   lastViewWorker?: string | null;
   privateDataUserId: number;
   roleId: number;
+}
+
+export interface ExtendedUser extends User {
   isGigWorker: boolean;
   isBuyer: boolean;
   stripeCustomerId?: string | null;
