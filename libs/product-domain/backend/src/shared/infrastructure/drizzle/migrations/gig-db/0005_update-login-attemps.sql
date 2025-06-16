@@ -1,0 +1,1 @@
+ALTER TABLE "users" ALTER COLUMN "login_attempts" SET NOT NULL;

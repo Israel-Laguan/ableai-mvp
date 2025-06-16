@@ -6,10 +6,19 @@ export interface PrivateDataUser extends IBase {
   phoneNumber: string | null;
 }
 
-export interface User extends IBase {
-  enabled: boolean;
-  roleId: number;
-  privateDataUserId: number;
+export enum LAST_APP_ROLE {
+  BUYER = 'BUYER',
+  WORKER = 'WORKER',
 }
 
-export type UserWithPassword = User & { password: string };
+export type LAST_APP_ROLE_TYPE = (typeof LAST_APP_ROLE)[keyof typeof LAST_APP_ROLE];
+
+export interface User extends IBase {
+  avatarUrl?: string | null;
+  displayName?: string | null;
+  lastAppRole?: LAST_APP_ROLE_TYPE | null;
+  lastViewBuyer?: string | null;
+  lastViewWorker?: string | null;
+  privateDataUserId: number;
+  roleId: number;
+}

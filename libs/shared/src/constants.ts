@@ -1,4 +1,5 @@
 export const HTTP_STATUS_CODE = {
+  OK: 200,
   CREATED: 201,
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
@@ -7,3 +8,9 @@ export const HTTP_STATUS_CODE = {
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
 };
+
+export type HTTPStatusCode = (typeof HTTP_STATUS_CODE)[keyof typeof HTTP_STATUS_CODE];
+
+export const NODE_ENV = ['development', 'production', 'test'] as const;
+
+export const DEFAULT_ERROR_MESSAGE = 'An unexpected error occurred';

@@ -1,0 +1,1 @@
+ALTER TABLE "private_data_user" DROP COLUMN "phone_verified";

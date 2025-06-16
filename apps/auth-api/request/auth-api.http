@@ -1,59 +1,31 @@
-@baseUrl = http://localhost:3000/auth-api
+@baseUrl = http://localhost:3001/api/auth/v1
+@accessToken = "your_access_token_here"
 
-### Root endpoint
-GET {{baseUrl}}/
+### ROOT Auth API
 
-### GET all users (gig)
-GET {{baseUrl}}/gig/users
+### GET health
+GET {{baseUrl}}/health
 
-### GET user by id (gig)
-GET {{baseUrl}}/gig/users/1
+############################################################################
+### AUTH ###################################################################
+############################################################################
 
-### CREATE user (gig)
-POST {{baseUrl}}/gig/users
+### POST Login
+POST {{baseUrl}}/login
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "email": "your_awesome_email@email.com",
+}
+
+### POST Register
+POST {{baseUrl}}/register
 Content-Type: application/json
 
 {
-  "name": "Nuevo Usuario",
-  "email": "nuevo@ejemplo.com"
+  "fullName": "your name",
+  "email": "your_awesome_email@email.com",
+  "password": "Your_Awesome_p4$$word",
+  "phoneNumber": "+123456789012"
 }
-
-### UPDATE user (gig)
-PUT {{baseUrl}}/gig/users/1
-Content-Type: application/json
-
-{
-  "name": "Usuario Actualizado",
-  "email": "actualizado@ejemplo.com"
-}
-
-### DELETE user (gig)
-DELETE {{baseUrl}}/gig/users/1
-
-### GET all users (private-gig)
-GET {{baseUrl}}/private-gig/users
-
-### GET user by id (private-gig)
-GET {{baseUrl}}/private-gig/users/1
-
-### CREATE user (private-gig)
-POST {{baseUrl}}/private-gig/users
-Content-Type: application/json
-
-{
-  "name": "Privado Usuario",
-  "email": "privado@ejemplo.com"
-}
-
-### UPDATE user (private-gig)
-PUT {{baseUrl}}/private-gig/users/1
-Content-Type: application/json
-
-{
-  "name": "Privado Actualizado",
-  "email": "privado_actualizado@ejemplo.com"
-}
-
-### DELETE user (private-gig)
-DELETE {{baseUrl}}/private-gig/users/1
-
