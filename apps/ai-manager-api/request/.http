@@ -1,15 +1,10 @@
-@baseUrl = http://localhost:3002/api/ai-manager/v1
+### Health
+GET {{baseUrlIAManager}}/health
 
-
-## Health
-GET {{baseUrl}}/health
-
-## Create a new assistant
-
-
-POST {{baseUrl}}/assistants
+### Create a new assistant
+POST {{baseUrlIAManager}}/assistants
 Content-Type: application/json
 
 {
-    "prompt": "¿Cuantos registro tengo actualmente en mi base da datos?"
+    "prompt": "¿Dame la información de los ids de los usuarios registrados en mis bases de datos?"
 }
