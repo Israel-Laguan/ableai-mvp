@@ -1,0 +1,13 @@
+{
+  "rest-client.environmentVariables": {
+    "$shared": {},
+    "local": {
+      "baseUrlAuth": "http://localhost:3001/api/auth/v1",
+      "baseUrlIAManager": "http://localhost:3002/api/ai-manager/v1"
+    },
+    "production": {
+      "baseUrlAuth": "https://ableia.vercel.app/api/auth/v1",
+      "baseUrlIAManager": "https://ableia.vercel.app/api/ai-manager/v1"
+    }
+  }
+}
