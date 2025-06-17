@@ -4,7 +4,7 @@ import { env } from '../../config/env.config';
 export const limiterMiddleware = Express.Middlewares.makeRedisExpressRateLimiter({
   rateLimitConfig: {
     windowMs: 10 * 60 * 1000,
-    max: 5,
+    max: 250,
     message: {
       message: 'Too many requests, please try again later.',
       code: 'RATE_LIMIT_EXCEEDED',
