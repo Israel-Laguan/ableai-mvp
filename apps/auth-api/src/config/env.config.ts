@@ -16,9 +16,9 @@ const envSchema = z.object({
     .refine(v =>
       z
         .object({
-          projectId: z.string(),
-          clientEmail: z.string(),
-          privateKey: z.string().refine(val => val.includes('-----BEGIN PRIVATE KEY-----'), {
+          project_id: z.string(),
+          client_email: z.string(),
+          private_key: z.string().refine(val => val.includes('-----BEGIN PRIVATE KEY-----'), {
             message: 'Invalid private key format',
           }),
         })
@@ -42,4 +42,12 @@ const envSchema = z.object({
   PRIVATE_GIG_DB_URL: z.string(),
 });
 
-export const env = envSchema.parse(process.env);
+const draw = envSchema.parse(process.env);
+export const env = {
+  ...draw,
+  GOOGLE_SERVICE_ACCOUNT: {
+    projectId: draw.GOOGLE_SERVICE_ACCOUNT.project_id,
+    clientEmail: draw.GOOGLE_SERVICE_ACCOUNT.client_email,
+    privateKey: draw.GOOGLE_SERVICE_ACCOUNT.private_key.replace(/\\n/g, '\n'), // Ensure newlines are correctly formatted
+  },
+};
