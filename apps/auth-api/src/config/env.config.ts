@@ -5,7 +5,12 @@ import { CONSTANTS } from '@shared';
 const { NODE_ENV } = CONSTANTS;
 
 const envSchema = z.object({
+  NODE_ENV: z.enum(NODE_ENV).default(NODE_ENV[0]),
+  HOST: z.string().default('localhost'),
+  PORT: z.string().default('3001'),
+
   GIG_DB_URL: z.string(),
+  PRIVATE_GIG_DB_URL: z.string(),
 
   GOOGLE_SERVICE_ACCOUNT: z
     .string()
@@ -25,10 +30,6 @@ const envSchema = z.object({
         .parse(v)
     ),
 
-  HOST: z.string().default('localhost'),
-
-  NODE_ENV: z.enum(NODE_ENV).default(NODE_ENV[0]),
-
   REDIS_USERNAME: z.string().default('default'),
   REDIS_PASSWORD: z.string().default(''),
   REDIS_HOST: z.string().default('localhost'),
@@ -36,10 +37,6 @@ const envSchema = z.object({
     .string()
     .default('6379')
     .transform(v => Number(v)),
-
-  PORT: z.string().default('3001'),
-
-  PRIVATE_GIG_DB_URL: z.string(),
 });
 
 const draw = envSchema.parse(process.env);
