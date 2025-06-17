@@ -1,4 +1,4 @@
-@accessToken = eyJhbGciOiJSUzI1NiIsImtpZCI6ImE0YTEwZGVjZTk4MzY2ZDZmNjNlMTY3Mjg2YWU5YjYxMWQyYmFhMjciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiS2VtYmVydCBOaWV2ZXMiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vYW5ndWxhci1jbG91ZC1mdW5jdGlvbnMtdG9kbyIsImF1ZCI6ImFuZ3VsYXItY2xvdWQtZnVuY3Rpb25zLXRvZG8iLCJhdXRoX3RpbWUiOjE3NTAxNzc1MjMsInVzZXJfaWQiOiIxRVZsa0N4blg4TTBkS3VLeTM3bDMyWjRnUmsyIiwic3ViIjoiMUVWbGtDeG5YOE0wZEt1S3kzN2wzMlo0Z1JrMiIsImlhdCI6MTc1MDE3NzUyMywiZXhwIjoxNzUwMTgxMTIzLCJlbWFpbCI6ImtlbWJlcnRsQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicGhvbmVfbnVtYmVyIjoiKzU4NDI2MzEyMTkzNCIsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsia2VtYmVydGxAZ21haWwuY29tIl0sInBob25lIjpbIis1ODQyNjMxMjE5MzQiXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.hIvP0fdTi84KAEP-3r8rHYyv7L6O82pn3hocZgK0mCzbXlau_-vR5P3zz3b-fygdjONJJhuZrZlKKdFk4tgOJylmzCmrtO6yjTk-rnagz0BDREz-VR3tmkRIQFXGyneKAotOWoqxziKcyp8t9xhJQ7t99TKFuEj2HsZHK1Y8i5uoY5yaJyW9nOKGszpIdov66IqKiEUmURVc_GRMKPlh-ELWeU2NGdlZQjlPgo4-mxXAyjjqmFzHG0yIIeKkWA7DIBH7b3tGHU0IBXM682JR3MMhoiaPGQ9RRnTmGPVQxM7hJRaT3ezT7yGkS9umwqdEfnCWr5-vD8W2_Dnmd8I6aA
+@accessToken =
 
 
 ### ROOT Auth API
@@ -16,7 +16,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "email": "kembertl@gmail.com"
+  "email": "<your_email>@email.com"
 }
 
 ### POST Register
@@ -24,8 +24,8 @@ POST {{baseUrlAuth}}/register
 Content-Type: application/json
 
 {
-  "fullName": "Kembert Nieves",
-  "email": "kembertl@gmail.com",
+  "fullName": "<your_full_name>",
+  "email": "<your_email>@email.com",
   "password": "Your_Awesome_p4$$word",
-  "phoneNumber": "+584263121934"
+  "phoneNumber": "<your_phone_number>",
 }
