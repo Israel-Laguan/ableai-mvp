@@ -154,5 +154,5 @@ vitest.config.*.timestamp*
 public
 postgres
 tmp
-.vscode
+
 credentials.*.json
