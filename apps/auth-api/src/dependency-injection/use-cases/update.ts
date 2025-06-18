@@ -1,7 +1,7 @@
 import { Shared, Auth } from '@product-domain/backend';
 import { gigDb, privateGigDb } from '../../db';
 import { firebaseService } from '../services';
-import { UpdateInput, UpdateOutput, UpdateTransaction } from '../../interfaces';
+import { UpdateInput, UpdateTransaction } from '../../interfaces';
 
 const { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } = Auth.Domain.Constants.AUTH_DICTIONARY;
 
@@ -20,7 +20,7 @@ const runInTransaction: UpdateTransaction = Shared.Infra.Drizzle.Repositories.ma
   ]
 );
 
-export const update = Auth.App.makeUpdateUserUseCase<UpdateInput, UpdateOutput>({
+export const update = Auth.App.makeUpdateUserUseCase<UpdateInput>({
   runInTransaction,
   runInUpdate: async input => {
     return await firebaseService.update(input);
