@@ -1,14 +1,26 @@
 import { Request, Response } from 'express';
 
 import { Express } from '@backend';
-import { CONSTANTS } from '@shared';
-import { authService } from './service';
+import { CONSTANTS, Utils } from '@shared';
 import { Auth } from '@product-domain/backend';
 import { UpdateInput } from '../../interfaces';
+import { authService } from './service';
 
 const { HTTP_STATUS_CODE } = CONSTANTS;
 
 const { tryCatchAndNext } = Express;
+
+const { makeBuildObjectDynamically } = Utils;
+
+const buildUpdateServiceInput = makeBuildObjectDynamically<
+  Auth.Domain.Interfaces.UpdateInput<UpdateInput>
+>({
+  admittedKeys: ['idTokenClaims', 'user', 'lastPassword', 'password', 'privateDataUser'],
+});
+
+const buildUserUpdateServiceInput = makeBuildObjectDynamically({
+  admittedKeys: Auth.Domain.Constants.USER_UPDATE_ADMITTED_KEYS_WITH_ID,
+});
 
 export const authController = {
   login: tryCatchAndNext(async (req: Request, res: Response) => {
@@ -34,26 +46,20 @@ export const authController = {
 
   update: tryCatchAndNext(
     async (req: Express.Types.AuthorizedRequest<UpdateInput['idTokenClaims']>, res: Response) => {
-      const input: Auth.Domain.Interfaces.UpdateInput<UpdateInput> = {
+      const user = buildUserUpdateServiceInput({
+        ...req.body.user,
+        id: req.user.id,
+      });
+
+      const input = buildUpdateServiceInput({
+        ...req.body,
         idTokenClaims: req.user,
-        user: {
-          ...req.body.user,
-          id: req.user.id,
-        },
-      };
+        user,
+      });
 
-      const { lastPassword, password, privateDataUser } = req.body;
-
-      if (lastPassword && password) {
-        input.lastPassword = lastPassword;
-        input.password = password;
-      }
-
-      if (privateDataUser) {
-        input.privateDataUser = { ...privateDataUser };
-      }
-
-      const result = await authService.update(input);
+      const result = await authService.update(
+        input as Auth.Domain.Interfaces.UpdateInput<UpdateInput>
+      );
 
       res.status(HTTP_STATUS_CODE.OK).json(result);
     }
