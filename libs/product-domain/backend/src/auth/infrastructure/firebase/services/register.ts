@@ -13,11 +13,6 @@ const { INVALID_CREDENTIALS, EMAIL_ALREADY_EXISTS } = FIREBASE_ERROR_CODES;
 const { ALREADY_EXIST_MESSAGE, INVALID_PHONE_NUMBER_MESSAGE } = AUTH_ERROR_MESSAGES;
 const ERROR_PATH = 'AUTH_REGISTER_SERVICE';
 
-const buildFirebaseUserData = Utils.makeBuildObjectDynamically<CreateRequest>({
-  admittedKeys: ['displayName', 'email', 'emailVerified', 'password', 'phoneNumber'],
-  admittedFalsyKeys: ['emailVerified'],
-});
-
 export function makeFirebaseRegisterService({
   auth,
 }: {
@@ -40,7 +35,7 @@ export function makeFirebaseRegisterService({
       });
     }
 
-    const userData = buildFirebaseUserData({
+    const userData = Utils.removeFalsyEntries({
       displayName: fullName,
       email,
       password,
