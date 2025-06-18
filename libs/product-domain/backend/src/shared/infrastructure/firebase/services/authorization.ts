@@ -8,9 +8,11 @@ export function makeAuthorizationService<CustomClaims extends object = object>({
 }: {
   auth: FirebaseAuthModule;
 }) {
-  return async (token: string): Promise<DecodedIdToken & CustomClaims> => {
-    return (await auth.verifyIdToken(token, true).catch(() => {
-      throw Errors.UnauthorizeError.create('Invalid token', 'FIREBASE_AUTHORIZATION_SERVICE');
-    })) as DecodedIdToken & CustomClaims;
-  };
+  return async (token: string): Promise<DecodedIdToken & CustomClaims> =>
+    auth
+      .verifyIdToken(token, true)
+      .then(response => response as DecodedIdToken & CustomClaims)
+      .catch(() => {
+        throw Errors.UnauthorizeError.create('Invalid token', 'FIREBASE_AUTHORIZATION_SERVICE');
+      });
 }
