@@ -1,6 +1,3 @@
-@accessToken =
-
-
 ### ROOT Auth API
 
 ### GET health
@@ -36,10 +33,6 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "lastPassword": "<Your_Last_Awesome_p4$$sword>",
-  
-  "password": "<Your_new_Awesome_p4$$sword>",
-
   "privateDataUser": {
     "fullName": "<Optional_new_full_name>",
     "email": "<Optional_new@email.com>",
