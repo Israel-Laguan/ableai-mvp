@@ -1,15 +1,15 @@
 import z from 'zod';
 
-export const emailSchema = z
+export const EmailSchema = z
   .string({ message: 'Email is required.' })
   .email({ message: 'Invalid email address.' })
   .nonempty();
 
-export const fullNameSchema = z
+export const FullNameSchema = z
   .string({ message: 'Full name is required.' })
   .min(3, { message: 'Full name must be at least 3 characters.' });
 
-export const passwordSchema = z
+export const PasswordSchema = z
   .string({ message: 'Password is required' })
   .min(10, { message: 'Password must be at least 10 characters.' })
   .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/, {
@@ -18,4 +18,4 @@ export const passwordSchema = z
   })
   .optional();
 
-export const phoneNumberSchema = z.string().startsWith('+');
+export const PhoneNumberSchema = z.string().startsWith('+');

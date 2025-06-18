@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-import { emailSchema, fullNameSchema, passwordSchema, phoneNumberSchema } from './shared';
+import { EmailSchema, FullNameSchema, PasswordSchema, PhoneNumberSchema } from './shared';
 
-export const registerUserSchema = z.object({
-  fullName: fullNameSchema,
-  email: emailSchema,
-  phoneNumber: phoneNumberSchema.optional(),
-  password: passwordSchema,
+export const RegisterUserSchema = z.object({
+  fullName: FullNameSchema,
+  email: EmailSchema,
+  phoneNumber: PhoneNumberSchema.optional(),
+  password: PasswordSchema,
 });
