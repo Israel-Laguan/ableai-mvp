@@ -1,14 +1,20 @@
 import { Express } from '@backend';
 import { env } from '../../config/env.config';
 
+const WINDOW_MS = 10 * 60 * 1000;
+const MAX_REQUESTS = 500;
+const MAX_REQUESTS_MESSAGE = 'Too many requests, please try again later.';
+const CODE = 'RATE_LIMIT_EXCEEDED';
+const STATUS_CODE = 429;
+
 export const limiterMiddleware = Express.Middlewares.makeRedisExpressRateLimiter({
   rateLimitConfig: {
-    windowMs: 10 * 60 * 1000,
-    max: 250,
+    windowMs: WINDOW_MS,
+    max: MAX_REQUESTS,
     message: {
-      message: 'Too many requests, please try again later.',
-      code: 'RATE_LIMIT_EXCEEDED',
-      statusCode: 429,
+      message: MAX_REQUESTS_MESSAGE,
+      code: CODE,
+      statusCode: STATUS_CODE,
     },
     standardHeaders: true,
     legacyHeaders: false,

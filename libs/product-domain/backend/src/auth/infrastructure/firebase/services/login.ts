@@ -29,14 +29,14 @@ export function makeFirebaseLoginService({
       });
     }
 
-    const newIdToken = await auth.createCustomToken(uid, { id, roleId, lastAppRole }).catch(() => {
+    const customToken = await auth.createCustomToken(uid, { id, roleId, lastAppRole }).catch(() => {
       return logAndResultLogin({
         loginStatus: UNAUTHORIZED,
       }) as never;
     });
 
     return {
-      idToken: newIdToken,
+      customToken,
     };
   };
 }

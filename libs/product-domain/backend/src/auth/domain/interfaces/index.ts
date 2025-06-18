@@ -1,7 +1,14 @@
 import { Infra, PrivateDataUser, User } from '@models/auth';
 import { LOGIN_STATUS_CODE } from '../constants';
 import { PrivateDataUserRepository, RegisterTransaction, UserRepository } from '../repositories';
-import { logAndResultLogin, ParseUserAgent, RunInLogin, RunInRegister } from '../services';
+import {
+  logAndResultLogin,
+  ParseUserAgent,
+  RunInLogin,
+  RunInRegister,
+  RunInUpdate,
+} from '../services';
+import { Transaction } from '@models/shared';
 
 export interface LogAttemptAndNextConfig extends UserAgent {
   IP: string;
@@ -37,6 +44,20 @@ export interface MakeRegisterUseCaseConfig<CustomOutput extends object = object>
   runInTransaction: RegisterTransaction<CustomOutput>;
 }
 
+export interface MakeUpdateUserCaseConfig<
+  CustomInput extends object = object,
+  CustomOutput extends object = object
+> {
+  runInUpdate: RunInUpdate<CustomInput, CustomOutput>;
+  runInTransaction: Transaction.RunInTransaction<
+    {
+      PRIVATE_USER_DATA_REPOSITORY: PrivateDataUserRepository;
+      USER_REPOSITORY: UserRepository;
+    },
+    void
+  >;
+}
+
 export type RunInLoginInput<CustomInput extends object = object> = LoginInput<CustomInput> & {
   logAndResultLogin: logAndResultLogin;
   privateDataUser: PrivateDataUser;
@@ -45,9 +66,17 @@ export type RunInLoginInput<CustomInput extends object = object> = LoginInput<Cu
   userRepository: UserRepository;
 };
 
+export interface RunInRegisterInput {
+  password: string;
+  user: User;
+  privateDataUser: PrivateDataUser;
+}
+
 export type RunInRegisterOutput<CustomInput extends object = object> = {
   rollback: () => Promise<void>;
 } & CustomInput;
+
+export type UpdateInput<CustomInput extends object = object> = Infra.UpdateUserInput & CustomInput;
 
 export type UserAgent = {
   browser: string;

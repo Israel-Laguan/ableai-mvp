@@ -1,5 +1,2 @@
-import { DEFAULT_ERROR_MESSAGE } from '../constants';
-
-export function getCustomOrDefaultMessage(message?: string): string {
-  return message || DEFAULT_ERROR_MESSAGE;
-}
+export * from './get-custom-or-default-message';
+export * from './remove-falsy-entries';

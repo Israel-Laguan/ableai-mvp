@@ -1,3 +1,6 @@
+import type { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
+
+import type { User } from '@models/auth';
 import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
 
 export interface FirebaseLoginInput {
@@ -5,9 +8,13 @@ export interface FirebaseLoginInput {
 }
 
 export interface FirebaseLoginOutput {
-  idToken: string;
+  customToken: string;
 }
 
 export interface MakeFirebaseLoginServiceConfig {
   auth: FirebaseAuthModule;
 }
+
+export type FirebaseUpdateInput = {
+  idTokenClaims: DecodedIdToken & Pick<User, 'lastAppRole' | 'roleId'>;
+};
