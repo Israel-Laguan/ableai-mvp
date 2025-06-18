@@ -1,20 +1,14 @@
-import type { UpdateRequest } from 'firebase-admin/lib/auth/auth-config';
-
 import type { FirebaseError } from '../../../../shared/domain/interfaces';
 import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
 import type { RunInUpdate } from '../../../domain/services';
 import type { FirebaseUpdateInput } from '../types';
 
+import { Utils } from '@shared';
 import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
 import { throwError, throwInvalidCredentialsError } from '../errors';
-import { Utils } from '@shared';
 
 const { INVALID_CREDENTIALS } = FIREBASE_ERROR_CODES;
 const ERROR_PATH = 'AUTH_REGISTER_SERVICE';
-
-const buildFirebaseUpdateRequest = Utils.makeBuildObjectDynamically<UpdateRequest>({
-  admittedKeys: ['displayName', 'email', 'phoneNumber'],
-});
 
 export function makeFirebaseUpdateService({
   auth,
@@ -32,7 +26,7 @@ export function makeFirebaseUpdateService({
 
     const { email, fullName, phoneNumber } = privateDataUser || {};
 
-    const updateRequestObj = buildFirebaseUpdateRequest({
+    const updateRequestObj = Utils.removeFalsyEntries({
       displayName: fullName,
       email,
       phoneNumber,

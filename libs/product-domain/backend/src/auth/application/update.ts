@@ -1,14 +1,10 @@
-import type { PrivateDataUser, User } from '@models/auth';
+import type { User } from '@models/auth';
 import type { UpdateUserStatusKeys } from '../domain/constants';
 import type { MakeUpdateUserCaseConfig } from '../domain/interfaces';
 import type { UpdateUserUseCase } from '../domain/use-cases';
 
 import { Errors, Utils } from '@shared';
 import { Constants } from '../domain';
-import {
-  PRIVATE_DATA_USER_UPDATE_ADMITTED_KEYS,
-  USER_UPDATE_ADMITTED_KEYS,
-} from '../domain/constants';
 
 interface RegisterErrorInputs {
   email?: string;
@@ -29,15 +25,7 @@ const { throwError } = Errors.makeErrorRunner<RegisterErrorInputs, UpdateUserSta
     Errors.UnauthorizeError.create(INVALID_CREDENTIALS_MESSAGE, 'AUTH_REGISTER'),
 });
 
-const { makeBuildObjectDynamically } = Utils;
-
-const buildUserUpdateObject = makeBuildObjectDynamically<User>({
-  admittedKeys: USER_UPDATE_ADMITTED_KEYS,
-});
-
-const buildPrivateDataUserUpdateObject = makeBuildObjectDynamically<PrivateDataUser>({
-  admittedKeys: PRIVATE_DATA_USER_UPDATE_ADMITTED_KEYS,
-});
+const { removeFalsyEntries } = Utils;
 
 export const makeUpdateUserUseCase = <
   CustomInput extends object = object,
@@ -60,16 +48,15 @@ export const makeUpdateUserUseCase = <
 
         const { id } = user;
 
-        const { privateDataUserId } = await userRepository
+        const { privateDataUserId } = (await userRepository
           .getById(String(id))
-          .then(user => user as User)
-          .catch(() => throwError(ERROR_UPDATING_USER));
+          .catch(() => throwError(ERROR_UPDATING_USER))) as User;
 
         if (!id || !privateDataUserId) {
           throwError(INVALID_CREDENTIALS);
         }
 
-        const userUpdates = buildUserUpdateObject(input.user);
+        const userUpdates = removeFalsyEntries(input.user);
 
         if (userUpdates) {
           await userRepository.updateById(String(id), userUpdates).catch(error => {
@@ -78,7 +65,7 @@ export const makeUpdateUserUseCase = <
           });
         }
 
-        const privateDataUserUpdates = buildPrivateDataUserUpdateObject(input.privateDataUser);
+        const privateDataUserUpdates = removeFalsyEntries(input.privateDataUser);
 
         if (privateDataUserUpdates) {
           const privateDataUserRepository = repositoryManager.getRepository(
