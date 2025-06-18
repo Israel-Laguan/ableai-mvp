@@ -1,13 +1,17 @@
 import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core';
 import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
 
-import { PrivateDataUser, User } from '@models/auth';
-import { Errors } from '@shared';
-import { Constants } from '../domain';
+import type { PrivateDataUser, User } from '@models/auth';
 import type { UpdateUserStatusKeys } from '../domain/constants';
 import type { MakeUpdateUserCaseConfig } from '../domain/interfaces';
 import type { UpdateUserUseCase } from '../domain/use-cases';
-import { IOmitBase } from '@models/shared';
+
+import { Errors, Utils } from '@shared';
+import { Constants } from '../domain';
+import {
+  PRIVATE_DATA_USER_UPDATE_ADMITTED_KEYS,
+  USER_UPDATE_ADMITTED_KEYS,
+} from '../domain/constants';
 
 interface RegisterErrorInputs {
   email?: string;
@@ -38,6 +42,16 @@ const { throwError } = Errors.makeErrorRunner<
     ${feedback || 'No feedback provided'}.`,
       'AUTH_REGISTER'
     ),
+});
+
+const { makeBuildObjectDynamically } = Utils;
+
+const buildUserUpdateObject = makeBuildObjectDynamically<User>({
+  admittedKeys: USER_UPDATE_ADMITTED_KEYS,
+});
+
+const buildPrivateDataUserUpdateObject = makeBuildObjectDynamically<PrivateDataUser>({
+  admittedKeys: PRIVATE_DATA_USER_UPDATE_ADMITTED_KEYS,
 });
 
 zxcvbnOptions.setOptions({
@@ -77,56 +91,31 @@ export const makeUpdateUserUseCase = <
       try {
         const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
 
-        const { id, avatarUrl, displayName, lastAppRole, lastViewBuyer, lastViewWorker } =
-          input.user;
+        const { user } = input;
 
-        const { privateDataUserId } = (await userRepository
+        const { id } = user;
+
+        const { privateDataUserId } = await userRepository
           .getById(String(id))
-          .catch(() => throwError(ERROR_UPDATING_USER))) as User;
+          .then(user => user as User)
+          .catch(() => throwError(ERROR_UPDATING_USER));
 
         if (!id || !privateDataUserId) {
           throwError(INVALID_CREDENTIALS);
         }
 
-        if (avatarUrl || displayName || lastAppRole || lastViewBuyer || lastViewWorker) {
-          const userUpdates: Partial<Omit<User, IOmitBase>> = {};
+        const userUpdates = buildUserUpdateObject(input.user);
 
-          if (avatarUrl) {
-            userUpdates.avatarUrl = avatarUrl;
-          }
-          if (displayName) {
-            userUpdates.displayName = displayName;
-          }
-          if (lastAppRole) {
-            userUpdates.lastAppRole = lastAppRole;
-          }
-          if (lastViewBuyer) {
-            userUpdates.lastViewBuyer = lastViewBuyer;
-          }
-          if (lastViewWorker) {
-            userUpdates.lastViewWorker = lastViewWorker;
-          }
-
+        if (userUpdates) {
           await userRepository.updateById(String(id), userUpdates).catch(error => {
             console.log(error.message);
             throwError(ERROR_UPDATING_USER);
           });
         }
 
-        if (input.privateDataUser) {
-          const { email, fullName, phoneNumber } = input.privateDataUser;
-          const privateDataUserUpdates: Partial<Omit<PrivateDataUser, IOmitBase>> = {};
+        const privateDataUserUpdates = buildPrivateDataUserUpdateObject(input.privateDataUser);
 
-          if (email) {
-            privateDataUserUpdates.email = email;
-          }
-          if (fullName) {
-            privateDataUserUpdates.fullName = fullName;
-          }
-          if (phoneNumber) {
-            privateDataUserUpdates.phoneNumber = phoneNumber;
-          }
-
+        if (privateDataUserUpdates) {
           const privateDataUserRepository = repositoryManager.getRepository(
             PRIVATE_USER_DATA_REPOSITORY
           );

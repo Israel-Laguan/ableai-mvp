@@ -1,3 +1,4 @@
+export * from './update';
 export { top10k10plus } from './top10k10plus';
 
 export enum AUTH_DICTIONARY {
@@ -30,13 +31,6 @@ export enum REGISTER_STATUS_CODE {
   WEAK_PASSWORD = 'WEAK_PASSWORD',
 }
 
-export enum UPDATE_STATUS_CODE {
-  INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
-  ERROR_UPDATING_USER = 'ERROR_UPDATING_USER',
-}
-
 export type LoginStatusKeys = keyof typeof LOGIN_STATUS_CODE;
 
 export type RegisterStatusKeys = keyof typeof REGISTER_STATUS_CODE;
-
-export type UpdateUserStatusKeys = keyof typeof UPDATE_STATUS_CODE;
