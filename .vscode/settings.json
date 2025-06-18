@@ -9,5 +9,6 @@
       "baseUrlAuth": "https://ableia.vercel.app/api/auth/v1",
       "baseUrlIAManager": "https://ableia.vercel.app/api/ai-manager/v1"
     }
-  }
+  },
+  "cSpell.words": ["zxcvbn"]
 }
