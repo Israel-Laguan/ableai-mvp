@@ -3,6 +3,7 @@ import {
   LogAttemptAndNextInputs,
   RunInLoginInput,
   RunInRegisterOutput,
+  UpdateInput,
   UserAgent,
 } from '../interfaces';
 
@@ -18,3 +19,8 @@ export type RunInLogin<
 export type RunInRegister<CustomOutput extends object = object> = (
   input: Infra.RegisterInput
 ) => Promise<RunInRegisterOutput<CustomOutput>>;
+
+export type RunInUpdate<
+  CustomInput extends object = object,
+  CustomOutput extends object = object
+> = (input: UpdateInput<CustomInput>) => Promise<RunInRegisterOutput<CustomOutput>>;
