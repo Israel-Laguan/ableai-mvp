@@ -66,6 +66,12 @@ export type RunInLoginInput<CustomInput extends object = object> = LoginInput<Cu
   userRepository: UserRepository;
 };
 
+export interface RunInRegisterInput {
+  password: string;
+  user: User;
+  privateDataUser: PrivateDataUser;
+}
+
 export type RunInRegisterOutput<CustomInput extends object = object> = {
   rollback: () => Promise<void>;
 } & CustomInput;

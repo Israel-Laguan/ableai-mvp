@@ -6,15 +6,13 @@ export type CustomLoginInput = Auth.Infra.Firebase.Types.FirebaseLoginInput;
 
 export type CustomLoginOutput = Auth.Infra.Firebase.Types.FirebaseLoginOutput;
 
-export type LoginInput = Auth.Domain.Interfaces.LoginInput<CustomLoginInput>;
+export type LoginInput = Auth.Domain.Interfaces.LoginInput;
 
 export type RegisterInput = Infra.RegisterInput;
 
 export type RegisterOutput = Shared.Domain.Interfaces.FirebaseUserRecord;
 
 export type UpdateInput = Auth.Infra.Firebase.Types.FirebaseUpdateInput;
-
-export type UpdateOutput = Auth.Infra.Firebase.Types.FirebaseUpdateOutput;
 
 export type UpdateTransaction = Transaction.RunInTransaction<
   {

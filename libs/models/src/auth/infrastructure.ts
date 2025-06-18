@@ -23,8 +23,6 @@ export type PrivateDataUserCreateInput = {
 };
 
 export type UpdateUserInput = {
-  lastPassword?: string;
-  password?: string;
   privateDataUser?: Partial<Omit<PrivateDataUser, IOmitBase>>;
   user: Pick<IBase, 'id'> & Partial<Omit<User, 'privateDataUserId' | 'roleId' | IOmitBase>>;
 };
