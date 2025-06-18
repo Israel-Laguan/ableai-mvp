@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-
-export type AuthorizedRequest<UserCredentials extends object = object> = Request & {
-  user?: UserCredentials;
-};
+import { AuthorizedRequest } from '../types';
 
 export type ExpressHandlerAuthorizationMiddleware<UserCredentials extends object = object> = (
   req: AuthorizedRequest<UserCredentials>,
