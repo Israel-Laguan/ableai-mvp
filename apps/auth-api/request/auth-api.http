@@ -27,5 +27,30 @@ Content-Type: application/json
   "fullName": "<your_full_name>",
   "email": "<your_email>@email.com",
   "password": "Your_Awesome_p4$$word",
-  "phoneNumber": "<your_phone_number>",
+  "phoneNumber": "<your_phone_number>"
+}
+
+### PUT Update
+PUT {{baseUrlAuth}}/update
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "lastPassword": "<Your_Last_Awesome_p4$$sword>",
+  
+  "password": "<Your_new_Awesome_p4$$sword>",
+
+  "privateDataUser": {
+    "fullName": "<Optional_new_full_name>",
+    "email": "<Optional_new@email.com>",
+    "phoneNumber": "<Optional_new_phone_number>"
+  },
+
+  "user": {
+    "avatarUrl": "<Optional_avatar_url>",
+    "displayName": "<Optional_new_display_name>",
+    "lastAppRole": "<Optional_las_app_role>",
+    "lastViewBuyer": "<Optional_last_view_buyer>",
+    "lastViewWorker": "<Optional_last_view_worker>"
+  } 
 }
