@@ -1,7 +1,7 @@
 import { Express } from '@backend';
 import { Auth } from '@product-domain/backend';
 
-const { registerUserSchema, updateUserSchema } = Auth.Infra.Zod.Schemas;
+const { RegisterUserSchema, UpdateUserSchema } = Auth.Infra.Zod.Schemas;
 
 const {
   Middlewares: { validateInputMiddleware },
@@ -9,10 +9,10 @@ const {
 
 export const AuthValidationInput = {
   validateRegisterUser: validateInputMiddleware({
-    bodySchema: registerUserSchema,
+    bodySchema: RegisterUserSchema,
   }),
 
   validateUpdateUser: validateInputMiddleware({
-    bodySchema: updateUserSchema,
+    bodySchema: UpdateUserSchema,
   }),
 };

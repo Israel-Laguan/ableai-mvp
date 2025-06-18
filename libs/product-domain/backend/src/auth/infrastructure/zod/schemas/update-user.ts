@@ -1,18 +1,18 @@
 import z from 'zod';
 
-import { emailSchema, fullNameSchema, passwordSchema, phoneNumberSchema } from './shared';
+import { EmailSchema, FullNameSchema, PasswordSchema, PhoneNumberSchema } from './shared';
 
-export const updateUserSchema = z
+export const UpdateUserSchema = z
   .object({
-    lastPassword: passwordSchema.optional(),
+    lastPassword: PasswordSchema.optional(),
 
-    password: passwordSchema.optional(),
+    password: PasswordSchema.optional(),
 
     privateDataUser: z
       .object({
-        fullName: fullNameSchema.optional(),
-        email: emailSchema.optional(),
-        phoneNumber: phoneNumberSchema.optional(),
+        fullName: FullNameSchema.optional(),
+        email: EmailSchema.optional(),
+        phoneNumber: PhoneNumberSchema.optional(),
       })
       .optional(),
 
