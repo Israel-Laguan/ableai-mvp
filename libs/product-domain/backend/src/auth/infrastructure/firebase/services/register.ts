@@ -1,3 +1,5 @@
+import type { CreateRequest } from 'firebase-admin/lib/auth/auth-config';
+
 import type { Infra } from '@models/auth';
 import type { FirebaseError, FirebaseUserRecord } from '../../../../shared/domain/interfaces';
 import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
@@ -8,7 +10,7 @@ import { RunInRegister } from '../../../domain/services';
 import { throwError } from '../errors';
 
 const { INVALID_CREDENTIALS, EMAIL_ALREADY_EXISTS } = FIREBASE_ERROR_CODES;
-const { ALREADY_EXIST_MESSAGE } = AUTH_ERROR_MESSAGES;
+const { ALREADY_EXIST_MESSAGE, INVALID_PHONE_NUMBER_MESSAGE } = AUTH_ERROR_MESSAGES;
 const ERROR_PATH = 'AUTH_REGISTER_SERVICE';
 
 export function makeFirebaseRegisterService({
@@ -33,22 +35,27 @@ export function makeFirebaseRegisterService({
       });
     }
 
-    const newUser = (await auth
-      .createUser({
-        displayName: fullName,
-        email,
-        emailVerified: false,
-        password,
-        phoneNumber,
-      })
-      .catch((error: FirebaseError) => {
-        throwError(error.code as FIREBASE_ERROR_CODES, ERROR_PATH);
-      })) as FirebaseUserRecord;
+    const userData: CreateRequest = {
+      displayName: fullName,
+      email,
+      emailVerified: false,
+      password,
+    };
+
+    if (phoneNumber) {
+      userData.phoneNumber = phoneNumber;
+    }
+
+    const newUser = (await auth.createUser(userData).catch((error: FirebaseError) => {
+      throwError(error.code as FIREBASE_ERROR_CODES, ERROR_PATH, {
+        message: INVALID_PHONE_NUMBER_MESSAGE,
+      });
+    })) as FirebaseUserRecord;
 
     return {
       ...newUser,
       async rollback() {
-        return auth.deleteUser(newUser.uid).catch((error: FirebaseError) => {
+        await auth.deleteUser(newUser.uid).catch((error: FirebaseError) => {
           throwError(error.code as FIREBASE_ERROR_CODES, ERROR_PATH, {
             message: 'Failed to rollback user creation',
           });
