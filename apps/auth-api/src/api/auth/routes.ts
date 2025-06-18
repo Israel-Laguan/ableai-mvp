@@ -6,7 +6,7 @@ import { authorizationMiddleware } from '../../dependency-injection/middlewares'
 
 const authRouter = Router();
 
-authRouter.post('/login', authController.login);
+authRouter.post('/login', authorizationMiddleware, authController.login);
 
 authRouter.post('/register', AuthValidationInput.validateRegisterUser, authController.register);
 
