@@ -1,26 +1,16 @@
 import { IBase, IOmitBase } from '../shared/base';
 import { PrivateDataUser, User } from '.';
 
-export type LoginInput = {
-  email: string;
-};
+export type LoginInput = Pick<User, 'id'>;
 
-export type RegisterInput = {
-  fullName: string;
+export type RegisterInput = Omit<PrivateDataUser, IOmitBase> & {
   email: string;
-  phoneNumber: string | null;
   password: string;
 };
 
-export type UserCreateInput = {
-  privateDataUserId: number;
-};
+export type UserCreateInput = Pick<User, 'uid' | 'privateDataUserId'>;
 
-export type PrivateDataUserCreateInput = {
-  fullName: string;
-  email: string;
-  phoneNumber: string | null;
-};
+export type PrivateDataUserCreateInput = Omit<PrivateDataUser, IOmitBase>;
 
 export type UpdateUserInput = {
   privateDataUser?: Partial<Omit<PrivateDataUser, IOmitBase>>;
