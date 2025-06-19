@@ -2,7 +2,7 @@ import z from 'zod';
 
 import { EmailSchema, FullNameSchema, PhoneNumberSchema } from './shared';
 
-export const UpdateUserSchema = z
+export const UpdateMeUserSchema = z
   .object({
     privateDataUser: z
       .object({
@@ -17,7 +17,6 @@ export const UpdateUserSchema = z
       .object({
         avatarUrl: z.string().url().optional(),
         displayName: z.string().optional(),
-        lastAppRole: z.string().optional(),
         lastViewBuyer: z.string().optional(),
         lastViewWorker: z.string().optional(),
       })

@@ -44,7 +44,7 @@ export interface MakeRegisterUseCaseConfig<CustomOutput extends object = object>
   runInTransaction: RegisterTransaction<CustomOutput>;
 }
 
-export interface MakeUpdateUserCaseConfig<
+export interface MakeUpdateMeUserCaseConfig<
   CustomInput extends object = object,
   CustomOutput extends object = object
 > {

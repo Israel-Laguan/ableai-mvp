@@ -20,7 +20,7 @@ const runInTransaction: UpdateTransaction = Shared.Infra.Drizzle.Repositories.ma
   ]
 );
 
-export const update = Auth.App.makeUpdateUserUseCase<UpdateInput>({
+export const updateUser = Auth.App.makeUpdateUserUseCase<UpdateInput>({
   runInTransaction,
   runInUpdate: async input => {
     return await firebaseService.update(input);

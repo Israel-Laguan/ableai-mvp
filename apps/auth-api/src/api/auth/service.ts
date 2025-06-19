@@ -11,7 +11,7 @@ export const authService = {
     return await UseCases.register(input);
   },
 
-  async update(input: Auth.Domain.Interfaces.UpdateInput<UpdateInput>) {
-    return await UseCases.update(input);
+  async updateUser(input: Auth.Domain.Interfaces.UpdateInput<UpdateInput>) {
+    return await UseCases.updateUser(input);
   },
 };

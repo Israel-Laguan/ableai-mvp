@@ -1,7 +1,7 @@
 import type { User } from '@models/auth';
 import type { UpdateUserStatusKeys } from '../domain/constants';
-import type { MakeUpdateUserCaseConfig } from '../domain/interfaces';
-import type { UpdateUserUseCase } from '../domain/use-cases';
+import type { MakeUpdateMeUserCaseConfig } from '../domain/interfaces';
+import type { UpdateMeUserUseCase } from '../domain/use-cases';
 
 import { Errors, Utils } from '@shared';
 import { Constants } from '../domain';
@@ -33,7 +33,7 @@ export const makeUpdateUserUseCase = <
 >({
   runInTransaction,
   runInUpdate,
-}: MakeUpdateUserCaseConfig<CustomInput, CustomOutput>): UpdateUserUseCase<
+}: MakeUpdateMeUserCaseConfig<CustomInput, CustomOutput>): UpdateMeUserUseCase<
   CustomInput,
   CustomOutput
 > => {
@@ -58,16 +58,15 @@ export const makeUpdateUserUseCase = <
 
         const userUpdates = removeFalsyEntries(input.user);
 
-        if (userUpdates) {
-          await userRepository.updateById(String(id), userUpdates).catch(error => {
-            console.log(error.message);
+        if (userUpdates && Object.keys(userUpdates).length) {
+          await userRepository.updateById(String(id), userUpdates).catch(() => {
             throwError(ERROR_UPDATING_USER);
           });
         }
 
         const privateDataUserUpdates = removeFalsyEntries(input.privateDataUser);
 
-        if (privateDataUserUpdates) {
+        if (privateDataUserUpdates && Object.keys(privateDataUserUpdates).length) {
           const privateDataUserRepository = repositoryManager.getRepository(
             PRIVATE_USER_DATA_REPOSITORY
           );
@@ -76,6 +75,8 @@ export const makeUpdateUserUseCase = <
             .updateById(String(privateDataUserId), privateDataUserUpdates)
             .catch(() => throwError(ERROR_UPDATING_USER));
         }
+
+        return void 0;
       } catch (error) {
         await rollback();
         throw error;
