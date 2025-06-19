@@ -1,5 +1,6 @@
 import { Transaction } from '@models/shared';
 import { PrivateDataUserRepository, UserRepository } from '.';
+import { RegisterDto } from '../interfaces';
 
 export type RegisterTransaction<CustomOutput extends object = object> =
   Transaction.RunInTransaction<
@@ -7,5 +8,5 @@ export type RegisterTransaction<CustomOutput extends object = object> =
       PRIVATE_USER_DATA_REPOSITORY: PrivateDataUserRepository;
       USER_REPOSITORY: UserRepository;
     },
-    CustomOutput
+    Omit<RegisterDto<CustomOutput>, 'rollback'>
   >;

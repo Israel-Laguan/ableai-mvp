@@ -15,9 +15,8 @@ export const authController = {
     async (req: Express.Types.AuthorizedRequest<UpdateInput['idTokenClaims']>, res: Response) => {
       const userAgent = req.headers['user-agent'];
       const IP = req.headers['x-forwarded-for']?.[0] || req.socket.remoteAddress || req.ip;
-
       const { privateDataUser, user } = await authService.login({
-        email: req.user.email,
+        id: req.user.id,
         IP,
         userAgent,
       });

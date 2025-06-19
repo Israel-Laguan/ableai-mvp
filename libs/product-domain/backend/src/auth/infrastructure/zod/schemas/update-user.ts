@@ -1,24 +1,12 @@
 import z from 'zod';
 
-import { EmailSchema, FullNameSchema, PhoneNumberSchema } from './shared';
+import { PhoneNumberSchema } from './shared';
 
 export const UpdateMeUserSchema = z
   .object({
     privateDataUser: z
       .object({
-        fullName: FullNameSchema.optional(),
-        email: EmailSchema.optional(),
         phoneNumber: PhoneNumberSchema.optional(),
-      })
-      .strict()
-      .optional(),
-
-    user: z
-      .object({
-        avatarUrl: z.string().url().optional(),
-        displayName: z.string().optional(),
-        lastViewBuyer: z.string().optional(),
-        lastViewWorker: z.string().optional(),
       })
       .strict()
       .optional(),

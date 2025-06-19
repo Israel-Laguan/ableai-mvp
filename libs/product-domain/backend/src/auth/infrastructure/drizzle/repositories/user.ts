@@ -2,7 +2,6 @@ import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import type { User, Infra as ModelsAutInfra } from '@models/auth';
-import type { UpdateEntityInput } from '@models/shared';
 import type { Repositories } from '../../../domain';
 import { Infra } from '../../../../shared';
 import { users } from '../schemas';
@@ -22,11 +21,13 @@ export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgD
       return await db
         .insert(users)
         .values({
+          uid: userInput.uid,
           roleId: 1,
           privateDataUserId: userInput.privateDataUserId,
         })
         .returning({
           id: users.id,
+          uid: users.uid,
           roleId: users.roleId,
           privateDataUserId: users.privateDataUserId,
           createdAt: users.createdAt,
@@ -36,14 +37,9 @@ export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgD
     getByPrivateDataUserId: async (id: number) => {
       return await db.select().from(users).where(eq(users.privateDataUserId, id)).limit(1);
     },
-    updateByPrivateDataUserId: async (id: number, input: UpdateEntityInput<User>) => {
-      return await db.update(users).set(input).where(eq(users.privateDataUserId, id)).returning({
-        id: users.id,
-        roleId: users.roleId,
-        privateDataUserId: users.privateDataUserId,
-        createdAt: users.createdAt,
-        updatedAt: users.updatedAt,
-      });
+
+    getByUid: async (uid: string) => {
+      return await db.select().from(users).where(eq(users.uid, uid)).limit(1);
     },
   };
 };

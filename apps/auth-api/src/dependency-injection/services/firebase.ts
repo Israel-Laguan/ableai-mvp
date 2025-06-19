@@ -18,9 +18,9 @@ const services = Auth.Infra.Firebase.Services;
 export const firebaseService = {
   authorization: makeAuthorizationService<Pick<User, 'id' | 'lastAppRole' | 'roleId'>>({ auth }),
 
-  register: services.makeFirebaseRegisterService({
-    auth,
-  }),
+  runAfterRegister: services.makeRunAfterRegisterService({ auth }),
+
+  runBeforeRegister: services.makeRunBeforeRegisterService({ auth }),
 
   update: services.makeFirebaseUpdateService({
     auth,
