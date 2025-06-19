@@ -15,22 +15,5 @@ export const makeDrizzlePrivateUserDataRepository: Repositories.PrivateDataUserR
 
   return {
     ...repository,
-
-    getByEmail: async (input: { email: string }) => {
-      const data = await repository
-        .getAll({
-          where: {
-            fields: [
-              {
-                field: 'email',
-                value: input.email,
-              },
-            ],
-          },
-        })
-        .then(data => data.results);
-
-      return data.length > 0 ? data[0] : null;
-    },
   };
 };
