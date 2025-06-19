@@ -23,10 +23,6 @@ POST {{baseUrlAuth}}/login
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
-{
-  "email": "<your_email>@email.com"
-}
-
 ### Update Settings user by id
 PATCH {{baseUrlAuth}}/user/:id
 Content-Type: application/json
@@ -34,17 +30,8 @@ Authorization: Bearer {{accessToken}}
 
 {
   "privateDataUser": {
-    "fullName": "<Optional_new_full_name>",
-    "email": "<Optional_new@email.com>",
     "phoneNumber": "<Optional_new_phone_number>"
   },
-
-  "user": {
-    "avatarUrl": "<Optional_avatar_url>",
-    "displayName": "<Optional_new_display_name>",
-    "lastViewBuyer": "<Optional_last_view_buyer>",
-    "lastViewWorker": "<Optional_last_view_worker>"
-  } 
 }
 
 ### Update Settings me user
@@ -54,15 +41,6 @@ Authorization: Bearer {{accessToken}}
 
 {
   "privateDataUser": {
-    "fullName": "<Optional_new_full_name>",
-    "email": "<Optional_new@email.com>",
     "phoneNumber": "<Optional_new_phone_number>"
-  },
-
-  "user": {
-    "avatarUrl": "<Optional_avatar_url>",
-    "displayName": "<Optional_new_display_name>",
-    "lastViewBuyer": "<Optional_last_view_buyer>",
-    "lastViewWorker": "<Optional_last_view_worker>"
-  } 
+  }
 }

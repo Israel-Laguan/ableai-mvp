@@ -1,7 +1,7 @@
 {
   "rest-client.environmentVariables": {
     "$shared": {
-      "accessToken": ""
+      "accessToken": "",
     },
     "local": {
       "baseUrlAuth": "http://localhost:3001/api/auth/v1",
@@ -16,5 +16,5 @@
       "baseUrlIAManager": "https://ableia.vercel.app/api/ai-manager/v1"
     }
   },
-  "cSpell.words": ["zxcvbn"]
+  "cSpell.words": ["ISQL", "zxcvbn"]
 }

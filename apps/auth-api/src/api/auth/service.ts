@@ -1,4 +1,3 @@
-import { Auth } from '@product-domain/backend';
 import { UseCases } from '../../dependency-injection';
 import { LoginInput, RegisterInput, UpdateInput } from '../../interfaces';
 
@@ -11,7 +10,7 @@ export const authService = {
     return await UseCases.register(input);
   },
 
-  async updateUser(input: Auth.Domain.Interfaces.UpdateInput<UpdateInput>) {
+  async updateUser(input: UpdateInput) {
     return await UseCases.updateUser(input);
   },
 };
