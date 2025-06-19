@@ -24,11 +24,9 @@ export function makeFirebaseUpdateService({
       throwInvalidCredentialsError(ERROR_PATH);
     }
 
-    const { email, fullName, phoneNumber } = privateDataUser || {};
+    const { phoneNumber } = privateDataUser || {};
 
     const updateRequestObj = Utils.removeFalsyEntries({
-      displayName: fullName,
-      email,
       phoneNumber,
     });
 
