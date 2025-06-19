@@ -10,7 +10,7 @@ export type RegisterUseCase<CustomOutput extends object = object> = (
   input: Infra.RegisterInput
 ) => Promise<CustomOutput>;
 
-export type UpdateUserUseCase<
+export type UpdateMeUserUseCase<
   CustomInput extends object = object,
   CustomOutput extends object = object
 > = (input: UpdateInput<CustomInput>) => Promise<CustomOutput>;

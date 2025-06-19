@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 import { Express } from '@backend';
 import { CONSTANTS } from '@shared';
+
 import { UpdateInput } from '../../interfaces';
 import { authService } from './service';
 
@@ -30,9 +31,24 @@ export const authController = {
     res.status(HTTP_STATUS_CODE.CREATED).json(result);
   }),
 
-  update: tryCatchAndNext(
+  updateUser: tryCatchAndNext(
     async (req: Express.Types.AuthorizedRequest<UpdateInput['idTokenClaims']>, res: Response) => {
-      const result = await authService.update({
+      const result = await authService.updateUser({
+        ...req.body,
+        idTokenClaims: req.user,
+        user: {
+          ...req.body.user,
+          id: parseInt(req.params.id, 10),
+        },
+      });
+
+      res.status(HTTP_STATUS_CODE.UPDATED).json(result);
+    }
+  ),
+
+  updateMe: tryCatchAndNext(
+    async (req: Express.Types.AuthorizedRequest<UpdateInput['idTokenClaims']>, res: Response) => {
+      const result = await authService.updateUser({
         ...req.body,
         idTokenClaims: req.user,
         user: {
@@ -41,7 +57,7 @@ export const authController = {
         },
       });
 
-      res.status(HTTP_STATUS_CODE.OK).json(result);
+      res.status(HTTP_STATUS_CODE.UPDATED).json(result);
     }
   ),
 };

@@ -10,11 +10,18 @@ authRouter.post('/login', authorizationMiddleware, authController.login);
 
 authRouter.post('/register', AuthValidationInput.validateRegisterUser, authController.register);
 
-authRouter.put(
-  '/update',
+authRouter.patch(
+  '/me',
+  authorizationMiddleware,
+  AuthValidationInput.validateUpdateMeUser,
+  authController.updateMe
+);
+
+authRouter.patch(
+  '/user/:id',
   authorizationMiddleware,
   AuthValidationInput.validateUpdateUser,
-  authController.update
+  authController.updateUser
 );
 
 export default authRouter;

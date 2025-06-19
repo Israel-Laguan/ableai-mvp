@@ -3,18 +3,9 @@
 ### GET health
 GET {{baseUrlAuth}}/health
 
-############################################################################
-### AUTH ###################################################################
-############################################################################
-
-### POST Login
-POST {{baseUrlAuth}}/login
-Content-Type: application/json
-Authorization: Bearer {{accessToken}}
-
-{
-  "email": "<your_email>@email.com"
-}
+#############################################
+################### AUTH ####################
+#############################################
 
 ### POST Register
 POST {{baseUrlAuth}}/register
@@ -27,8 +18,17 @@ Content-Type: application/json
   "phoneNumber": "<your_phone_number>"
 }
 
-### PUT Update
-PUT {{baseUrlAuth}}/update
+### POST Login
+POST {{baseUrlAuth}}/login
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "email": "<your_email>@email.com"
+}
+
+### Update Settings user by id
+PATCH {{baseUrlAuth}}/user/:id
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -42,7 +42,26 @@ Authorization: Bearer {{accessToken}}
   "user": {
     "avatarUrl": "<Optional_avatar_url>",
     "displayName": "<Optional_new_display_name>",
-    "lastAppRole": "<Optional_las_app_role>",
+    "lastViewBuyer": "<Optional_last_view_buyer>",
+    "lastViewWorker": "<Optional_last_view_worker>"
+  } 
+}
+
+### Update Settings me user
+PATCH {{baseUrlAuth}}/me
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "privateDataUser": {
+    "fullName": "<Optional_new_full_name>",
+    "email": "<Optional_new@email.com>",
+    "phoneNumber": "<Optional_new_phone_number>"
+  },
+
+  "user": {
+    "avatarUrl": "<Optional_avatar_url>",
+    "displayName": "<Optional_new_display_name>",
     "lastViewBuyer": "<Optional_last_view_buyer>",
     "lastViewWorker": "<Optional_last_view_worker>"
   } 

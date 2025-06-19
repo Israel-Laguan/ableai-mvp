@@ -24,5 +24,6 @@ export type PrivateDataUserCreateInput = {
 
 export type UpdateUserInput = {
   privateDataUser?: Partial<Omit<PrivateDataUser, IOmitBase>>;
-  user: Pick<IBase, 'id'> & Partial<Omit<User, 'privateDataUserId' | 'roleId' | IOmitBase>>;
+  user: Pick<IBase, 'id'> &
+    Partial<Omit<User, 'privateDataUserId' | 'roleId' | 'lastAppRole' | IOmitBase>>;
 };
