@@ -1,4 +1,3 @@
-import type { PrivateDataUser } from '@models/auth';
 import type {
   MakeLoginUseCaseConfig,
   LogAttemptAndNextConfig,
@@ -31,18 +30,12 @@ const statusCodeStack = {
 };
 
 function makeLogAndResult({ IP, browser, device, os }: LogAttemptAndNextConfig) {
-  return ({ loginStatus, retryAfter }: LogAttemptAndNextInputs): void | never => {
+  return ({ loginStatus }: LogAttemptAndNextInputs): void => {
     console.log(
       `POST / [ LOGIN ATTEMPT ] : ${new Date().toUTCString()} status: ${
         statusCodeStack[loginStatus]
       }/${loginStatus} IP: ${IP} UserAgent: ${device} ${os} ${browser}`
     );
-
-    if (loginStatus !== LOGIN) {
-      throwError(loginStatus, { retryAfter });
-    }
-
-    return;
   };
 }
 
@@ -56,7 +49,7 @@ export function makeLoginUseCase<
   runInLogin,
 }: MakeLoginUseCaseConfig<CustomInput, CustomOutput>): LoginUseCase<CustomInput, CustomOutput> {
   return async input => {
-    const { email, IP, userAgent } = input;
+    const { id, IP, userAgent } = input;
 
     const parsedUserAgent = parseUserAgent(userAgent);
 
@@ -65,32 +58,32 @@ export function makeLoginUseCase<
       IP,
     });
 
-    const privateDataUser = (await privateDataUserRepository.getByEmail({ email }).catch(() => {
-      logAndResult({
-        loginStatus: ERROR,
-      });
-    })) as PrivateDataUser;
-
-    const privateUserId = privateDataUser.id;
-
-    if (!privateUserId) {
-      logAndResult({ loginStatus: UNAUTHORIZED });
-    }
-
-    const [user] = await userRepository.getByPrivateDataUserId(privateUserId);
+    const user = await userRepository.getById(String(id));
 
     if (!user) {
-      logAndResult({ loginStatus: UNAUTHORIZED });
+      const loginStatus = UNAUTHORIZED;
+      logAndResult({ loginStatus });
+      throw throwError(loginStatus);
     }
 
-    const runInLoginResult = (await runInLogin?.({
-      ...input,
-      logAndResultLogin: logAndResult,
-      privateDataUser,
-      privateDataUserRepository,
-      user,
-      userRepository,
-    })) as CustomOutput;
+    const privateDataUser = await privateDataUserRepository.getById(String(user.privateDataUserId));
+
+    if (!privateDataUser) {
+      const loginStatus = UNAUTHORIZED;
+      logAndResult({ loginStatus });
+      throw throwError(loginStatus);
+    }
+
+    const runInLoginResult = runInLogin
+      ? await runInLogin({
+          ...input,
+          logAndResultLogin: logAndResult,
+          privateDataUser,
+          privateDataUserRepository,
+          user,
+          userRepository,
+        })
+      : ({} as CustomOutput);
 
     logAndResult({
       loginStatus: LOGIN,
