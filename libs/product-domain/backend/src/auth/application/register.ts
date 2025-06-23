@@ -7,6 +7,7 @@ import type { RegisterUseCase } from '../domain/use-cases';
 
 import { Errors } from '@shared';
 import { Constants } from '../domain';
+import { User } from '@models/auth';
 
 interface RegisterErrorInputs {
   email?: string;
@@ -16,14 +17,12 @@ const {
   AUTH_DICTIONARY: { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY },
   REGISTER_STATUS_CODE: {
     ALREADY_EXIST,
-    COULD_NOT_HASH,
     PRIVATE_DATA_USER_CREATION_FAILED,
     USER_CREATION_FAILED,
     WEAK_PASSWORD,
   },
   AUTH_ERROR_MESSAGES: {
     ALREADY_EXIST_MESSAGE,
-    COULD_NOT_HASH_MESSAGE,
     PRIVATE_DATA_USER_CREATION_FAILED_MESSAGE,
     USER_CREATION_FAILED_MESSAGE,
     WEAK_PASSWORD_MESSAGE,
@@ -36,9 +35,6 @@ const { throwError } = Errors.makeErrorRunner<
   RegisterStatusKeys
 >({
   [ALREADY_EXIST]: () => Errors.AlreadyExistError.create(ALREADY_EXIST_MESSAGE, 'AUTH_REGISTER'),
-
-  [COULD_NOT_HASH]: () =>
-    Errors.InternalServerError.create(COULD_NOT_HASH_MESSAGE, 'AUTH_REGISTER'),
 
   [PRIVATE_DATA_USER_CREATION_FAILED]: () =>
     Errors.InternalServerError.create(PRIVATE_DATA_USER_CREATION_FAILED_MESSAGE, 'AUTH_REGISTER'),
@@ -64,10 +60,10 @@ zxcvbnOptions.setOptions({
 
 export const makeRegisterUserUseCase = <CustomOutput extends object = object>({
   runInTransaction,
-  runInRegister,
+  registerProviders: { runBeforeRegister, runAfterRegister },
 }: MakeRegisterUseCaseConfig<CustomOutput>): RegisterUseCase<CustomOutput> => {
-  return async ({ email, password, fullName, phoneNumber = null }) => {
-    const { score: passwordStrength, feedback } = zxcvbn(password);
+  return async input => {
+    const { score: passwordStrength, feedback } = zxcvbn(input.password);
 
     const PASSWORD_STRENGTH_SCORE = 3;
 
@@ -75,56 +71,57 @@ export const makeRegisterUserUseCase = <CustomOutput extends object = object>({
       throwError(WEAK_PASSWORD, { feedback: feedback.warning || 'No feedback provided' });
     }
 
-    return await runInTransaction(async repositoryManager => {
-      const privateDataUserRepository = repositoryManager.getRepository(
-        PRIVATE_USER_DATA_REPOSITORY
-      );
+    const runBeforeRegisterOutput = await runBeforeRegister(input);
 
-      const { rollback, ...result } = await runInRegister({
-        email,
-        password,
-        fullName,
-        phoneNumber,
-      });
+    const { rollback, ...runBeforeRegisterOutputWithoutRollback } = runBeforeRegisterOutput;
+
+    return await runInTransaction(async repositoryManager => {
+      const {
+        user: { uid },
+      } = runBeforeRegisterOutputWithoutRollback;
 
       try {
-        const userExist = await privateDataUserRepository
-          .getByEmail({ email })
-          .catch(() => throwError(USER_CREATION_FAILED));
-
-        if (userExist) {
-          throwError(ALREADY_EXIST);
-        }
-
-        const [privateDataUser] = await privateDataUserRepository.create({
-          fullName,
-          email,
-          phoneNumber,
-        });
-
-        const { id } = privateDataUser;
-
-        if (!id) {
-          throwError(PRIVATE_DATA_USER_CREATION_FAILED);
+        if (!uid) {
+          throw throwError(USER_CREATION_FAILED);
         }
 
         const userRepository = repositoryManager.getRepository(USER_REPOSITORY);
 
-        const user = await userRepository
-          .create({
-            privateDataUserId: id,
-          })
-          .catch(() => {
-            throwError(USER_CREATION_FAILED);
-          });
+        const [userExist] = await userRepository.getByUid(uid).catch(() => {
+          throw throwError(USER_CREATION_FAILED);
+        });
 
-        if (!user || !user[0]?.id) {
-          throwError(USER_CREATION_FAILED);
+        if (userExist?.id) {
+          throw throwError(ALREADY_EXIST);
         }
 
-        return result as CustomOutput;
+        const privateDataUserRepository = repositoryManager.getRepository(
+          PRIVATE_USER_DATA_REPOSITORY
+        );
+
+        const [privateDataUser] = await privateDataUserRepository.create(input);
+
+        const newUser = (await userRepository
+          .create({
+            uid,
+            privateDataUserId: privateDataUser.id,
+          })
+          .then(user => user[0])
+          .catch(() => {
+            throw throwError(USER_CREATION_FAILED);
+          })) as User;
+
+        if (!newUser?.id) {
+          throw throwError(USER_CREATION_FAILED);
+        }
+
+        return await runAfterRegister({
+          ...runBeforeRegisterOutputWithoutRollback,
+          user: newUser,
+          privateDataUser,
+        });
       } catch (error) {
-        await rollback();
+        rollback();
         throw error;
       }
     });

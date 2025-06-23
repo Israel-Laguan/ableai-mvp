@@ -57,6 +57,13 @@
       "when": 1749659123407,
       "tag": "0007_remove-login-attemps-and-block-id",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1750364539206,
+      "tag": "0008_remove-unused-data",
+      "breakpoints": true
     }
   ]
 }

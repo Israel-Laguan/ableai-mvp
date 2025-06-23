@@ -1,5 +1,5 @@
 import { Infra } from '@models/auth';
-import { LoginInput, LoginOutput } from '../interfaces';
+import { LoginInput, LoginOutput, RegisterDtoWithoutRollback, UpdateInput } from '../interfaces';
 
 export type LoginUseCase<
   CustomInput extends object = object,
@@ -8,4 +8,9 @@ export type LoginUseCase<
 
 export type RegisterUseCase<CustomOutput extends object = object> = (
   input: Infra.RegisterInput
-) => Promise<CustomOutput>;
+) => Promise<RegisterDtoWithoutRollback<CustomOutput>>;
+
+export type UpdateMeUserUseCase<
+  CustomInput extends object = object,
+  CustomOutput extends object = object
+> = (input: UpdateInput<CustomInput>) => Promise<CustomOutput>;

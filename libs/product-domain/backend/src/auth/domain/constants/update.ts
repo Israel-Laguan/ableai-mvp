@@ -1,0 +1,6 @@
+export enum UPDATE_STATUS_CODE {
+  INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
+  ERROR_UPDATING_USER = 'ERROR_UPDATING_USER',
+}
+
+export type UpdateUserStatusKeys = keyof typeof UPDATE_STATUS_CODE;

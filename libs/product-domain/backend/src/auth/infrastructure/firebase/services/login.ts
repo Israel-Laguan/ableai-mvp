@@ -11,32 +11,24 @@ export function makeFirebaseLoginService({
   auth,
 }: MakeFirebaseLoginServiceConfig): RunInLogin<FirebaseLoginInput, FirebaseLoginOutput> {
   return async ({ logAndResultLogin, ...input }) => {
-    const { uid, email: FirebaseAuthEmail } = (await auth
-      .verifyIdToken(input.idToken, true)
-      .catch(() => {
-        logAndResultLogin({
-          loginStatus: UNAUTHORIZED,
-        });
-      })) as DecodedIdToken;
-
-    const { user, email } = input;
-
-    const { id, roleId, lastAppRole } = user;
-
-    if (FirebaseAuthEmail !== email) {
+    const { uid } = (await auth.verifyIdToken(input.idToken, true).catch(() => {
       logAndResultLogin({
         loginStatus: UNAUTHORIZED,
       });
-    }
+    })) as DecodedIdToken;
 
-    const newIdToken = await auth.createCustomToken(uid, { id, roleId, lastAppRole }).catch(() => {
+    const { user } = input;
+
+    const { id, roleId, lastAppRole } = user;
+
+    const customToken = await auth.createCustomToken(uid, { id, roleId, lastAppRole }).catch(() => {
       return logAndResultLogin({
         loginStatus: UNAUTHORIZED,
       }) as never;
     });
 
     return {
-      idToken: newIdToken,
+      customToken,
     };
   };
 }

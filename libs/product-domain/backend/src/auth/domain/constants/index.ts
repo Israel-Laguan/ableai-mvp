@@ -1,3 +1,4 @@
+export * from './update';
 export { top10k10plus } from './top10k10plus';
 
 export enum AUTH_DICTIONARY {
@@ -10,6 +11,7 @@ export enum AUTH_ERROR_MESSAGES {
   COULD_NOT_HASH_MESSAGE = `Could not hash the password.`,
   ERROR_MESSAGE = `An error occurred during the authentication process.`,
   INVALID_CREDENTIALS_MESSAGE = `Incorrect email or password`,
+  INVALID_PHONE_NUMBER_MESSAGE = `Invalid phone number.`,
   PRIVATE_DATA_USER_CREATION_FAILED_MESSAGE = `Could not create the user private data.`,
   USER_CREATION_FAILED_MESSAGE = `Could not create the user.`,
   TO_MANY_ATTEMPTS_MESSAGE = `Your account is temporarily locked due to multiple failed attempts. Please try again in 15 minutes or reset your password.`,
@@ -17,14 +19,13 @@ export enum AUTH_ERROR_MESSAGES {
 }
 
 export enum LOGIN_STATUS_CODE {
-  ERROR,
-  LOGIN,
-  UNAUTHORIZED,
+  ERROR = 'ERROR',
+  LOGIN = 'LOGIN',
+  UNAUTHORIZED = 'UNAUTHORIZED',
 }
 
 export enum REGISTER_STATUS_CODE {
   ALREADY_EXIST = 'ALREADY_EXIST',
-  COULD_NOT_HASH = 'COULD_NOT_HASH',
   PRIVATE_DATA_USER_CREATION_FAILED = 'PRIVATE_DATA_USER_CREATION_FAILED',
   USER_CREATION_FAILED = 'USER_CREATION_FAILED',
   WEAK_PASSWORD = 'WEAK_PASSWORD',

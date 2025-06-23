@@ -29,6 +29,13 @@
       "when": 1749595867376,
       "tag": "0003_remove-phone-verified",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1750364569780,
+      "tag": "0004_remove-unused-data",
+      "breakpoints": true
     }
   ]
 }

@@ -5,7 +5,12 @@ import { CONSTANTS } from '@shared';
 const { NODE_ENV } = CONSTANTS;
 
 const envSchema = z.object({
+  NODE_ENV: z.enum(NODE_ENV).default(NODE_ENV[0]),
+  HOST: z.string().default('localhost'),
+  PORT: z.string().default('3001'),
+
   GIG_DB_URL: z.string(),
+  PRIVATE_GIG_DB_URL: z.string(),
 
   GOOGLE_SERVICE_ACCOUNT: z
     .string()
@@ -16,18 +21,14 @@ const envSchema = z.object({
     .refine(v =>
       z
         .object({
-          projectId: z.string(),
-          clientEmail: z.string(),
-          privateKey: z.string().refine(val => val.includes('-----BEGIN PRIVATE KEY-----'), {
+          project_id: z.string(),
+          client_email: z.string(),
+          private_key: z.string().refine(val => val.includes('-----BEGIN PRIVATE KEY-----'), {
             message: 'Invalid private key format',
           }),
         })
         .parse(v)
     ),
-
-  HOST: z.string().default('localhost'),
-
-  NODE_ENV: z.enum(NODE_ENV).default(NODE_ENV[0]),
 
   REDIS_USERNAME: z.string().default('default'),
   REDIS_PASSWORD: z.string().default(''),
@@ -36,10 +37,14 @@ const envSchema = z.object({
     .string()
     .default('6379')
     .transform(v => Number(v)),
-
-  PORT: z.string().default('3001'),
-
-  PRIVATE_GIG_DB_URL: z.string(),
 });
 
-export const env = envSchema.parse(process.env);
+const draw = envSchema.parse(process.env);
+export const env = {
+  ...draw,
+  GOOGLE_SERVICE_ACCOUNT: {
+    projectId: draw.GOOGLE_SERVICE_ACCOUNT.project_id,
+    clientEmail: draw.GOOGLE_SERVICE_ACCOUNT.client_email,
+    privateKey: draw.GOOGLE_SERVICE_ACCOUNT.private_key.replace(/\\n/g, '\n'), // Ensure newlines are correctly formatted
+  },
+};

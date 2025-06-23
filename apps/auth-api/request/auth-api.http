@@ -1,31 +1,46 @@
-@baseUrl = http://localhost:3001/api/auth/v1
-@accessToken = "your_access_token_here"
-
 ### ROOT Auth API
 
 ### GET health
-GET {{baseUrl}}/health
+GET {{baseUrlAuth}}/health
 
-############################################################################
-### AUTH ###################################################################
-############################################################################
+#############################################
+################### AUTH ####################
+#############################################
+
+### POST Register
+POST {{baseUrlAuth}}/register
+Content-Type: application/json
+
+{
+  "fullName": "<your_full_name>",
+  "email": "<your_email>@email.com",
+  "password": "Your_Awesome_p4$$word",
+  "phoneNumber": "<your_phone_number>"
+}
 
 ### POST Login
-POST {{baseUrl}}/login
+POST {{baseUrlAuth}}/login
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Update Settings user by id
+PATCH {{baseUrlAuth}}/user/:id
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "email": "your_awesome_email@email.com",
+  "privateDataUser": {
+    "phoneNumber": "<Optional_new_phone_number>"
+  },
 }
 
-### POST Register
-POST {{baseUrl}}/register
+### Update Settings me user
+PATCH {{baseUrlAuth}}/me
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
-  "fullName": "your name",
-  "email": "your_awesome_email@email.com",
-  "password": "Your_Awesome_p4$$word",
-  "phoneNumber": "+123456789012"
+  "privateDataUser": {
+    "phoneNumber": "<Optional_new_phone_number>"
+  }
 }
