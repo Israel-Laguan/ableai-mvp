@@ -2,7 +2,10 @@ import { Router } from 'express';
 
 import { authController } from './controller';
 import { AuthValidationInput } from '../../dependency-injection';
-import { authorizationMiddleware } from '../../dependency-injection/middlewares';
+import {
+  authorizationMiddleware,
+  roleAuthorizationMiddlewares,
+} from '../../dependency-injection/middlewares';
 
 const authRouter = Router();
 
@@ -20,6 +23,7 @@ authRouter.patch(
 authRouter.patch(
   '/user/:id',
   authorizationMiddleware,
+  roleAuthorizationMiddlewares.superAdminGuard,
   AuthValidationInput.validateUpdateUser,
   authController.updateUser
 );
