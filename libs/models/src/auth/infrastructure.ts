@@ -8,12 +8,11 @@ export type RegisterInput = Omit<PrivateDataUser, IOmitBase> & {
   password: string;
 };
 
-export type UserCreateInput = Pick<User, 'uid' | 'privateDataUserId'>;
+export type UserCreateInput = Pick<User, 'uid' | 'privateDataUserId' | 'roleId'>;
 
 export type PrivateDataUserCreateInput = Omit<PrivateDataUser, IOmitBase>;
 
 export type UpdateUserInput = {
   privateDataUser?: Partial<Omit<PrivateDataUser, IOmitBase>>;
-  user: Pick<IBase, 'id'> &
-    Partial<Omit<User, 'privateDataUserId' | 'roleId' | 'lastAppRole' | IOmitBase>>;
+  user: Pick<IBase, 'id'> & Partial<Omit<User, 'privateDataUserId' | 'roleId' | IOmitBase>>;
 };
