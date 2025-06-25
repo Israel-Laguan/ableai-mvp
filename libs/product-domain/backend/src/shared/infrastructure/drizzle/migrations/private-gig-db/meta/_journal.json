@@ -36,6 +36,13 @@
       "when": 1750364569780,
       "tag": "0004_remove-unused-data",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1750865905954,
+      "tag": "0005_update-private-data-user-schema",
+      "breakpoints": true
     }
   ]
 }
