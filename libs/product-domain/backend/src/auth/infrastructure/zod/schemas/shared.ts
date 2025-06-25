@@ -1,5 +1,10 @@
 import z from 'zod';
 
+export const AddressSchema = z
+  .string()
+  .regex(/^[^\s]/, { message: 'Address must not start with a blank space' })
+  .min(3);
+
 export const EmailSchema = z
   .string({ message: 'Email is required.' })
   .email({ message: 'Invalid email address.' })
