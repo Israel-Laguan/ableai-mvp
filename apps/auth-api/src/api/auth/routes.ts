@@ -10,6 +10,8 @@ authRouter.post('/login', authorizationMiddleware, authController.login);
 
 authRouter.post('/register', AuthValidationInput.validateRegisterUser, authController.register);
 
+authRouter.post('/switch-app-role', authorizationMiddleware, authController.switchAppRole);
+
 authRouter.patch(
   '/me',
   authorizationMiddleware,
