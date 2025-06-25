@@ -15,13 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@shared": ["libs/shared/src/index.ts"],
       "@backend": ["libs/backend/src/index.ts"],
       "@models": ["libs/models/src/index.ts"],
       "@models/auth": ["libs/models/src/auth/index.ts"],
       "@models/shared": ["libs/models/src/shared/index.ts"],
       "@product-domain/backend": ["libs/product-domain/backend/src/index.ts"],
-      "@product-domain/frontend": ["libs/product-domain/frontend/src/index.ts"]
+      "@product-domain/frontend": ["libs/product-domain/frontend/src/index.ts"],
+      "@shared": ["libs/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
