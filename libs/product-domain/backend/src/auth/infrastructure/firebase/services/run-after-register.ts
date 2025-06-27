@@ -1,12 +1,12 @@
+import type { UserClaims } from '@models/auth';
 import type { FirebaseError } from '../../../../shared/domain/interfaces';
 import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
 import type { RunAfterRegister } from '../../../domain/services';
 import type { FirebaseAddCustomClaimsDto } from '../types';
 
+import { APP_ROLE } from '@models/shared';
 import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
 import { throwError } from '../errors';
-import { UserClaims } from '@models/auth';
-import { APP_ROLE } from '@models/shared';
 
 const ERROR_PATH = 'AUTH_CUSTOM_CLAIMS_SERVICE';
 

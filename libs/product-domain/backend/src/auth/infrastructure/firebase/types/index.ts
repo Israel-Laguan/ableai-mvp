@@ -21,5 +21,5 @@ export interface MakeFirebaseLoginServiceConfig {
 }
 
 export type FirebaseUpdateInput = {
-  idTokenClaims: DecodedIdToken & Pick<User, 'id' | 'lastAppRole' | 'roleId'>;
+  idTokenClaims: DecodedIdToken & Pick<User, 'id' | 'roleId'>;
 };
