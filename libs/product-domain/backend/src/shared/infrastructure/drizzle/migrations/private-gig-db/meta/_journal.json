@@ -43,6 +43,13 @@
       "when": 1750865905954,
       "tag": "0005_update-private-data-user-schema",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1751052187045,
+      "tag": "0006_fix-longitude-and-latitude",
+      "breakpoints": true
     }
   ]
 }

@@ -6,8 +6,8 @@ import { PrivateDataUser } from '@models/auth';
 export const privateDataUser = Schemas.withBaseSchema<PrivateDataUser>('private_data_user', {
   address: p.varchar('address'),
   kycUrl: p.varchar('kyc_url'),
-  latitude: p.numeric('latitude', { mode: 'number' }),
-  longitude: p.numeric('longitude', { mode: 'number' }),
+  latitude: p.varchar('latitude'),
+  longitude: p.varchar('longitude'),
   phoneNumber: p.varchar('phone_number').unique(),
   rwtUrl: p.varchar('rwt_url'),
 });
