@@ -71,6 +71,13 @@
       "when": 1750865662377,
       "tag": "0009_add-roles-and-buyers-schemas",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1751058092737,
+      "tag": "0010_add-gig-schenas",
+      "breakpoints": true
     }
   ]
 }
