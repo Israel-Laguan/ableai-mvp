@@ -20,7 +20,10 @@ Content-Type: application/json
 
 ### POST Login
 POST {{baseUrlAuth}}/login
-Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### POST Switch App role
+POST {{baseUrlAuth}}/switch-app-role
 Authorization: Bearer {{accessToken}}
 
 ### Update Settings user by id

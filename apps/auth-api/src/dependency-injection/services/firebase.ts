@@ -2,6 +2,7 @@ import type { User } from '@models/auth';
 
 import { Auth, Shared } from '@product-domain/backend';
 import { env } from '../../config/env.config';
+import { userRepository } from '../repositories';
 
 const {
   Modules: { makeFirebaseAuthModule },
@@ -21,6 +22,11 @@ export const firebaseService = {
   runAfterRegister: services.makeRunAfterRegisterService({ auth }),
 
   runBeforeRegister: services.makeRunBeforeRegisterService({ auth }),
+
+  switchAppRole: services.makeFirebaseSwitchAppRoleService({
+    auth,
+    userRepository,
+  }),
 
   update: services.makeFirebaseUpdateService({
     auth,
