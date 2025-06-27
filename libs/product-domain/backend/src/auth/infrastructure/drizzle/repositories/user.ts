@@ -25,14 +25,7 @@ export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgD
           roleId: 1,
           privateDataUserId: userInput.privateDataUserId,
         })
-        .returning({
-          id: users.id,
-          uid: users.uid,
-          roleId: users.roleId,
-          privateDataUserId: users.privateDataUserId,
-          createdAt: users.createdAt,
-          updatedAt: users.updatedAt,
-        });
+        .returning();
     },
     getByPrivateDataUserId: async (id: number) => {
       return await db.select().from(users).where(eq(users.privateDataUserId, id)).limit(1);
