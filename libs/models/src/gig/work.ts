@@ -12,12 +12,12 @@ export interface GigWork extends IBase {
 
 export interface GigWorkTeam extends IBase {
   awardedBadge?: string;
-  delegateTo: number; // id
+  delegateTo: number;
   endDateOffer: Date;
-  endGig?: boolean; // false
+  endGig?: boolean;
   feedback?: string;
   gigWorkId: number;
-  isAcceptedOffer: boolean; // false
+  isAcceptedOffer: boolean;
   paymentId: number;
   skillId: number;
   tips?: number;

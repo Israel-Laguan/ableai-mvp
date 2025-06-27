@@ -1,11 +1,11 @@
 import { APP_ROLE_TYPE, IBase } from '../shared/';
 
 export interface User extends IBase {
-  isBuyerAllowed: boolean; // true
+  isBuyerAllowed: boolean;
   isKycApproved: boolean;
-  isPublicProfile: boolean; // true
+  isPublicProfile: boolean;
   isRtwApproved: boolean;
-  isWorkerAllowed: boolean; // false
+  isWorkerAllowed: boolean;
   privateDataUserId: number;
   roleId: number;
   socialMediaUrl?: string;
