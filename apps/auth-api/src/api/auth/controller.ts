@@ -38,7 +38,7 @@ export const authController = {
         roleId: req.user.roleId,
       });
 
-      res.status(HTTP_STATUS_CODE.OK).end();
+      res.status(HTTP_STATUS_CODE.UPDATED).end();
     }
   ),
 
