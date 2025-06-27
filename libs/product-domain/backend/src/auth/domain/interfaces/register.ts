@@ -1,4 +1,4 @@
-import { PrivateDataUser, User } from '@models/auth';
+import { Buyer, PrivateDataUser, User } from '@models/auth';
 import { RegisterTransaction } from '../repositories';
 import { RunBeforeRegister, RunAfterRegister } from '../services';
 
@@ -19,6 +19,7 @@ export type RegisterDto<CustomOutput extends object = object> = {
   privateDataUser: Partial<PrivateDataUser>;
   rollback: () => Promise<void>;
   user: Partial<User> & Pick<User, 'uid'>;
+  buyer: Buyer;
 } & CustomOutput;
 
 export type RegisterDtoWithoutRollback<CustomOutput extends object = object> = Omit<
