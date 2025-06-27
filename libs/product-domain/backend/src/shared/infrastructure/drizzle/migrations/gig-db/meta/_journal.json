@@ -78,6 +78,13 @@
       "when": 1751058092737,
       "tag": "0010_add-gig-schenas",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1751059376854,
+      "tag": "0011_add-review-schema",
+      "breakpoints": true
     }
   ]
 }
