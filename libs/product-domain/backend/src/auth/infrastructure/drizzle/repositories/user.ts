@@ -5,6 +5,7 @@ import type { User, Infra as ModelsAutInfra } from '@models/auth';
 import type { Repositories } from '../../../domain';
 import { Infra } from '../../../../shared';
 import { users } from '../schemas';
+import { ROLES } from '../../../domain/constants';
 
 export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgDatabase> = ({
   db,
@@ -22,7 +23,7 @@ export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgD
         .insert(users)
         .values({
           uid: userInput.uid,
-          roleId: 1,
+          roleId: ROLES.USER,
           privateDataUserId: userInput.privateDataUserId,
         })
         .returning();

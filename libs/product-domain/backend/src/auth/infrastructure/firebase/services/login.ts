@@ -2,7 +2,7 @@ import type { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 
 import type { RunInLogin } from '../../../domain/services';
 
-import { LOGIN_STATUS_CODE } from '../../../domain/constants';
+import { LOGIN_STATUS_CODE, ROLES } from '../../../domain/constants';
 import { FirebaseLoginInput, FirebaseLoginOutput, MakeFirebaseLoginServiceConfig } from '../types';
 
 const { UNAUTHORIZED } = LOGIN_STATUS_CODE;
@@ -21,11 +21,13 @@ export function makeFirebaseLoginService({
 
     const { id, roleId } = user;
 
-    const customToken = await auth.createCustomToken(uid, { id, roleId }).catch(() => {
-      return logAndResultLogin({
-        loginStatus: UNAUTHORIZED,
-      }) as never;
-    });
+    const customToken = await auth
+      .createCustomToken(uid, { id, roleId, appRole: ROLES.USER })
+      .catch(() => {
+        return logAndResultLogin({
+          loginStatus: UNAUTHORIZED,
+        }) as never;
+      });
 
     return {
       customToken,

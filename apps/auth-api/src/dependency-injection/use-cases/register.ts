@@ -3,7 +3,8 @@ import { gigDb, privateGigDb } from '../../db';
 import { firebaseService } from '../services';
 import { RegisterTransaction } from '../../interfaces';
 
-const { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } = Auth.Domain.Constants.AUTH_DICTIONARY;
+const { BUYER_REPOSITORY, PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY } =
+  Auth.Domain.Constants.AUTH_DICTIONARY;
 
 const runInTransaction: RegisterTransaction =
   Shared.Infra.Drizzle.Repositories.makeDrizzleUnitOfWork([
@@ -16,6 +17,11 @@ const runInTransaction: RegisterTransaction =
       db: gigDb,
       repositoryName: USER_REPOSITORY,
       repositoryMaker: Auth.Infra.Drizzle.Repositories.makeDrizzleUserRepository,
+    },
+    {
+      db: gigDb,
+      repositoryName: BUYER_REPOSITORY,
+      repositoryMaker: Auth.Infra.Drizzle.Repositories.makeDrizzleBuyerRepository,
     },
   ]);
 
