@@ -15,4 +15,5 @@ export const skills = Schemas.withBaseSchema<Skills>('skills', {
   summary: p.varchar('summary').notNull(),
   trainingDescription: p.varchar('training_description'),
   videoUrl: p.varchar('video_url'),
+  workerId: p.integer('worker_id').notNull(),
 });
