@@ -12,7 +12,12 @@ interface RegisterErrorInputs {
 }
 
 const {
-  AUTH_DICTIONARY: { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY },
+  AUTH_DICTIONARY: {
+    BUYER_REPOSITORY,
+    PRIVATE_USER_DATA_REPOSITORY,
+    USER_REPOSITORY,
+    WORKER_REPOSITORY,
+  },
   AUTH_ERROR_MESSAGES: { ERROR_MESSAGE, INVALID_CREDENTIALS_MESSAGE },
   UPDATE_STATUS_CODE: { INVALID_CREDENTIALS, ERROR_UPDATING_USER },
 } = Constants;
@@ -74,6 +79,22 @@ export const makeUpdateUserUseCase = <
           await privateDataUserRepository
             .updateById(String(privateDataUserId), privateDataUserUpdates)
             .catch(() => throwError(ERROR_UPDATING_USER));
+        }
+
+        const buyerUpdates = removeFalsyEntries(input.buyer);
+
+        if (buyerUpdates && Object.keys(buyerUpdates).length) {
+          const buyerRepository = repositoryManager.getRepository(BUYER_REPOSITORY);
+
+          await buyerRepository.updateByUserId(id, buyerUpdates);
+        }
+
+        const workerUpdates = removeFalsyEntries(input.worker);
+
+        if (workerUpdates && Object.keys(workerUpdates).length) {
+          const buyerRepository = repositoryManager.getRepository(WORKER_REPOSITORY);
+
+          await buyerRepository.updateByUserId(id, workerUpdates);
         }
 
         return void 0;

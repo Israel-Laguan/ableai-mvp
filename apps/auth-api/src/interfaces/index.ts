@@ -1,5 +1,4 @@
 import { Infra, UserClaims } from '@models/auth';
-import { Transaction } from '@models/shared';
 import { Auth } from '@product-domain/backend';
 
 export type CustomLoginInput = Auth.Infra.Firebase.Types.FirebaseLoginInput;
@@ -18,10 +17,4 @@ export type SwitchAppRoleInput = UserClaims;
 export type UpdateInput =
   Auth.Domain.Interfaces.UpdateInput<Auth.Infra.Firebase.Types.FirebaseUpdateInput>;
 
-export type UpdateTransaction = Transaction.RunInTransaction<
-  {
-    PRIVATE_USER_DATA_REPOSITORY: Auth.Domain.Repositories.PrivateDataUserRepository;
-    USER_REPOSITORY: Auth.Domain.Repositories.UserRepository;
-  },
-  void
->;
+export type UpdateTransaction = Auth.Domain.Repositories.UpdateTransaction;

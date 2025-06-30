@@ -1,6 +1,10 @@
-import type { Buyer } from '@models/auth';
+import type { Buyer, Infra } from '@models/auth';
 import type { ISQLCustomRepository, ISQLRepositoryMaker } from '@models/shared';
 
-export type BuyerRepository = ISQLCustomRepository<Buyer>;
+interface CustomMethods {
+  updateByUserId: (userId: number, input: Infra.UpdateBuyerInput) => Promise<Buyer[]>;
+}
 
-export type BuyerRepositoryMaker<TDatabase> = ISQLRepositoryMaker<TDatabase, Buyer>;
+export type BuyerRepository = ISQLCustomRepository<Buyer, CustomMethods>;
+
+export type BuyerRepositoryMaker<TDatabase> = ISQLRepositoryMaker<TDatabase, Buyer, CustomMethods>;
