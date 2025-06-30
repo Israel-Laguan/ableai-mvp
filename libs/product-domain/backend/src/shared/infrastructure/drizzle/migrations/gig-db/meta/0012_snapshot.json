@@ -1,316 +1,11 @@
 {
-  "id": "6f6ef902-2e9a-4b82-bb11-c2a010f6f27a",
-  "prevId": "66ff557c-72d0-41e6-8ae4-13875ba476e1",
+  "id": "c97b5462-3f03-4fc9-bc8b-62287fd184ae",
+  "prevId": "78109e66-61bc-4f82-b673-92ffc4937bfd",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.buyers": {
-      "name": "buyers",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "badges_awarded": {
-          "name": "badges_awarded",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "business_address": {
-          "name": "business_address",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "business_name": {
-          "name": "business_name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "business_registration_number": {
-          "name": "business_registration_number",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "business_role": {
-          "name": "business_role",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "representative_id": {
-          "name": "representative_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "social_network_url": {
-          "name": "social_network_url",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "video_url": {
-          "name": "video_url",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "buyers_user_id_unique": {
-          "name": "buyers_user_id_unique",
-          "nullsNotDistinct": false,
-          "columns": ["user_id"]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.users": {
-      "name": "users",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "is_buyer_allowed": {
-          "name": "is_buyer_allowed",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "is_kyc_approved": {
-          "name": "is_kyc_approved",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "is_public_profile": {
-          "name": "is_public_profile",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "is_rtw_approved": {
-          "name": "is_rtw_approved",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "is_worker_allowed": {
-          "name": "is_worker_allowed",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "private_data_user_id": {
-          "name": "private_data_user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role_id": {
-          "name": "role_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "social_media_url": {
-          "name": "social_media_url",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "firebase_uid": {
-          "name": "firebase_uid",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "users_firebase_uid_unique": {
-          "name": "users_firebase_uid_unique",
-          "nullsNotDistinct": false,
-          "columns": ["firebase_uid"]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.roles": {
-      "name": "roles",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "roles_name_unique": {
-          "name": "roles_name_unique",
-          "nullsNotDistinct": false,
-          "columns": ["name"]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.workers": {
-      "name": "workers",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "feedback_summary": {
-          "name": "feedback_summary",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "slot_availability": {
-          "name": "slot_availability",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "social_network_url": {
-          "name": "social_network_url",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "tags": {
-          "name": "tags",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "workers_user_id_unique": {
-          "name": "workers_user_id_unique",
-          "nullsNotDistinct": false,
-          "columns": ["user_id"]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.gig_work_team": {
-      "name": "gig_work_team",
+    "public.gig_work_teams": {
+      "name": "gig_work_teams",
       "schema": "",
       "columns": {
         "id": {
@@ -429,8 +124,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.gig_work": {
-      "name": "gig_work",
+    "public.gig_works": {
+      "name": "gig_works",
       "schema": "",
       "columns": {
         "id": {
@@ -541,6 +236,51 @@
         },
         "worker_id": {
           "name": "worker_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.reviews": {
+      "name": "reviews",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "review": {
+          "name": "review",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -693,6 +433,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "worker_id": {
+          "name": "worker_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -726,47 +472,32 @@
           "primaryKey": true,
           "notNull": true
         },
-        "address": {
-          "name": "address",
+        "app_role": {
+          "name": "app_role",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'BUYER'"
         },
-        "buyer_id": {
-          "name": "buyer_id",
+        "response_rate": {
+          "name": "response_rate",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "description": {
-          "name": "description",
-          "type": "varchar",
+        "would_work": {
+          "name": "would_work",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true
-        },
-        "end_date": {
-          "name": "end_date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "payment_per_hour": {
-          "name": "payment_per_hour",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "start_date": {
-          "name": "start_date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
+          "notNull": false,
+          "default": 0
         },
         "created_at": {
           "name": "created_at",

@@ -79,8 +79,3 @@ CREATE TABLE "statistics" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
---> statement-breakpoint
-DROP TABLE "buyers" CASCADE;--> statement-breakpoint
-DROP TABLE "users" CASCADE;--> statement-breakpoint
-DROP TABLE "roles" CASCADE;--> statement-breakpoint
-DROP TABLE "workers" CASCADE;
