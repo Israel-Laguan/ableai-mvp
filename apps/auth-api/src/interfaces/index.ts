@@ -1,4 +1,4 @@
-import { Infra } from '@models/auth';
+import { Infra, UserClaims } from '@models/auth';
 import { Auth } from '@product-domain/backend';
 
 export type CustomLoginInput = Auth.Infra.Firebase.Types.FirebaseLoginInput;
