@@ -1,4 +1,4 @@
-import { APP_ROLE_TYPE, IBase } from '../shared/';
+import { APP_ROLE_TYPE, IBase } from '../shared';
 
 export interface User extends IBase {
   isBuyerAllowed: boolean;

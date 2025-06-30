@@ -15,12 +15,15 @@ export function makeRunAfterRegisterService({
 }: {
   auth: FirebaseAuthModule;
 }): RunAfterRegister<FirebaseAddCustomClaimsDto, FirebaseAddCustomClaimsDto> {
-  return async ({ privateDataUser, user, userRecord, buyer }) => {
-    const { uid } = userRecord;
+  return async input => {
+    const {
+      userRecord: { uid },
+      user: { id, roleId },
+    } = input;
 
     const customClaims: UserClaims = {
-      id: Number(user.id),
-      roleId: Number(user.roleId),
+      id: Number(id),
+      roleId: Number(roleId),
       appRole: APP_ROLE.BUYER,
     };
 
@@ -31,10 +34,7 @@ export function makeRunAfterRegisterService({
     });
 
     return {
-      buyer,
-      privateDataUser,
-      user,
-      userRecord,
+      ...input,
     };
   };
 }
