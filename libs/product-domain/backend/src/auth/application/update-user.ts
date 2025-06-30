@@ -92,9 +92,9 @@ export const makeUpdateUserUseCase = <
         const workerUpdates = removeFalsyEntries(input.worker);
 
         if (workerUpdates && Object.keys(workerUpdates).length) {
-          const buyerRepository = repositoryManager.getRepository(WORKER_REPOSITORY);
+          const workerRepository = repositoryManager.getRepository(WORKER_REPOSITORY);
 
-          await buyerRepository.updateByUserId(id, workerUpdates);
+          await workerRepository.updateByUserId(id, workerUpdates);
         }
 
         return void 0;
