@@ -64,6 +64,13 @@
       "when": 1750364539206,
       "tag": "0008_remove-unused-data",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1750865662377,
+      "tag": "0009_add-roles-and-buyers-schemas",
+      "breakpoints": true
     }
   ]
 }
