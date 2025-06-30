@@ -4,7 +4,7 @@ import type { GigWorkTeam } from '@models/gig';
 
 import { Schemas } from '../../../../../shared/infrastructure/drizzle';
 
-export const gigWorkTeams = Schemas.withBaseSchema<GigWorkTeam>('gig_work_team', {
+export const gigWorkTeams = Schemas.withBaseSchema<GigWorkTeam>('gig_work_teams', {
   awardedBadge: p.varchar('awarded_badge'),
   delegateTo: p.integer('delegate_to'),
   endDateOffer: p.timestamp('end_date_offer'),

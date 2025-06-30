@@ -1,15 +1,12 @@
 import * as p from 'drizzle-orm/pg-core';
 
-import type { GigWork } from '@models/gig';
+import type { Statistic } from '@models/gig';
 
 import { Schemas } from '../../../../../shared/infrastructure/drizzle';
 
-export const statistics = Schemas.withBaseSchema<GigWork>('statistics', {
-  address: p.varchar('address'),
-  buyerId: p.integer('buyer_id').notNull(),
-  description: p.varchar('description').notNull(),
-  endDate: p.timestamp('end_date').notNull(),
-  paymentPerHour: p.numeric('payment_per_hour', { mode: 'number' }).notNull(),
-  startDate: p.timestamp('start_date').notNull(),
-  title: p.varchar('title').notNull(),
+export const statistics = Schemas.withBaseSchema<Statistic>('statistics', {
+  appRole: p.varchar('app_role').default('BUYER'),
+  responseRate: p.numeric('response_rate', { mode: 'number' }).default(0),
+  userId: p.integer('user_id').notNull(),
+  wouldWork: p.integer('would_work').default(0),
 });

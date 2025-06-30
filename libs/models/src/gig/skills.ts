@@ -17,4 +17,5 @@ export interface Skills extends IBase {
   summary: string;
   trainingDescription: string;
   videoUrl?: string;
+  workerId: number;
 }

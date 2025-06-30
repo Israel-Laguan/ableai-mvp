@@ -1,5 +1,5 @@
-export * from './gig-work';
-export * from './gig-work-team';
+export * from './gig-works';
+export * from './gig-work-teams';
 export * from './recommendations';
 export * from './review';
 export * from './skill-hires';

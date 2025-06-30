@@ -4,7 +4,7 @@ import type { GigWork } from '@models/gig';
 
 import { Schemas } from '../../../../../shared/infrastructure/drizzle';
 
-export const gigWorks = Schemas.withBaseSchema<GigWork>('gig_work', {
+export const gigWorks = Schemas.withBaseSchema<GigWork>('gig_works', {
   address: p.varchar('address'),
   buyerId: p.integer('buyer_id').notNull(),
   description: p.varchar('description'),
