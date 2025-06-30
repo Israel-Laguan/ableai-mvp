@@ -16,13 +16,13 @@ const argSchema = z.object({
 const args = process.argv.slice(2);
 if (args.length < 3) {
   console.error(
-    'Usage: tsx scripts/drizzle-migrations.ts <scope> <dbName> <migrationName> [--custom]'
+    'Usage: tsx scripts/drizzle-migrations.ts <scope> <dbName> <migrationName> [custom]'
   );
   process.exit(1);
 }
 
 const [scope, dbName, migrationName, ...rest] = args;
-const custom = rest.includes('--custom');
+const custom = rest.includes('custom');
 
 // Validate inputs
 const parsed = argSchema.safeParse({ scope, dbName, migrationName, custom });
