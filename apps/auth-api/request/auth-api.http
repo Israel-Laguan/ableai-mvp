@@ -20,7 +20,10 @@ Content-Type: application/json
 
 ### POST Login
 POST {{baseUrlAuth}}/login
-Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### POST Switch App role
+POST {{baseUrlAuth}}/switch-app-role
 Authorization: Bearer {{accessToken}}
 
 ### Update Settings user by id
@@ -40,7 +43,39 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
+  "buyer":{
+    "badgesAwarded": "<badges>",
+    "businessAddress": "business_address>",
+    "businessName": "<business_name>",
+    "businessRegistrationNumber": "<business_registration_number>",
+    "businessRole": "<business_role>",
+    "representativeId": "representative_id",
+    "socialNetworkUrl": "https://example.com",
+    "videoUrl": "https://example.com"
+  },
+
   "privateDataUser": {
-    "phoneNumber": "<Optional_new_phone_number>"
+    "address": "<address>",
+    "kycUrl": "https://example.com",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "phoneNumber": "<Optional_new_phone_number>",
+    "rwtUrl": "https://example.com"
+  },
+
+  "user":{
+    "isBuyerAllowed": true,
+    "isKycApproved": false,
+    "isPublicProfile": true,
+    "isRtwApproved": false,
+    "isWorkerAllowed": false,
+    "socialMediaUrl": "https://example.com"
+  },
+
+  "worker":{
+    "feedbackSummary": "<feedback_summary>",
+    "slotAvailability": "<slot_availability>",
+    "socialNetworkUrl": "https://example.com",
+    "tags": "<tags>"
   }
 }

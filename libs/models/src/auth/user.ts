@@ -1,21 +1,15 @@
-import { IBase } from '../shared/';
-
-export interface PrivateDataUser extends IBase {
-  phoneNumber: string | null;
-}
-
-export enum LAST_APP_ROLE {
-  BUYER = 'BUYER',
-  WORKER = 'WORKER',
-}
-
-export type LAST_APP_ROLE_TYPE = (typeof LAST_APP_ROLE)[keyof typeof LAST_APP_ROLE];
+import { APP_ROLE_TYPE, IBase } from '../shared';
 
 export interface User extends IBase {
-  uid: string;
-  lastAppRole?: LAST_APP_ROLE_TYPE | null;
+  isBuyerAllowed: boolean;
+  isKycApproved: boolean;
+  isPublicProfile: boolean;
+  isRtwApproved: boolean;
+  isWorkerAllowed: boolean;
   privateDataUserId: number;
   roleId: number;
+  socialMediaUrl?: string;
+  uid: string;
 }
 
-export type UserClaims = Pick<User, 'id' | 'lastAppRole' | 'roleId'>;
+export type UserClaims = Pick<User, 'id' | 'roleId'> & { appRole: APP_ROLE_TYPE };

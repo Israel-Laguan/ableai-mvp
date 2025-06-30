@@ -1,6 +1,5 @@
 import { Infra } from '@models/auth';
-import { Transaction } from '@models/shared';
-import { PrivateDataUserRepository, UserRepository } from '../repositories';
+import { UpdateTransaction } from '../repositories';
 import { RunInUpdate } from '../services';
 
 export interface MakeUpdateMeUserCaseConfig<
@@ -8,13 +7,7 @@ export interface MakeUpdateMeUserCaseConfig<
   CustomOutput extends object = object
 > {
   runInUpdate: RunInUpdate<CustomInput, CustomOutput>;
-  runInTransaction: Transaction.RunInTransaction<
-    {
-      PRIVATE_USER_DATA_REPOSITORY: PrivateDataUserRepository;
-      USER_REPOSITORY: UserRepository;
-    },
-    void
-  >;
+  runInTransaction: UpdateTransaction;
 }
 
 export type UpdateDto<CustomOutput extends object = object> = {

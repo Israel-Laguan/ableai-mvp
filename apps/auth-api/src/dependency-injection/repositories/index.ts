@@ -4,7 +4,7 @@ import { gigDb, privateGigDb } from '../../db';
 const {
   Infra: {
     Drizzle: {
-      Repositories: { makeDrizzleUserRepository, makeDrizzlePrivateUserDataRepository },
+      Repositories: { makeDrizzlePrivateUserDataRepository, makeDrizzleUserRepository },
     },
   },
 } = Auth;
