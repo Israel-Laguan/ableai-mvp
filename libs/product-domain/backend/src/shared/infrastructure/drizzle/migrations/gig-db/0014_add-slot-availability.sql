@@ -12,4 +12,6 @@ ALTER TABLE "slots"
 ADD CONSTRAINT "slot_worker_id_fkey"
 FOREIGN KEY("worker_id") REFERENCES "workers"("id");
 
-ALTER TABLE "workers" DROP COLUMN "slot_availability";
+ALTER TABLE "workers" DROP COLUMN "slot_availability" ON DELETE CASCADE;
+
+CREATE INDEX "slots_worker_id_idx" ON "slots" ("worker_id");
