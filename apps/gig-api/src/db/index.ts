@@ -1,5 +1,6 @@
 import { Utils as UtilsBackend } from '@backend';
 import { Shared as SharedDomainBackend } from '@product-domain/backend';
+import { env } from '../config/env.config';
 
 const {
   Infra: {
@@ -9,17 +10,9 @@ const {
   },
 } = SharedDomainBackend;
 
-import { env } from '../config/env.config';
-
 const { createMigrationsPath } = UtilsBackend;
 
 export const gigDb = createDrizzlePostgresDbConnection({
-  poolConfig: {
-    connectionString: env.GIG_DB_URL,
-  },
-});
-
-export const privateGigDb = createDrizzlePostgresDbConnection({
   poolConfig: {
     connectionString: env.GIG_DB_URL,
   },

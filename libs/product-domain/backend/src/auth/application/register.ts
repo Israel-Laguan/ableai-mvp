@@ -14,7 +14,7 @@ interface RegisterErrorInputs {
 }
 
 const {
-  AUTH_DICTIONARY: { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY, BUYER_REPOSITORY },
+  AUTH_DICTIONARY: { PRIVATE_USER_DATA_REPOSITORY, USER_REPOSITORY },
   REGISTER_STATUS_CODE: {
     ALREADY_EXIST,
     PRIVATE_DATA_USER_CREATION_FAILED,
@@ -118,15 +118,10 @@ export const makeRegisterUserUseCase = <CustomOutput extends object = object>({
           throw throwError(USER_CREATION_FAILED);
         }
 
-        const buyerRepository = repositoryManager.getRepository(BUYER_REPOSITORY);
-
-        const [buyer] = await buyerRepository.create({ userId });
-
         return await runAfterRegister({
           ...runBeforeRegisterOutputWithoutRollback,
           user,
           privateDataUser,
-          buyer,
         });
       } catch (error) {
         rollback();

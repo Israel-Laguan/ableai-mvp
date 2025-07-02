@@ -6,17 +6,6 @@ import { makeZodObjectSchema } from '../../../../shared/infrastructure/zod/utils
 import { AddressSchema, PhoneNumberSchema } from './shared';
 import { Infra } from '@models/auth';
 
-const BuyerSchema = makeZodObjectSchema<Infra.UpdateBuyerInput>({
-  badgesAwarded: z.string().optional(),
-  businessAddress: z.string().optional(),
-  businessName: z.string().optional(),
-  businessRegistrationNumber: z.string().optional(),
-  businessRole: z.string().optional(),
-  representativeId: z.string().optional(),
-  socialNetworkUrl: z.string().url().optional(),
-  videoUrl: z.string().url().optional(),
-}).strict();
-
 const PrivateDataUser = makeZodObjectSchema<Infra.UpdatePrivateDataInput>({
   address: AddressSchema.optional(),
   kycUrl: z.string().url().optional(),
@@ -47,15 +36,7 @@ const UserSchema = makeZodObjectSchema<Omit<Infra.IUpdateUserInput, 'id'>>({
   socialMediaUrl: z.string().url().optional(),
 }).strict();
 
-const WorkerSchema = makeZodObjectSchema<Infra.UpdateWorkerInput>({
-  feedbackSummary: z.string().optional(),
-  socialNetworkUrl: z.string().url().optional(),
-  tags: z.string().optional(),
-}).strict();
-
-export const UpdateMeUserSchema = makeZodObjectSchema<UpdateInput>({
-  buyer: BuyerSchema.optional(),
+export const UpdateUserSchema = makeZodObjectSchema<UpdateInput>({
   privateDataUser: PrivateDataUser.optional(),
   user: UserSchema.optional(),
-  worker: WorkerSchema.optional(),
 });

@@ -1,4 +1,4 @@
-import type { Infra, Worker } from '@models/auth';
+import type { Infra, Worker } from '@models/gig';
 import type { ISQLCustomRepository, ISQLRepositoryMaker } from '@models/shared';
 
 interface CustomMethods {

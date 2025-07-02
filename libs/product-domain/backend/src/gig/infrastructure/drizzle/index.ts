@@ -1,1 +1,2 @@
-export * as Drizzle from './schemas';
+export * as Repositories from './repositories';
+export * as Schemas from './schemas';

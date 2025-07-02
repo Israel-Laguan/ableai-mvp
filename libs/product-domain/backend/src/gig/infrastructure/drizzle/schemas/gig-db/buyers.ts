@@ -1,6 +1,6 @@
 import * as p from 'drizzle-orm/pg-core';
 
-import type { Buyer } from '@models/auth';
+import type { Buyer } from '@models/gig';
 
 import { Schemas } from '../../../../../shared/infrastructure/drizzle';
 

@@ -1,7 +1,7 @@
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq } from 'drizzle-orm';
 
-import type { Buyer } from '@models/auth';
+import type { Buyer } from '@models/gig';
 import type { BuyerRepositoryMaker } from '../../../domain/repositories';
 
 import { Infra } from '../../../../shared';

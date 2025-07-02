@@ -22,38 +22,12 @@ Content-Type: application/json
 POST {{baseUrlAuth}}/login
 Authorization: Bearer {{accessToken}}
 
-### POST Switch App role
-POST {{baseUrlAuth}}/switch-app-role
-Authorization: Bearer {{accessToken}}
-
 ### Update Settings user by id
 PATCH {{baseUrlAuth}}/user/:id
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "privateDataUser": {
-    "phoneNumber": "<Optional_new_phone_number>"
-  },
-}
-
-### Update Settings me user
-PATCH {{baseUrlAuth}}/me
-Content-Type: application/json
-Authorization: Bearer {{accessToken}}
-
-{
-  "buyer":{
-    "badgesAwarded": "<badges>",
-    "businessAddress": "business_address>",
-    "businessName": "<business_name>",
-    "businessRegistrationNumber": "<business_registration_number>",
-    "businessRole": "<business_role>",
-    "representativeId": "representative_id",
-    "socialNetworkUrl": "https://example.com",
-    "videoUrl": "https://example.com"
-  },
-
   "privateDataUser": {
     "address": "<address>",
     "kycUrl": "https://example.com",
@@ -71,10 +45,24 @@ Authorization: Bearer {{accessToken}}
     "isWorkerAllowed": false,
     "socialMediaUrl": "https://example.com"
   },
+}
 
-  "worker":{
-    "feedbackSummary": "<feedback_summary>",
-    "socialNetworkUrl": "https://example.com",
-    "tags": "<tags>"
+### Update Settings me user
+PATCH {{baseUrlAuth}}/me
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "privateDataUser": {
+    "address": "<address>",
+    "kycUrl": "https://example.com",
+    "latitude": "0.0",
+    "longitude": "0.0",
+    "phoneNumber": "<Optional_new_phone_number>",
+    "rwtUrl": "https://example.com"
+  },
+
+  "user":{
+    "socialMediaUrl": "https://example.com"
   }
 }

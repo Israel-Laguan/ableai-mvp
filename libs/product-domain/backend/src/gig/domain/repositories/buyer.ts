@@ -1,4 +1,4 @@
-import type { Buyer, Infra } from '@models/auth';
+import type { Buyer, Infra } from '@models/gig';
 import type { ISQLCustomRepository, ISQLRepositoryMaker } from '@models/shared';
 
 interface CustomMethods {
