@@ -1,17 +1,6 @@
 ALTER TABLE "gig_work_team" RENAME TO "gig_work_teams";--> statement-breakpoint
 ALTER TABLE "gig_work" RENAME TO "gig_works";--> statement-breakpoint
 ALTER TABLE "skills" ADD COLUMN "worker_id" integer NOT NULL;--> statement-breakpoint
-ALTER TABLE "statistics" ADD COLUMN "app_role" varchar DEFAULT 'BUYER';--> statement-breakpoint
-ALTER TABLE "statistics" ADD COLUMN "response_rate" numeric DEFAULT 0;--> statement-breakpoint
-ALTER TABLE "statistics" ADD COLUMN "user_id" integer NOT NULL;--> statement-breakpoint
-ALTER TABLE "statistics" ADD COLUMN "would_work" integer DEFAULT 0;--> statement-breakpoint
-ALTER TABLE "statistics" DROP COLUMN "address";--> statement-breakpoint
-ALTER TABLE "statistics" DROP COLUMN "buyer_id";--> statement-breakpoint
-ALTER TABLE "statistics" DROP COLUMN "description";--> statement-breakpoint
-ALTER TABLE "statistics" DROP COLUMN "end_date";--> statement-breakpoint
-ALTER TABLE "statistics" DROP COLUMN "payment_per_hour";--> statement-breakpoint
-ALTER TABLE "statistics" DROP COLUMN "start_date";--> statement-breakpoint
-ALTER TABLE "statistics" DROP COLUMN "title";--> statement-breakpoint
 
 ALTER TABLE "buyers"
 ADD CONSTRAINT "buyers_user_id_fkey"
