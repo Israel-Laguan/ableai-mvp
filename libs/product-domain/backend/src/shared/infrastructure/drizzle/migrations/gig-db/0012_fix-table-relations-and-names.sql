@@ -26,7 +26,7 @@ FOREIGN KEY ("user_id") REFERENCES "users"("id");
 
 ALTER TABLE "skills"
 ADD CONSTRAINT "skills_worker_id_fkey"
-FOREIGN KEY ("worker_id") REFERENCES "workers"("id");
+FOREIGN KEY ("worker_id") REFERENCES "workers"("id") ON DELETE CASCADE;
 
 ALTER TABLE "skill_hires"
 ADD CONSTRAINT "skill_hires_buyer_id_fkey"
@@ -34,7 +34,7 @@ FOREIGN KEY ("buyer_id") REFERENCES "buyers"("id");
 
 ALTER TABLE "statistics"
 ADD CONSTRAINT "statistics_user_id_fkey"
-FOREIGN KEY ("user_id") REFERENCES "users"("id");
+FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE;
 
 ALTER TABLE "users"
 ADD CONSTRAINT "users_role_id_fkey"
@@ -42,4 +42,4 @@ FOREIGN KEY ("role_id") REFERENCES "roles"("id");
 
 ALTER TABLE "workers" 
 ADD CONSTRAINT "worker_user_id_fkey"
-FOREIGN KEY ("user_id") REFERENCES "users"("id");
+FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE;

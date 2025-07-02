@@ -71,7 +71,7 @@ CREATE TABLE "statistics" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"app_role" varchar DEFAULT 'BUYER',
 	"response_rate" numeric DEFAULT 0,
-	"user_id" integer NOT NULL,
+	"user_id" integer,
 	"would_work" integer DEFAULT 0,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
