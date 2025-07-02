@@ -4,8 +4,10 @@ import { CONSTANTS } from '@shared';
 
 const { NODE_ENV } = CONSTANTS;
 
+const [DEVELOPMENT] = NODE_ENV;
+
 const envSchema = z.object({
-  NODE_ENV: z.enum(NODE_ENV).default(NODE_ENV[0]),
+  NODE_ENV: z.enum(NODE_ENV).default(DEVELOPMENT),
   HOST: z.string().default('localhost'),
   PORT: z.string().default('3003'),
 
