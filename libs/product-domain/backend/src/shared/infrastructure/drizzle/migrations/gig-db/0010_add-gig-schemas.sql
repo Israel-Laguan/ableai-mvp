@@ -36,7 +36,7 @@ CREATE TABLE "recommendations" (
 	"is_external" boolean DEFAULT false,
 	"name" varchar NOT NULL,
 	"recommendation" varchar NOT NULL,
-	"user_id" integer NOT NULL,
+	"user_id" integer,
 	"worker_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
@@ -69,13 +69,10 @@ CREATE TABLE "skills" (
 --> statement-breakpoint
 CREATE TABLE "statistics" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"address" varchar,
-	"buyer_id" integer NOT NULL,
-	"description" varchar NOT NULL,
-	"end_date" timestamp NOT NULL,
-	"payment_per_hour" numeric NOT NULL,
-	"start_date" timestamp NOT NULL,
-	"title" varchar NOT NULL,
+	"app_role" varchar DEFAULT 'BUYER',
+	"response_rate" numeric DEFAULT 0,
+	"user_id" integer,
+	"would_work" integer DEFAULT 0,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
