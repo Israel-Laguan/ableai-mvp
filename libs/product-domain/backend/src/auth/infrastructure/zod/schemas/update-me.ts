@@ -27,16 +27,11 @@ const PrivateDataUser = makeZodObjectSchema<Infra.UpdatePrivateDataInput>({
     }
   });
 
-const UserSchema = makeZodObjectSchema<Omit<Infra.IUpdateUserInput, 'id'>>({
-  isBuyerAllowed: z.boolean().optional(),
-  isKycApproved: z.boolean().optional(),
-  isPublicProfile: z.boolean().optional(),
-  isRtwApproved: z.boolean().optional(),
-  isWorkerAllowed: z.boolean().optional(),
+const UserSchema = makeZodObjectSchema<Pick<Infra.IUpdateUserInput, 'socialMediaUrl'>>({
   socialMediaUrl: z.string().url().optional(),
 }).strict();
 
-export const UpdateUserSchema = makeZodObjectSchema<UpdateInput>({
+export const UpdateMeUserSchema = makeZodObjectSchema<UpdateInput>({
   privateDataUser: PrivateDataUser.optional(),
   user: UserSchema.optional(),
 });
