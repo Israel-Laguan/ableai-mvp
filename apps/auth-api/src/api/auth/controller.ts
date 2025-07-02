@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import type { SwitchAppRoleInput, UpdateInput } from '../../interfaces';
+import type { UpdateInput } from '../../interfaces';
 
 import { Express } from '@backend';
 import { CONSTANTS } from '@shared';
@@ -29,18 +29,6 @@ export const authController = {
     const result = await authService.register(req.body);
     res.status(HTTP_STATUS_CODE.CREATED).json(result);
   }),
-
-  switchAppRole: tryCatchAndNext(
-    async (req: Express.Types.AuthorizedRequest<SwitchAppRoleInput>, res: Response) => {
-      await authService.switchAppRole({
-        appRole: req.body.appRole,
-        id: req.user.id,
-        roleId: req.user.roleId,
-      });
-
-      res.status(HTTP_STATUS_CODE.UPDATED).end();
-    }
-  ),
 
   updateUser: tryCatchAndNext(
     async (req: Express.Types.AuthorizedRequest<UpdateInput['idTokenClaims']>, res: Response) => {

@@ -1,4 +1,4 @@
-import { Infra, UserClaims } from '@models/auth';
+import { Infra } from '@models/auth';
 import { Auth } from '@product-domain/backend';
 
 export type CustomLoginInput = Auth.Infra.Firebase.Types.FirebaseLoginInput;
@@ -11,8 +11,6 @@ export type RegisterInput = Infra.RegisterInput;
 
 export type RegisterTransaction =
   Auth.Domain.Repositories.RegisterTransaction<Auth.Infra.Firebase.Types.FirebaseAddCustomClaimsDto>;
-
-export type SwitchAppRoleInput = UserClaims;
 
 export type UpdateInput =
   Auth.Domain.Interfaces.UpdateInput<Auth.Infra.Firebase.Types.FirebaseUpdateInput>;
