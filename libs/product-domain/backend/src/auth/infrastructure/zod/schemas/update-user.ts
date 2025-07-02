@@ -49,7 +49,6 @@ const UserSchema = makeZodObjectSchema<Omit<Infra.IUpdateUserInput, 'id'>>({
 
 const WorkerSchema = makeZodObjectSchema<Infra.UpdateWorkerInput>({
   feedbackSummary: z.string().optional(),
-  slotAvailability: z.string(),
   socialNetworkUrl: z.string().url().optional(),
   tags: z.string().optional(),
 }).strict();
