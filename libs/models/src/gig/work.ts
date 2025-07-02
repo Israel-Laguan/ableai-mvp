@@ -23,6 +23,6 @@ export interface GigWorkTeam extends IBase {
   tips?: number;
   totalPayment: number;
   workerId: number;
-  workTime: Date;
+  workTime: number;
   wouldWork: boolean;
 }

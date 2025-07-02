@@ -1,12 +1,12 @@
 import { ExpressHandlerAuthorizationMiddleware } from '.';
 
 export function makeRoleAuthorizationMiddleware(
-  requiredRoleId = 1
+  acceptedRoles: number[]
 ): ExpressHandlerAuthorizationMiddleware<{ roleId: number }> {
   return (req, res, next) => {
     const roleId = req.user?.roleId || null;
 
-    if (roleId && roleId >= requiredRoleId) {
+    if (roleId && acceptedRoles.includes(roleId)) {
       next();
     }
 

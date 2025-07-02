@@ -86,15 +86,19 @@ export const makeUpdateUserUseCase = <
         if (buyerUpdates && Object.keys(buyerUpdates).length) {
           const buyerRepository = repositoryManager.getRepository(BUYER_REPOSITORY);
 
-          await buyerRepository.updateByUserId(id, buyerUpdates);
+          await buyerRepository
+            .updateByUserId(id, buyerUpdates)
+            .catch(() => throwError(ERROR_UPDATING_USER));
         }
 
         const workerUpdates = removeFalsyEntries(input.worker);
 
         if (workerUpdates && Object.keys(workerUpdates).length) {
-          const buyerRepository = repositoryManager.getRepository(WORKER_REPOSITORY);
+          const workerRepository = repositoryManager.getRepository(WORKER_REPOSITORY);
 
-          await buyerRepository.updateByUserId(id, workerUpdates);
+          await workerRepository
+            .updateByUserId(id, workerUpdates)
+            .catch(() => throwError(ERROR_UPDATING_USER));
         }
 
         return void 0;

@@ -20,8 +20,8 @@ const BuyerSchema = makeZodObjectSchema<Infra.UpdateBuyerInput>({
 const PrivateDataUser = makeZodObjectSchema<Infra.UpdatePrivateDataInput>({
   address: AddressSchema.optional(),
   kycUrl: z.string().url().optional(),
-  latitude: z.number().optional(),
-  longitude: z.number().optional(),
+  latitude: z.string().optional(),
+  longitude: z.string().optional(),
   phoneNumber: PhoneNumberSchema.optional(),
   rwtUrl: z.string().url().optional(),
 })
@@ -49,7 +49,6 @@ const UserSchema = makeZodObjectSchema<Omit<Infra.IUpdateUserInput, 'id'>>({
 
 const WorkerSchema = makeZodObjectSchema<Infra.UpdateWorkerInput>({
   feedbackSummary: z.string().optional(),
-  slotAvailability: z.string(),
   socialNetworkUrl: z.string().url().optional(),
   tags: z.string().optional(),
 }).strict();
