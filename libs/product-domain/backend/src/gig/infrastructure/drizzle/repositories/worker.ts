@@ -1,6 +1,6 @@
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
-import type { Worker } from '@models/auth';
+import type { Worker } from '@models/gig';
 import type { WorkerRepositoryMaker } from '../../../domain/repositories';
 import { Infra } from '../../../../shared';
 import { workers } from '../schemas';

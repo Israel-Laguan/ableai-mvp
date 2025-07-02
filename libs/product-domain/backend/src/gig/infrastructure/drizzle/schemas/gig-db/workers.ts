@@ -1,6 +1,6 @@
 import * as p from 'drizzle-orm/pg-core';
 
-import type { Worker } from '@models/auth';
+import type { Worker } from '@models/gig';
 
 import { Schemas } from '../../../../../shared/infrastructure/drizzle';
 
