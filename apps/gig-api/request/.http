@@ -1,11 +1,8 @@
-@baseUrl = http://localhost:3003/api/gig/v1
-
-
 ## Health
-GET {{baseUrl}}/health
+GET {{baseUrlGig}}/health
 
 ### Update Settings me user
-PATCH {{baseUrlAuth}}/me
+PATCH {{baseUrlGig}}/me
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
