@@ -8,6 +8,6 @@ export const recommendations = Schemas.withBaseSchema<Recommendations>('recommen
   isExternal: p.boolean('is_external').default(false),
   name: p.varchar('name').notNull(),
   recommendation: p.varchar('recommendation').notNull(),
-  userId: p.integer('user_id').notNull(),
+  userId: p.integer('user_id'),
   workerId: p.integer('worker_id').notNull(),
 });

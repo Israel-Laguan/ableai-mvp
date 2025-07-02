@@ -4,6 +4,6 @@ export interface Recommendations extends IBase {
   isExternal: boolean;
   name: string;
   recommendation: string;
-  userId: number;
+  userId?: number | null;
   workerId: number;
 }
