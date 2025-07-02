@@ -44,6 +44,6 @@ export const env = {
   GOOGLE_SERVICE_ACCOUNT: {
     projectId: draw.GOOGLE_SERVICE_ACCOUNT.project_id,
     clientEmail: draw.GOOGLE_SERVICE_ACCOUNT.client_email,
-    privateKey: draw.GOOGLE_SERVICE_ACCOUNT.private_key.replace(/\\n/g, '\n'), // Ensure newlines are correctly formatted
+    privateKey: draw.GOOGLE_SERVICE_ACCOUNT.private_key.replace(/\\n/g, '\n'),
   },
 };

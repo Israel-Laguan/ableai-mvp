@@ -10,7 +10,7 @@ const {
 
 const auth = makeFirebaseAuthModule({
   serviceAccount: env.GOOGLE_SERVICE_ACCOUNT,
-  appName: 'auth-api',
+  appName: 'gig-api',
 });
 
 export const firebaseService = {
