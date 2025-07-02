@@ -1,10 +1,6 @@
 import { Infra } from '@models/auth';
 import { Auth } from '@product-domain/backend';
 
-export type CustomLoginInput = Auth.Infra.Firebase.Types.FirebaseLoginInput;
-
-export type CustomLoginOutput = Auth.Infra.Firebase.Types.FirebaseLoginOutput;
-
 export type LoginInput = Auth.Domain.Interfaces.LoginInput;
 
 export type RegisterInput = Infra.RegisterInput;
