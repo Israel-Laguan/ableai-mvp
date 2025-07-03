@@ -34,6 +34,7 @@ const UserSchema = makeZodObjectSchema<Omit<Infra.IUpdateUserInput, 'id'>>({
   isRtwApproved: z.boolean().optional(),
   isWorkerAllowed: z.boolean().optional(),
   socialMediaUrl: z.string().url().optional(),
+  withoutPrivateData: z.boolean().optional(),
 }).strict();
 
 export const UpdateUserSchema = makeZodObjectSchema<UpdateInput>({

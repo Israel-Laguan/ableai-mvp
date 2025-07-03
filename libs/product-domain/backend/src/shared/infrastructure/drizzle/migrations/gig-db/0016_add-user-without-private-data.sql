@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "without_private_data" BOOLEAN NOT NULL DEFAULT FALSE;
