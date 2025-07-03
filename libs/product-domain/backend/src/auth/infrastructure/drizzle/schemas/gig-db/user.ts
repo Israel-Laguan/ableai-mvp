@@ -14,4 +14,5 @@ export const users = Schemas.withBaseSchema<User>('users', {
   roleId: p.integer('role_id').notNull(),
   socialMediaUrl: p.varchar('social_media_url'),
   uid: p.varchar('firebase_uid').notNull().unique(),
+  withoutPrivateData: p.boolean('without_private_data').notNull().default(false),
 });

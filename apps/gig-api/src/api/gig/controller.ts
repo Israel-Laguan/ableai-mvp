@@ -9,7 +9,7 @@ const { HTTP_STATUS_CODE } = CONSTANTS;
 const { tryCatchAndNext } = Express;
 
 export const gigController = {
-  updateMe: tryCatchAndNext(
+  updateProfile: tryCatchAndNext(
     async (req: Express.Types.AuthorizedRequest<{ id: number }>, res: Response) => {
       const result = await gigService.updateUser({
         ...req.body,
