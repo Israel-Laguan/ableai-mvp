@@ -1,12 +1,11 @@
+import { IOmitBase } from '@models/shared';
 import { pgTable, serial, timestamp } from 'drizzle-orm/pg-core';
 import type { PgColumnBuilderBase } from 'drizzle-orm/pg-core';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ColumnBuilders = Record<string, PgColumnBuilderBase<any>>;
-
-export function withBaseSchema<TColumns extends ColumnBuilders>(
+export function withBaseSchema<Schema extends object>(
   tableName: string,
-  columns: TColumns
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columns: Record<keyof Omit<Schema, IOmitBase>, PgColumnBuilderBase<any, object>>
 ) {
   return pgTable(tableName, {
     id: serial('id').primaryKey(),

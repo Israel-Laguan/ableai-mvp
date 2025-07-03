@@ -1,7 +1,7 @@
 import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core';
 import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
 
-import type { RegisterStatusKeys } from '../domain/constants';
+import { ROLES, type RegisterStatusKeys } from '../domain/constants';
 import type { MakeRegisterUseCaseConfig } from '../domain/interfaces';
 import type { RegisterUseCase } from '../domain/use-cases';
 
@@ -101,23 +101,26 @@ export const makeRegisterUserUseCase = <CustomOutput extends object = object>({
 
         const [privateDataUser] = await privateDataUserRepository.create(input);
 
-        const newUser = (await userRepository
+        const user = (await userRepository
           .create({
             uid,
             privateDataUserId: privateDataUser.id,
+            roleId: ROLES.USER,
           })
           .then(user => user[0])
           .catch(() => {
             throw throwError(USER_CREATION_FAILED);
           })) as User;
 
-        if (!newUser?.id) {
+        const { id: userId } = user;
+
+        if (!userId) {
           throw throwError(USER_CREATION_FAILED);
         }
 
         return await runAfterRegister({
           ...runBeforeRegisterOutputWithoutRollback,
-          user: newUser,
+          user,
           privateDataUser,
         });
       } catch (error) {

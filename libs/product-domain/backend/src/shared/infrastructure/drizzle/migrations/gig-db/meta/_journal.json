@@ -64,6 +64,62 @@
       "when": 1750364539206,
       "tag": "0008_remove-unused-data",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1750865662377,
+      "tag": "0009_add-roles-and-buyers-schemas",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1751058092737,
+      "tag": "0010_add-gig-schemas",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1751059376854,
+      "tag": "0011_add-review-schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1751303980831,
+      "tag": "0012_fix-table-relations-and-names",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1751311912118,
+      "tag": "0013_add-gig-worker-team-relation",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1751318266677,
+      "tag": "0014_fix-user-schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1751325352481,
+      "tag": "0015_add-slot-availability",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1751563837350,
+      "tag": "0016_add-user-without-private-data",
+      "breakpoints": true
     }
   ]
 }

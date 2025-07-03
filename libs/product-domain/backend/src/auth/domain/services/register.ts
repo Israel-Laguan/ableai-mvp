@@ -3,7 +3,7 @@ import { RegisterDto, RegisterDtoWithoutRollback } from '../interfaces';
 
 export type RunBeforeRegister<CustomOutput extends object = object> = (
   input: Infra.RegisterInput
-) => Promise<Omit<RegisterDto<CustomOutput>, 'privateDataUser'>>;
+) => Promise<Omit<RegisterDto<CustomOutput>, 'privateDataUser' | 'buyer'>>;
 
 export type RunAfterRegister<
   CustomInput extends object = object,

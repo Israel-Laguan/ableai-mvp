@@ -19,10 +19,10 @@ const {
 
 const { throwError } = Errors.makeErrorRunner<RegisterErrorInputs, UpdateUserStatusKeys>({
   [ERROR_UPDATING_USER]: () =>
-    Errors.InternalServerError.create(ERROR_MESSAGE, 'UPDATE_USER_USE_CASE'),
+    Errors.InternalServerError.create(ERROR_MESSAGE, 'AUTH_UPDATE_USE_CASE'),
 
   [INVALID_CREDENTIALS]: () =>
-    Errors.UnauthorizeError.create(INVALID_CREDENTIALS_MESSAGE, 'AUTH_REGISTER'),
+    Errors.UnauthorizeError.create(INVALID_CREDENTIALS_MESSAGE, 'AUTH_UPDATE_USE_CASE'),
 });
 
 const { removeFalsyEntries } = Utils;

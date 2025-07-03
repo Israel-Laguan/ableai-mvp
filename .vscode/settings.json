@@ -1,19 +1,22 @@
 {
   "rest-client.environmentVariables": {
     "$shared": {
-      "accessToken": "",
+      "accessToken": ""
     },
     "local": {
       "baseUrlAuth": "http://localhost:3001/api/auth/v1",
-      "baseUrlIAManager": "http://localhost:3002/api/ai-manager/v1"
+      "baseUrlIAManager": "http://localhost:3002/api/ai-manager/v1",
+      "baseUrlGig": "http://localhost:3003/api/gig/v1"
     },
     "preview": {
       "baseUrlAuth": "https://ableia-4bg61sglr-kembert-nieves-projects.vercel.app/api/auth/v1",
-      "baseUrlIAManager": "https://ableia-4bg61sglr-kembert-nieves-projects.vercel.app/api/ai-manager/v1"
+      "baseUrlIAManager": "https://ableia-4bg61sglr-kembert-nieves-projects.vercel.app/api/ai-manager/v1",
+      "baseUrlGig": "https://ableia-4bg61sglr-kembert-nieves-projects.vercel.app/api/gig/v1"
     },
     "production": {
       "baseUrlAuth": "https://ableia.vercel.app/api/auth/v1",
-      "baseUrlIAManager": "https://ableia.vercel.app/api/ai-manager/v1"
+      "baseUrlIAManager": "https://ableia.vercel.app/api/ai-manager/v1",
+      "baseUrlGig": "https://ableia.vercel.app/api/gig/v1"
     }
   },
   "cSpell.words": ["ISQL", "zxcvbn"]

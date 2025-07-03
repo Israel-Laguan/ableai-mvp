@@ -2,26 +2,31 @@ import { Router } from 'express';
 
 import { authController } from './controller';
 import { AuthValidationInput } from '../../dependency-injection';
-import { authorizationMiddleware } from '../../dependency-injection/middlewares';
+import {
+  authorizationMiddleware,
+  roleAuthorizationMiddlewares,
+} from '../../dependency-injection/middlewares';
+
+const { superAdminGuard } = roleAuthorizationMiddlewares;
+
+const { login, register, updateMe, updateUser } = authController;
+
+const { validateRegisterUser, validateUpdateMeUser, validateUpdateUser } = AuthValidationInput;
 
 const authRouter = Router();
 
-authRouter.post('/login', authorizationMiddleware, authController.login);
+authRouter.post('/login', authorizationMiddleware, login);
 
-authRouter.post('/register', AuthValidationInput.validateRegisterUser, authController.register);
+authRouter.post('/register', validateRegisterUser, register);
 
-authRouter.patch(
-  '/me',
-  authorizationMiddleware,
-  AuthValidationInput.validateUpdateMeUser,
-  authController.updateMe
-);
+authRouter.patch('/me', authorizationMiddleware, validateUpdateMeUser, updateMe);
 
 authRouter.patch(
   '/user/:id',
   authorizationMiddleware,
-  AuthValidationInput.validateUpdateUser,
-  authController.updateUser
+  superAdminGuard,
+  validateUpdateUser,
+  updateUser
 );
 
 export default authRouter;

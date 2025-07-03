@@ -8,18 +8,10 @@ export type FirebaseAddCustomClaimsDto = {
   userRecord: Omit<UserRecord, 'toJSON'>;
 };
 
-export interface FirebaseLoginInput {
-  idToken: string;
-}
-
-export interface FirebaseLoginOutput {
-  customToken: string;
-}
-
 export interface MakeFirebaseLoginServiceConfig {
   auth: FirebaseAuthModule;
 }
 
 export type FirebaseUpdateInput = {
-  idTokenClaims: DecodedIdToken & Pick<User, 'id' | 'lastAppRole' | 'roleId'>;
+  idTokenClaims: DecodedIdToken & Pick<User, 'id' | 'roleId'>;
 };

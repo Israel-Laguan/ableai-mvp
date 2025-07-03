@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 
+import type { UpdateInput } from '../../interfaces';
+
 import { Express } from '@backend';
 import { CONSTANTS } from '@shared';
-
-import { UpdateInput } from '../../interfaces';
 import { authService } from './service';
 
 const { HTTP_STATUS_CODE } = CONSTANTS;

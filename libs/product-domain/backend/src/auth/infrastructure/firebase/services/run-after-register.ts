@@ -1,11 +1,12 @@
+import type { UserClaims } from '@models/auth';
 import type { FirebaseError } from '../../../../shared/domain/interfaces';
 import type { FirebaseAuthModule } from '../../../../shared/domain/modules';
 import type { RunAfterRegister } from '../../../domain/services';
 import type { FirebaseAddCustomClaimsDto } from '../types';
 
+import { APP_ROLE } from '@models/shared';
 import { FIREBASE_ERROR_CODES } from '../../../../shared/domain/constants';
 import { throwError } from '../errors';
-import { UserClaims } from '@models/auth';
 
 const ERROR_PATH = 'AUTH_CUSTOM_CLAIMS_SERVICE';
 
@@ -14,13 +15,16 @@ export function makeRunAfterRegisterService({
 }: {
   auth: FirebaseAuthModule;
 }): RunAfterRegister<FirebaseAddCustomClaimsDto, FirebaseAddCustomClaimsDto> {
-  return async ({ privateDataUser, user, userRecord }) => {
-    const { uid } = userRecord;
+  return async input => {
+    const {
+      userRecord: { uid },
+      user: { id, roleId },
+    } = input;
 
     const customClaims: UserClaims = {
-      id: Number(user.id),
-      roleId: Number(user.roleId),
-      lastAppRole: null,
+      id: Number(id),
+      roleId: Number(roleId),
+      appRole: APP_ROLE.BUYER,
     };
 
     auth.setCustomUserClaims(uid, customClaims).catch((error: FirebaseError) => {
@@ -30,9 +34,7 @@ export function makeRunAfterRegisterService({
     });
 
     return {
-      privateDataUser,
-      user,
-      userRecord,
+      ...input,
     };
   };
 }
