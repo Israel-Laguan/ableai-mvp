@@ -10,6 +10,6 @@ const { validateUpdateMeUser } = GigValidationInput;
 
 const gigRouter = Router();
 
-gigRouter.patch('/me', authorizationMiddleware, validateUpdateMeUser, updateMe);
+gigRouter.patch('/profile', authorizationMiddleware, validateUpdateMeUser, updateMe);
 
 export default gigRouter;
