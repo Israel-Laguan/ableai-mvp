@@ -22,7 +22,7 @@ const WorkerSchema = makeZodObjectSchema<Infra.UpdateWorkerInput>({
   tags: z.string().optional(),
 }).strict();
 
-export const UpdateMeUserSchema = makeZodObjectSchema<Omit<UpdateInput, 'user'>>({
+export const UpdateUserProfileSchema = makeZodObjectSchema<Omit<UpdateInput, 'user'>>({
   buyer: BuyerSchema.optional(),
   worker: WorkerSchema.optional(),
 });

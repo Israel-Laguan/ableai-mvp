@@ -2,7 +2,7 @@
 GET {{baseUrlGig}}/health
 
 ### Update Settings me user
-PATCH {{baseUrlGig}}/me
+PATCH {{baseUrlGig}}/profile
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

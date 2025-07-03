@@ -10,6 +10,7 @@ export interface User extends IBase {
   roleId: number;
   socialMediaUrl?: string;
   uid: string;
+  withoutPrivateData: boolean;
 }
 
 export type UserClaims = Pick<User, 'id' | 'roleId'> & { appRole: APP_ROLE_TYPE };
