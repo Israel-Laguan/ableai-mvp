@@ -14,15 +14,6 @@ Accept: application/json, text/event-stream
 }
 
 ### Retrieve data from gig_db via assistant
-### Simulate a bad request
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "What are the available tables in the database?",
-    "userId": "invalid_user_id"
-}
-
 ###
 POST {{baseUrlIAManager}}/assistants
 Content-Type: application/json
