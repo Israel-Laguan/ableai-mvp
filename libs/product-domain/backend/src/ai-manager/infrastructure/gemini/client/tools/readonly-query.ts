@@ -1,6 +1,6 @@
 import { FunctionDeclaration, SchemaType } from '@google/generative-ai';
-import { ToolManager } from '../types';
-import { executeMcpTool } from '../tool-runner';
+import { ToolManager } from '../../types';
+import { runMcpRequest } from '../mcp/request';
 
 export function createReadonlyQueryToolManager(mcpServerUrl: string): ToolManager<{ sql: string }> {
   const toolName = 'query';
@@ -8,22 +8,21 @@ export function createReadonlyQueryToolManager(mcpServerUrl: string): ToolManage
   return {
     definition: {
       name: toolName,
-      description: 'Run a read-only SQL query',
+      description: 'Run a read-only SQL query on the database to retrieve data.',
       parameters: {
         type: SchemaType.OBJECT,
         properties: {
           sql: {
             type: SchemaType.STRING,
             description: `The SQL query to execute. 
-              Only read-only queries for a PostgreSQL database are allowed.
-              Your are only allowed to make queries about users (schema: id, name, email)`,
+              Only read-only queries for a PostgreSQL database are allowed.`,
           },
         },
         required: ['sql'],
       },
     } as const as FunctionDeclaration,
     execute: async toolArguments => {
-      return await executeMcpTool({
+      return await runMcpRequest({
         mcpServerUrl,
         toolArguments,
         toolName,
