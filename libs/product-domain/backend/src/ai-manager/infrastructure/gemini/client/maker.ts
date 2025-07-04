@@ -34,15 +34,15 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
   // Conversational function call loop
   return async ({ prompt }: { prompt: string }): Promise<string> => {
     const chat = llm.startChat();
+    const accumulatedText: string[] = [];
 
     let lastPrompt: string | Part[] = `
-    # Server context
-    Use the available function calls to interact with the MCP server to rich your goals.
+      # Server context
+      Use the available function calls to interact with the MCP server to rich your goals.
 
-    # User prompt
-    ${prompt}`;
-
-    const accumulatedText: string[] = [];
+      # User prompt
+      ${prompt}`;
+    let endsWithColonCount = 0; // Breaker counter
 
     try {
       while (true) {
@@ -90,8 +90,17 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
           }
 
           const last = accumulatedText[accumulatedText.length - 1];
-          if (last.trim().endsWith(':')) {
-            lastPrompt = '';
+
+          if (last.trim().endsWith(':') && endsWithColonCount < 11) {
+            endsWithColonCount++;
+            if (endsWithColonCount >= 10) {
+              lastPrompt = `
+                You have reached the maximum of 10 responses ending with ":". 
+                Please, finish your answer in the next message.`;
+            } else {
+              lastPrompt = '';
+            }
+
             continue;
           }
 
