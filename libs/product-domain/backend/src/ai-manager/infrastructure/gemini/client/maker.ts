@@ -6,7 +6,10 @@ import {
   Part,
 } from '@google/generative-ai';
 
+import { Errors } from '@shared';
 import { LlmGeminiServiceConfig, ToolsManager } from '../types';
+
+const PATH = 'GEMINI_CLIENT_MAKER';
 
 export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) {
   const toolsManager: ToolsManager = {
@@ -71,7 +74,14 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
             };
 
             try {
-              const toolResult = await toolsManager[name].execute(args);
+              const tool = toolsManager[name];
+
+              if (!tool) {
+                throw Errors.InternalServerError.create(`Error: Tool "${name}" not found.`, PATH);
+              }
+
+              const toolResult = await tool.execute(args);
+
               toolResponsePart.functionResponse.response = { result: toolResult, mcpContext };
             } catch (error) {
               const errorMessage = error instanceof Error ? error.message : String(error);
