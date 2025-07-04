@@ -1,10 +1,103 @@
 ### Health
 GET {{baseUrlIAManager}}/health
 
-### Create a new assistant
+### Retrieve de resource list (tables) from MCP
+POST {{baseUrlMCP}}
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "method": "resources/list",
+  "params": {},
+  "id": 1
+}
+
+### Retrieve data from gig_db via assistant
+###
 POST {{baseUrlIAManager}}/assistants
 Content-Type: application/json
 
 {
-    "prompt": "¿Dame la información de los ids de los usuarios registrados en mis bases de datos?"
+    "prompt": "What are the available tables in the database?"
+}
+
+###
+POST {{baseUrlIAManager}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "What are the relations available within the tables?"
+}
+
+###
+POST {{baseUrlIAManager}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "What are the relations available from skills?"
+}
+
+### Simulate a user asking for a non existing table
+POST {{baseUrlIAManager}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "How many workerssss are there in the database?"
+}
+
+### Multiples questions about the database
+POST {{baseUrlIAManager}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "How many workers and users are there in the database?"
+}
+
+###
+POST {{baseUrlIAManager}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "How many users are there in the database?"
+}
+
+###
+POST {{baseUrlIAManager}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "How many buyers are there in the database?"
+}
+
+###
+POST {{baseUrlIAManager}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "How many workers are there in the database?"
+}
+
+###
+POST {{baseUrlIAManager}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "How many reviews are there in the database?"
+}
+
+###
+POST {{baseUrlIAManager}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "How many skills hire are in the skill_hires table?"
+}
+
+###
+POST {{baseUrlIAManager}}/assistants
+Content-Type: application/json
+
+{
+    "prompt": "What are the skills of the user 1?"
 }

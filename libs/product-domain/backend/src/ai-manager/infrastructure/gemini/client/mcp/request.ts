@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Errors } from '@shared';
 
-import { JsonRpcRequest, JsonRpcResponse, McpExecutorConfig } from './types';
+import { JsonRpcRequest, JsonRpcResponse, McpExecutorConfig } from '../../types';
 
 /**
  * Executes a tool on the MCP server using JSON-RPC.
@@ -12,21 +12,20 @@ import { JsonRpcRequest, JsonRpcResponse, McpExecutorConfig } from './types';
  * @param toolArguments - The arguments to pass to the tool
  * @param toolName - The name of the tool to execute.
  */
-export async function executeMcpTool<ToolArgs = unknown, ToolOutput = unknown>({
+export async function runMcpRequest<ToolArgs = unknown, ToolOutput = unknown>({
   mcpServerUrl,
   toolArguments,
   toolName,
+  method = 'tools/call',
 }: McpExecutorConfig<ToolArgs>): Promise<ToolOutput> {
-  const requestId: string = uuidv4();
-
   const jsonRpcPayload: JsonRpcRequest = {
     jsonrpc: '2.0',
-    method: 'tools/call',
+    method,
     params: {
       name: toolName,
       arguments: toolArguments,
     },
-    id: requestId,
+    id: uuidv4(),
   };
 
   const headers = {
