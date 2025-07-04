@@ -1,4 +1,4 @@
-import { FunctionDeclaration, GoogleGenerativeAI } from '@google/generative-ai';
+import { FunctionDeclaration, ModelParams } from '@google/generative-ai';
 
 export interface JsonRpcRequest<Params = unknown> {
   jsonrpc: '2.0';
@@ -24,6 +24,7 @@ export interface McpExecutorConfig<ToolArgs = unknown> {
   mcpServerUrl: string;
   toolName: string;
   toolArguments: ToolArgs;
+  method?: 'tools/call' | 'resources/list';
 }
 
 export interface ToolManager<ToolArgs = unknown, ToolOutput = unknown> {
@@ -32,9 +33,8 @@ export interface ToolManager<ToolArgs = unknown, ToolOutput = unknown> {
 }
 
 export interface LlmGeminiServiceConfig {
-  llmClient: GoogleGenerativeAI;
-  tools: ToolManager[];
-  systemContext?: string;
+  apiKey: string;
+  llmConfig: Omit<ModelParams, 'tools'> & { tools?: ToolManager[] };
 }
 
 export type ToolsManager = Record<string, Omit<ToolManager, 'definition'>>;

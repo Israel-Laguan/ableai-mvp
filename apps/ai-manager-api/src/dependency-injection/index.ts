@@ -1,3 +1,1 @@
-export * as McpServers from './mcp-servers';
-
-export * from './llm-tool-manager';
+export * as Services from './services';
