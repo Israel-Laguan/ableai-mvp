@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 
-import { Express } from '@backend';
 import { CONSTANTS } from '@shared';
 import { MCPService } from './service';
 
@@ -8,10 +7,8 @@ const {
   HTTP_STATUS_CODE: { INTERNAL_SERVER_ERROR },
 } = CONSTANTS;
 
-const { tryCatchAndNext } = Express;
-
 export const MCPController = {
-  handleRequest: tryCatchAndNext(async (req: Request, res: Response) => {
+  handleRequest: async (req: Request, res: Response) => {
     try {
       await MCPService.handleStatelessStreamableRequest(req, res);
     } catch (err) {
@@ -28,5 +25,5 @@ export const MCPController = {
         });
       }
     }
-  }),
+  },
 };
