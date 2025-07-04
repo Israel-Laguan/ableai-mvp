@@ -1,26 +1,11 @@
 import { Router } from 'express';
 
-import { AiManager } from '@product-domain/backend';
-
-import assistantsRouter from './assistants';
-import { McpServers } from '../dependency-injection';
-
-const {
-  Infra: {
-    MCP: {
-      Routers: { makeStatelessStreamableMcpRouter },
-    },
-  },
-} = AiManager;
+import assistantsRouter from '../api/assistant/router';
+import mcpRouter from '../api/mcp/router';
 
 const apiV1 = Router();
 
-const gigDbRouter = makeStatelessStreamableMcpRouter({
-  server: McpServers.gigDbMcpServer,
-  suffix: '/mcp',
-});
-
-apiV1.use(gigDbRouter);
 apiV1.use(assistantsRouter);
+apiV1.use(mcpRouter);
 
 export default apiV1;
