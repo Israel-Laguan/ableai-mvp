@@ -1,10 +1,10 @@
 import * as p from 'drizzle-orm/pg-core';
 
-import type { Recommendations } from '@models/gig';
+import type { Recommendation } from '@models/gig';
 
 import { Schemas } from '../../../../../shared/infrastructure/drizzle';
 
-export const recommendations = Schemas.withBaseSchema<Recommendations>('recommendations', {
+export const recommendations = Schemas.withBaseSchema<Recommendation>('recommendations', {
   isExternal: p.boolean('is_external').default(false),
   name: p.varchar('name').notNull(),
   recommendation: p.varchar('recommendation').notNull(),

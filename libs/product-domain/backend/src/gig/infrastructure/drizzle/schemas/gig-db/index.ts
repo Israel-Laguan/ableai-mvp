@@ -5,5 +5,6 @@ export * from './recommendations';
 export * from './review';
 export * from './skill-hires';
 export * from './skills';
+export * from './slots';
 export * from './statistics';
 export * from './workers';

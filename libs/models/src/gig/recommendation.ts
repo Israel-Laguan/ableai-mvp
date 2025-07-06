@@ -1,6 +1,6 @@
 import { IBase } from '../shared';
 
-export interface Recommendations extends IBase {
+export interface Recommendation extends IBase {
   isExternal: boolean;
   name: string;
   recommendation: string;
