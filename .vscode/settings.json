@@ -5,6 +5,7 @@
     },
     "local": {
       "baseUrlAuth": "http://localhost:3001/api/auth/v1",
+      "baseUrlFaker": "http://localhost:3005/api/faker/v1",
       "baseUrlIAManager": "http://localhost:3002/api/ai-manager/v1",
       "baseUrlGig": "http://localhost:3003/api/gig/v1"
     },
