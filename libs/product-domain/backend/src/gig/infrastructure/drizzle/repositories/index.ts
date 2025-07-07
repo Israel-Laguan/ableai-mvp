@@ -2,6 +2,7 @@ export * from './buyer';
 export * from './gig-work';
 export * from './gig-work-team';
 export * from './recommendation';
+export * from './review';
 export * from './skill';
 export * from './skill-hire';
 export * from './slot';
