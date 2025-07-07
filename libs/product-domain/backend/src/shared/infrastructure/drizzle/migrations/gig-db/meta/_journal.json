@@ -120,6 +120,20 @@
       "when": 1751563837350,
       "tag": "0016_add-user-without-private-data",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1751819081895,
+      "tag": "0017_add-missing-constrains",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1751893440576,
+      "tag": "0018_fix-end-gig-data-type",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,15 @@
+### GET health
+GET {{baseUrlFaker}}/health
+
+#############################################
+################### FAKER ###################
+#############################################
+
+### POST Generate Fake User Data
+POST {{baseUrlFaker}}/user
+Content-Type: application/json
+
+{}
+
+### DELETE Remove Fake User Data
+DELETE {{baseUrlFaker}}/user/<userId>
