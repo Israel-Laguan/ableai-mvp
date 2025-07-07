@@ -1,12 +1,12 @@
 import { IBase } from '../shared';
 
-export interface SkillHires extends IBase {
+export interface SkillHire extends IBase {
   name: string;
   buyerId: number;
   gigsCompleted: number;
 }
 
-export interface Skills extends IBase {
+export interface Skill extends IBase {
   badgesAwarded?: string;
   equipment?: string;
   experienceMonth: number;
