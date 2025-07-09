@@ -51,7 +51,7 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
         (
           await llmWithOutputSchema
             .startChat({ history })
-            .sendMessage(`Pleas provide the final answer.`)
+            .sendMessage(`Please provide the final answer.`)
         ).response.candidates?.[0]?.content?.parts?.[0]?.text ??
         'An error occurred while processing your request.'
       );
@@ -134,12 +134,12 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
         if (last.trim().endsWith(':') && remainingLoops > 0) {
           remainingLoops--;
 
-          if (remainingLoops <= 0) {
+          if (remainingLoops > 0) {
+            lastPrompt = '';
+          } else {
             lastPrompt = `
                 You have reached the maximum of 10 responses ending with ":". 
                 Please, finish your answer in the next message.`;
-          } else {
-            lastPrompt = '';
           }
 
           continue;
