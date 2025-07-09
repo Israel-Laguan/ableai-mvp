@@ -145,8 +145,8 @@ export const fakerService = {
     const fakePrivateDataUser: FakePrivateDataUser = {
       address: faker.location.streetAddress(),
       kycUrl: faker.internet.url(),
-      latitude: String(faker.location.latitude({ min: 51.4, max: 51.55 })),
-      longitude: String(faker.location.longitude({ min: -0.25, max: 0.05 })),
+      latitude: faker.location.latitude({ min: 51.4, max: 51.55 }),
+      longitude: faker.location.longitude({ min: -0.25, max: 0.05 }),
       phoneNumber: faker.phone.number(),
       rwtUrl: faker.internet.url(),
       ...input,
@@ -190,6 +190,8 @@ export const fakerService = {
       endDate: faker.date.future(),
       startDate: faker.date.recent(),
       title: faker.lorem.sentence(),
+      latitude: faker.location.latitude({ min: 51.4, max: 51.55 }),
+      longitude: faker.location.longitude({ min: -0.25, max: 0.05 }),
       paymentPerHour: faker.number.int({ min: 10, max: 100 }),
       ...input,
     };
