@@ -3,8 +3,14 @@ ALTER TABLE "private_data_user" ADD COLUMN "longitude_tmp" double precision;
 
 UPDATE "private_data_user"
 SET
-  "latitude_tmp" = NULLIF(trim("latitude"), '')::double precision,
-  "longitude_tmp" = NULLIF(trim("longitude"), '')::double precision;
+  "latitude_tmp" = CASE
+    WHEN trim("latitude") ~ '^[-+]?\d+(\.\d+)?$' THEN trim("latitude")::double precision
+    ELSE NULL
+  END,
+  "longitude_tmp" = CASE
+    WHEN trim("longitude") ~ '^[-+]?\d+(\.\d+)?$' THEN trim("longitude")::double precision
+    ELSE NULL
+  END;
 
 ALTER TABLE "private_data_user" DROP COLUMN "latitude";
 ALTER TABLE "private_data_user" DROP COLUMN "longitude";
