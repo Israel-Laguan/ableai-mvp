@@ -4,11 +4,11 @@ ALTER TABLE "private_data_user" ADD COLUMN "longitude_tmp" double precision;
 UPDATE "private_data_user"
 SET
   "latitude_tmp" = CASE
-    WHEN trim("latitude") ~ '^[-+]?\d+(\.\d+)?$' THEN trim("latitude")::double precision
+    WHEN trim("latitude"::text) ~ '^[-+]?\d+(\.\d+)?$' THEN trim("latitude"::text)::double precision
     ELSE NULL
   END,
   "longitude_tmp" = CASE
-    WHEN trim("longitude") ~ '^[-+]?\d+(\.\d+)?$' THEN trim("longitude")::double precision
+    WHEN trim("longitude"::text) ~ '^[-+]?\d+(\.\d+)?$' THEN trim("longitude"::text)::double precision
     ELSE NULL
   END;
 
