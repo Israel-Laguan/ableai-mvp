@@ -1,6 +1,7 @@
 import { AiManager } from '@product-domain/backend';
 import { env } from '../../config/env.config';
 import { Instructions } from '../ai';
+import { SchemaType } from '@google/generative-ai';
 
 const {
   Infra: {
@@ -25,6 +26,17 @@ export const geminiService = {
         maxOutputTokens: 1024,
         stopSequences: ['\n\n'],
         topK: 40,
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: SchemaType.OBJECT,
+          properties: {
+            text: {
+              type: SchemaType.STRING,
+              description: 'The response text from the AI model.',
+            },
+          },
+          required: ['text'],
+        },
       },
 
       tools: [
