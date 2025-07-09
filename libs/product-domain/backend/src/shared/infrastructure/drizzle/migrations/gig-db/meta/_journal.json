@@ -134,6 +134,13 @@
       "when": 1751893440576,
       "tag": "0018_fix-end-gig-data-type",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1752066828695,
+      "tag": "0019_update-gig-work",
+      "breakpoints": true
     }
   ]
 }

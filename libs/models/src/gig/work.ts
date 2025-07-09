@@ -1,10 +1,13 @@
 import { IBase } from '../shared';
 
 export interface GigWork extends IBase {
+  additionalInstructions?: string;
   address: string;
   buyerId: number;
   description: string;
   endDate: Date;
+  latitude?: number;
+  longitude?: number;
   paymentPerHour: number;
   startDate: Date;
   title: string;
