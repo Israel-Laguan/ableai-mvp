@@ -4,6 +4,9 @@ import type { Interfaces, UseCases } from '../../../../domain';
 import type { ToolManager } from '../../types';
 
 import { Schemas } from '../../../zod';
+import { Errors } from '@shared';
+
+const PATH = 'MATCH_WORKER_SERVICE';
 
 export function MakeMatchWorkerService(
   matchWorkers: UseCases.MatchWorkers
@@ -46,7 +49,10 @@ export function MakeMatchWorkerService(
     execute: async input => {
       const { success, error } = Schemas.MatchWorkersInputSchema.safeParse(input);
       if (!success) {
-        throw new Error(`Invalid input for matchWorkers: ${error.message}`);
+        throw Errors.BadRequestError.create(
+          `Invalid input for matchWorkers: ${JSON.stringify(error.issues)}`,
+          PATH
+        );
       } else {
         return await matchWorkers(input);
       }

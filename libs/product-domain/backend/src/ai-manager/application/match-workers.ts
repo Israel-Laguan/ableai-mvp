@@ -201,6 +201,8 @@ export function makeMatchWorkersUseCase({
     while (loopsCount < maxLoops) {
       const workerId = sortedRanking[loopsCount].workerId;
 
+      loopsCount++;
+
       const worker = workerByIdMap.get(workerId) as Worker;
 
       const skill = availableSkills.find(
@@ -210,6 +212,11 @@ export function makeMatchWorkersUseCase({
       const slot = matchedSlots.filter(({ workerId: slotWorkerId }) => slotWorkerId === workerId);
 
       const statistic = statistics.find(({ userId }) => userId === worker.userId) as Statistic;
+
+      if (!statistic) {
+        console.warn(`No statistic found for userId: ${worker.userId}`);
+        continue;
+      }
 
       /* eslint-disable @typescript-eslint/no-unused-vars */
       const { userId: _1, ...retrievedStatistic } = statistic;
@@ -224,8 +231,6 @@ export function makeMatchWorkersUseCase({
       };
 
       matchedWorkers.push(matchedWorker);
-
-      loopsCount++;
     }
 
     return matchedWorkers;
