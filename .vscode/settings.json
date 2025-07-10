@@ -21,5 +21,5 @@
       "baseUrlGig": "https://ableia.vercel.app/api/gig/v1"
     }
   },
-  "cSpell.words": ["ISQL", "modelcontextprotocol", "Streamable", "zxcvbn"]
+  "cSpell.words": ["ISQL", "modelcontextprotocol", "postgis", "Streamable", "zxcvbn"]
 }

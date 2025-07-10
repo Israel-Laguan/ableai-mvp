@@ -8,6 +8,6 @@ const { validateAssistantInput } = InputValidation;
 
 const assistantsRouter = Router();
 
-assistantsRouter.post('/assistants', validateAssistantInput, handleRequest);
+assistantsRouter.post('/prompt', validateAssistantInput, handleRequest);
 
 export default assistantsRouter;
