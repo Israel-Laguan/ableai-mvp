@@ -1,4 +1,4 @@
-import { FunctionDeclaration, ModelParams } from '@google/generative-ai';
+import type { FunctionDeclaration, ModelParams, ObjectSchema, Schema } from '@google/generative-ai';
 
 export interface JsonRpcRequest<Params = unknown> {
   jsonrpc: '2.0';
@@ -38,3 +38,11 @@ export interface LlmGeminiServiceConfig {
 }
 
 export type ToolsManager = Record<string, Omit<ToolManager, 'definition'>>;
+
+export type TypedObjectSchema<TSchema extends object> = ObjectSchema & {
+  properties: {
+    [K in keyof TSchema]:
+      | Schema
+      | TypedObjectSchema<TSchema[K] extends object ? TSchema[K] : never>;
+  };
+};

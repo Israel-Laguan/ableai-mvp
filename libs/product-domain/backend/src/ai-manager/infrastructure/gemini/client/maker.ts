@@ -106,8 +106,10 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
 
               toolResponsePart.functionResponse.response = { result: toolResult, mcpContext };
             } catch (error) {
-              console.error('Error while running the too: \n', { name, args });
               const errorMessage = error instanceof Error ? error.message : String(error);
+
+              console.error('Error while running the too: \n', { name, args, errorMessage });
+
               toolResponsePart.functionResponse.response = {
                 error: errorMessage,
               };
@@ -148,7 +150,14 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
         return await getFinalAnswer({ accumulatedText, chat });
       }
     } catch (error) {
-      console.error('Error in LLM tool manager:', error);
+      console.error(
+        Errors.InternalServerError.create(
+          `Error in LLM tool manager:
+        ${error instanceof Error ? error.message : String(error)}`,
+          PATH
+        )
+      );
+
       return `Sorry, I couldn't complete your request at this time. Please try again later.`;
     }
   };
