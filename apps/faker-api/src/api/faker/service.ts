@@ -43,9 +43,9 @@ const {
   workerRepository,
 } = repositories;
 
-const fakeBadges = ['Top Performer', 'Outstanding Contributor', 'Innovation Award'];
-const fakeEquipment = ['Laptop', 'Smartphone', 'desktop', 'mac', 'camera', 'microphone'];
-const FakeSkills = ['JavaScript', 'Python', 'Java', 'C#', 'Ruby', 'PHP', 'Go', 'Swift', 'Kotlin'];
+const FAKE_BADGES = ['Top Performer', 'Outstanding Contributor', 'Innovation Award'];
+const FAKE_EQUIPMENT = ['Laptop', 'Smartphone', 'desktop', 'mac', 'camera', 'microphone'];
+const FAKE_SKILLS = ['JavaScript', 'Python', 'Java', 'C#', 'Ruby', 'PHP', 'Go', 'Swift', 'Kotlin'];
 
 export const fakerService = {
   generateFakeUserData: async (input: FakeUserData = {}) => {
@@ -127,7 +127,7 @@ export const fakerService = {
 
   generateFakeBuyer: async (input: FakeBuyer) => {
     const fakeBuyer: FakeBuyer = {
-      badgesAwarded: String(faker.helpers.arrayElements(fakeBadges, { min: 1, max: 3 })),
+      badgesAwarded: String(faker.helpers.arrayElements(FAKE_BADGES, { min: 1, max: 3 })),
       businessAddress: faker.location.streetAddress(),
       businessName: faker.company.name(),
       businessRegistrationNumber: faker.string.alphanumeric(10),
@@ -176,7 +176,7 @@ export const fakerService = {
     const fakeWorker: FakeWorker = {
       feedbackSummary: faker.lorem.sentence(),
       socialNetworkUrl: faker.internet.url(),
-      tags: String(faker.helpers.arrayElements(FakeSkills, { min: 1, max: 3 })),
+      tags: String(faker.helpers.arrayElements(FAKE_SKILLS, { min: 1, max: 3 })),
       ...input,
     };
 
@@ -201,7 +201,7 @@ export const fakerService = {
 
   generateFakeGigWorkTeam: async (input: FakeGigWorkTeamInput) => {
     const fakeGigWorkTeam: FakeGigWorkTeam = {
-      awardedBadge: faker.helpers.arrayElement(fakeBadges),
+      awardedBadge: faker.helpers.arrayElement(FAKE_BADGES),
       endDateOffer: faker.date.future(),
       endGig: faker.datatype.boolean(),
       feedback: faker.lorem.sentence(),
@@ -220,7 +220,7 @@ export const fakerService = {
   generateFakeSkillHire: async (input: FakeSkillHireInput) => {
     const fakeSkillHire: FakeSkillHire = {
       gigsCompleted: faker.number.int({ min: 1, max: 100 }),
-      name: faker.helpers.arrayElement(FakeSkills),
+      name: faker.helpers.arrayElement(FAKE_SKILLS),
       ...input,
     };
 
@@ -229,9 +229,9 @@ export const fakerService = {
 
   generateFakeSkill: async (input: FakeSkillInput) => {
     const fakeSkill: FakeSkill = {
-      name: faker.helpers.arrayElement(FakeSkills),
-      badgesAwarded: String(faker.helpers.arrayElements(fakeBadges, { min: 1, max: 3 })),
-      equipment: faker.helpers.arrayElements(fakeEquipment, { min: 1, max: 2 }).join(', '),
+      name: faker.helpers.arrayElement(FAKE_SKILLS),
+      badgesAwarded: String(faker.helpers.arrayElements(FAKE_BADGES, { min: 1, max: 3 })),
+      equipment: faker.helpers.arrayElements(FAKE_EQUIPMENT, { min: 1, max: 2 }).join(', '),
       experienceMonth: faker.number.int({ min: 1, max: 120 }),
       gigsCompleted: faker.number.int({ min: 1, max: 100 }),
       imagesUrl: faker.image.url(),
@@ -280,7 +280,6 @@ export const fakerService = {
     const fakeStatistic: FakeStatistic = {
       appRole: faker.helpers.arrayElement([APP_ROLE.BUYER, APP_ROLE.WORKER]),
       responseRate: faker.number.int({ min: 0, max: 100 }),
-      userId: faker.number.int({ min: 1, max: 1000 }),
       wouldWork: faker.number.int({ min: 0, max: 100 }),
       ...input,
     };
