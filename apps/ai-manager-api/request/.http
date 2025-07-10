@@ -15,89 +15,9 @@ Accept: application/json, text/event-stream
 
 ### Retrieve data from gig_db via assistant
 ###
-POST {{baseUrlIAManager}}/assistants
+POST {{baseUrlIAManager}}/prompt
 Content-Type: application/json
 
 {
     "prompt": "What are the available tables in the database?"
-}
-
-###
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "What are the relations available within the tables?"
-}
-
-###
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "What are the relations available from skills?"
-}
-
-### Simulate a user asking for a non existing table
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "How many workerssss are there in the database?"
-}
-
-### Multiples questions about the database
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "How many workers and users are there in the database?"
-}
-
-###
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "How many users are there in the database?"
-}
-
-###
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "How many buyers are there in the database?"
-}
-
-###
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "How many workers are there in the database?"
-}
-
-###
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "How many reviews are there in the database?"
-}
-
-###
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "How many skills hire are in the skill_hires table?"
-}
-
-###
-POST {{baseUrlIAManager}}/assistants
-Content-Type: application/json
-
-{
-    "prompt": "What are the skills of the user 1?"
 }
