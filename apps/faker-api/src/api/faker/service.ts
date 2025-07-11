@@ -23,6 +23,7 @@ import type {
   FakeStatisticInput,
   FakeWorker,
   FakeGigWorkTeamInput,
+  GenerateFakeWorkersInput,
 } from '../../interfaces';
 
 import { APP_ROLE } from '@models/shared';
@@ -119,6 +120,28 @@ export const fakerService = {
       user: fakeUser,
       worker: fakeWorker,
     };
+  },
+
+  generateFakeWorkers: async (input: GenerateFakeWorkersInput) => {
+    const { limit = 1 } = input;
+    for (let i = 0; i < limit; i++) {
+      const [fakePrivateDataUser] = await fakerService.generateFakePrivateDataUser();
+      const [fakeUser] = await fakerService.generateFakeUser({
+        privateDataUserId: fakePrivateDataUser.id,
+      });
+      const [fakeWorker] = await fakerService.generateFakeWorker({
+        userId: fakeUser.id,
+      });
+      await fakerService.generateFakeSkill({
+        workerId: fakeWorker.id,
+      });
+      await fakerService.generateFakeSlot({
+        workerId: fakeWorker.id,
+      });
+      await fakerService.generateFakeStatistic({
+        userId: fakeUser.id,
+      });
+    }
   },
 
   removeFakeUserData: async (userId: string) => {

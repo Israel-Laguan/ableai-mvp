@@ -25,7 +25,10 @@ export function MakeMatchWorkerTool(
           PATH
         );
       } else {
-        return await matchWorkers(input);
+        console.time('WORKER_MATCHING');
+        const result = await matchWorkers(input);
+        console.timeEnd('WORKER_MATCHING');
+        return result;
       }
     },
   };

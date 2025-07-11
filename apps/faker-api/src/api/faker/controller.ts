@@ -14,6 +14,11 @@ export const fakerController = {
     res.status(HTTP_STATUS_CODE.OK).json(fakeUserData);
   }),
 
+  generateFakeWorkers: tryCatchAndNext(async (req: Request, res: Response) => {
+    await fakerService.generateFakeWorkers(req.body);
+    res.end();
+  }),
+
   removeFakeUserData: tryCatchAndNext(async (req: Request, res: Response) => {
     const { userId } = req.params;
     await fakerService.removeFakeUserData(userId);
