@@ -4,8 +4,8 @@ export type MatchWorkers = (
   input: Interfaces.MatchWorkersInput
 ) => Promise<Interfaces.MatchedWorker[] | []>;
 
-export type RetrieveBuyerProfile = (buyerId: number) => Promise<Interfaces.BuyerProfile>;
+export type RetrieveBuyerProfile = (userId: number) => Promise<Interfaces.BuyerProfile>;
 
 export type RetrieveUserProfile = (userId: number) => Promise<Interfaces.UserProfile>;
 
-export type RetrieveWorkerProfile = (workerId: number) => Promise<Interfaces.WorkerProfile>;
+export type RetrieveWorkerProfile = (userId: number) => Promise<Interfaces.WorkerProfile>;

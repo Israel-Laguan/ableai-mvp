@@ -110,7 +110,7 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
 
               console.error(
                 Errors.InternalServerError.create(
-                  `Error while running the too: \n ${{ name, args, errorMessage }}`,
+                  `Error while running the tool: ${JSON.stringify({ name, args, errorMessage })}`,
                   PATH
                 )
               );

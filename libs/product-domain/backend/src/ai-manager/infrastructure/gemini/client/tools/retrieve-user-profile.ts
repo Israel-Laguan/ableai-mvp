@@ -14,7 +14,7 @@ export function MakeRetrieveUserProfileTool(
         type: SchemaType.OBJECT,
         properties: {
           userId: {
-            type: SchemaType.STRING,
+            type: SchemaType.NUMBER,
             description: 'The userId of the user profile to retrieve',
           },
         },

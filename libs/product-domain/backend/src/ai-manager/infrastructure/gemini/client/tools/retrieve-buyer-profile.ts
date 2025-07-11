@@ -14,7 +14,7 @@ export function MakeRetrieveBuyerProfileTool(
         type: SchemaType.OBJECT,
         properties: {
           userId: {
-            type: SchemaType.STRING,
+            type: SchemaType.NUMBER,
             description: 'The userId of the buyer profile to retrieve',
           },
         },

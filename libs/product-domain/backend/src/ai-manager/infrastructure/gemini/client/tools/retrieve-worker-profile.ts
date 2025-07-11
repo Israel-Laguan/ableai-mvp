@@ -14,7 +14,7 @@ export function MakeRetrieveWorkerProfileTool(
         type: SchemaType.OBJECT,
         properties: {
           userId: {
-            type: SchemaType.STRING,
+            type: SchemaType.NUMBER,
             description: 'The userId of the worker profile to retrieve',
           },
         },
