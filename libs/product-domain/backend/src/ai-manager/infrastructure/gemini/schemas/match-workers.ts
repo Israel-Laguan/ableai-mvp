@@ -32,6 +32,17 @@ export const MatchWorkersInputSchema: FunctionDeclarationSchema = {
       type: SchemaType.STRING,
       description: 'The a valid timestamp start date for the workers availability.',
     },
+    location: {
+      type: SchemaType.OBJECT,
+      properties: {
+        longitude: {
+          type: SchemaType.NUMBER,
+        },
+        latitude: {
+          type: SchemaType.NUMBER,
+        },
+      },
+    },
   },
   required: ['userId', 'skills', 'startDate'],
 };
