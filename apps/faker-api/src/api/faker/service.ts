@@ -122,26 +122,32 @@ export const fakerService = {
     };
   },
 
+  generateFakeWorkerData: async () => {
+    const [fakePrivateDataUser] = await fakerService.generateFakePrivateDataUser();
+    const [fakeUser] = await fakerService.generateFakeUser({
+      privateDataUserId: fakePrivateDataUser.id,
+    });
+    const [fakeWorker] = await fakerService.generateFakeWorker({
+      userId: fakeUser.id,
+    });
+    await fakerService.generateFakeSkill({
+      workerId: fakeWorker.id,
+    });
+    await fakerService.generateFakeSlot({
+      workerId: fakeWorker.id,
+    });
+    await fakerService.generateFakeStatistic({
+      userId: fakeUser.id,
+    });
+
+    return fakeUser.id;
+  },
+
   generateFakeWorkers: async (input: GenerateFakeWorkersInput) => {
     const { limit = 1 } = input;
-    for (let i = 0; i < limit; i++) {
-      const [fakePrivateDataUser] = await fakerService.generateFakePrivateDataUser();
-      const [fakeUser] = await fakerService.generateFakeUser({
-        privateDataUserId: fakePrivateDataUser.id,
-      });
-      const [fakeWorker] = await fakerService.generateFakeWorker({
-        userId: fakeUser.id,
-      });
-      await fakerService.generateFakeSkill({
-        workerId: fakeWorker.id,
-      });
-      await fakerService.generateFakeSlot({
-        workerId: fakeWorker.id,
-      });
-      await fakerService.generateFakeStatistic({
-        userId: fakeUser.id,
-      });
-    }
+    const queries = Array.from({ length: limit }).map(() => fakerService.generateFakeWorkerData);
+    const results = await Promise.allSettled(queries.map(fn => fn()));
+    return results.filter(result => result.status === 'fulfilled').map(result => result.value);
   },
 
   removeFakeUserData: async (userId: string) => {
