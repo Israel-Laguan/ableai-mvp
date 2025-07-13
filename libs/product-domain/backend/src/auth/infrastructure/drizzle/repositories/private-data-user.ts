@@ -1,10 +1,11 @@
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { sql } from 'drizzle-orm';
 
 import type { PrivateDataUser } from '@models/auth';
 import type { Repositories } from '../../../domain';
+
 import { Infra } from '../../../../shared';
 import { privateDataUser } from '../schemas';
-import { sql } from 'drizzle-orm';
 
 export const makeDrizzlePrivateUserDataRepository: Repositories.PrivateDataUserRepositoryMaker<
   NodePgDatabase
