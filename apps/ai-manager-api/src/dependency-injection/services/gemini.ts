@@ -12,7 +12,10 @@ const {
         Tools: {
           createListResourceToolManager,
           createReadonlyQueryToolManager,
-          MakeMatchWorkerService,
+          MakeMatchWorkerTool,
+          MakeRetrieveBuyerProfileTool,
+          MakeRetrieveUserProfileTool,
+          MakeRetrieveWorkerProfileTool,
         },
       },
       Schemas: { MatchWorkersOutputSchema },
@@ -48,7 +51,10 @@ export const geminiService = {
       tools: [
         createReadonlyQueryToolManager(env.MCP_SERVER_URL),
         createListResourceToolManager(env.MCP_SERVER_URL),
-        MakeMatchWorkerService(UseCases.matchWorkers),
+        MakeMatchWorkerTool(UseCases.matchWorkers),
+        MakeRetrieveBuyerProfileTool(UseCases.retrieveBuyerProfile),
+        MakeRetrieveUserProfileTool(UseCases.retrieveUserProfile),
+        MakeRetrieveWorkerProfileTool(UseCases.retrieveWorkerProfile),
       ],
 
       systemInstruction: Ai.Instructions.gigDbAssistantInstructions,

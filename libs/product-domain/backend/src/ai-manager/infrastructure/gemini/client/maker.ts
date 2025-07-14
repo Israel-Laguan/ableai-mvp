@@ -22,7 +22,7 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
       })
     : [];
 
-  const llmConfig_1: ModelParams = {
+  const llmConfig1: ModelParams = {
     ...llmConfig,
     tools: [{ functionDeclarations }],
   };
@@ -33,16 +33,16 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
   }) => Promise<string> = async ({ accumulatedText }) => accumulatedText.join('');
 
   if (
-    llmConfig_1.generationConfig?.responseMimeType === 'application/json' &&
-    llmConfig_1.generationConfig?.responseSchema
+    llmConfig1.generationConfig?.responseMimeType === 'application/json' &&
+    llmConfig1.generationConfig?.responseSchema
   ) {
-    const llmConfig_2 = JSON.parse(JSON.stringify(llmConfig_1));
+    const llmConfig2 = JSON.parse(JSON.stringify(llmConfig1));
 
-    delete llmConfig_1.generationConfig.responseMimeType;
-    delete llmConfig_1.generationConfig.responseSchema;
+    delete llmConfig1.generationConfig.responseMimeType;
+    delete llmConfig1.generationConfig.responseSchema;
 
     const llmWithOutputSchema = new GoogleGenerativeAI(apiKey).getGenerativeModel({
-      ...llmConfig_2,
+      ...llmConfig2,
     });
 
     getFinalAnswer = async ({ chat }) => {
@@ -58,7 +58,7 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
     };
   }
 
-  const llm = new GoogleGenerativeAI(apiKey).getGenerativeModel(llmConfig_1);
+  const llm = new GoogleGenerativeAI(apiKey).getGenerativeModel(llmConfig1);
 
   const mcpContext = `Reminder: You are interacting with an MCP server. You can use the available function calls to query information, execute actions, and resolve your own doubts. You may perform multiple queries to the MCP server during the conversation. If you need more context, request additional information using function calls.`;
 
@@ -108,7 +108,12 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
             } catch (error) {
               const errorMessage = error instanceof Error ? error.message : String(error);
 
-              console.error('Error while running the too: \n', { name, args, errorMessage });
+              console.error(
+                Errors.InternalServerError.create(
+                  `Error while running the tool: ${JSON.stringify({ name, args, errorMessage })}`,
+                  PATH
+                )
+              );
 
               toolResponsePart.functionResponse.response = {
                 error: errorMessage,

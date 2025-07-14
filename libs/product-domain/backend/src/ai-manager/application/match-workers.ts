@@ -15,7 +15,7 @@ export function makeMatchWorkersUseCase({
   workerRepository,
 }: Interfaces.MakeMatchWorkersConfig): UseCases.MatchWorkers {
   return async input => {
-    const { userId, distanceInKm = 10, limit = 5, skills, startDate } = input;
+    const { userId, distanceInKm = 10, limit = 5, location, skills, startDate } = input;
 
     const user = await userRepository.getById(String(userId));
 
@@ -25,7 +25,8 @@ export function makeMatchWorkersUseCase({
 
     const nearUsers = await privateDataUserRepository.findNearUsers(
       String(user.privateDataUserId),
-      distanceInKm
+      distanceInKm,
+      location
     );
 
     if (nearUsers.length === 0) {
@@ -175,7 +176,10 @@ export function makeMatchWorkersUseCase({
 
     const setScores = (sortField: number[]) => {
       sortField.forEach((workerId, i) => {
-        const currentScore = ranking.get(workerId) as number;
+        let currentScore = ranking.get(workerId);
+        if (typeof currentScore !== 'number') {
+          currentScore = 0;
+        }
         ranking.set(workerId, currentScore + maxScore - i);
       });
     };
@@ -203,15 +207,25 @@ export function makeMatchWorkersUseCase({
 
       loopsCount++;
 
-      const worker = workerByIdMap.get(workerId) as Worker;
+      const worker = workerByIdMap.get(workerId);
+
+      if (!worker) {
+        console.warn(`No worker found for workerId: ${workerId}`);
+        continue;
+      }
 
       const skill = availableSkills.find(
         ({ workerId: skillWorkerId }) => skillWorkerId === workerId
-      ) as Skill;
+      );
+
+      if (!skill) {
+        console.warn(`No skill found for workerId: ${workerId}`);
+        continue;
+      }
 
       const slot = matchedSlots.filter(({ workerId: slotWorkerId }) => slotWorkerId === workerId);
 
-      const statistic = statistics.find(({ userId }) => userId === worker.userId) as Statistic;
+      const statistic = statistics.find(({ userId }) => userId === worker.userId);
 
       if (!statistic) {
         console.warn(`No statistic found for userId: ${worker.userId}`);
