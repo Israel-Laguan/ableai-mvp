@@ -1,8 +1,51 @@
-import { Schema, SchemaType } from '@google/generative-ai';
+import type { FunctionDeclarationSchema, Schema } from '@google/generative-ai';
+
+import { SchemaType } from '@google/generative-ai';
 
 import type { Slot } from '@models/gig';
 import type { Interfaces } from '../../../domain';
 import type { TypedObjectSchema } from '../types';
+
+export const MatchWorkersInputSchema: FunctionDeclarationSchema = {
+  type: SchemaType.OBJECT,
+  properties: {
+    userId: {
+      type: SchemaType.NUMBER,
+      description: 'The id of the user to match workers for.',
+    },
+    distanceInKm: {
+      type: SchemaType.NUMBER,
+      description: 'The distance radius of the search.',
+    },
+    limit: {
+      type: SchemaType.NUMBER,
+      description: 'The maximum number of workers to return.',
+    },
+    skills: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.STRING,
+        description: 'The skills to match workers for.',
+      },
+    },
+    startDate: {
+      type: SchemaType.STRING,
+      description: 'The a valid timestamp start date for the workers availability.',
+    },
+    location: {
+      type: SchemaType.OBJECT,
+      properties: {
+        longitude: {
+          type: SchemaType.NUMBER,
+        },
+        latitude: {
+          type: SchemaType.NUMBER,
+        },
+      },
+    },
+  },
+  required: ['userId', 'skills', 'startDate'],
+};
 
 export const MatchWorkersOutputSchema: Schema = {
   type: SchemaType.ARRAY,

@@ -1,4 +1,5 @@
 import type { Worker, Skill, Statistic, Slot } from '@models/gig';
+import type { Location } from '@models/shared';
 import type { Repositories as AuthRepositories } from '../../../auth/domain';
 import type { Repositories as GigRepositories } from '../../../gig/domain';
 
@@ -21,6 +22,7 @@ export interface MatchedWorker {
 export interface MatchWorkersInput {
   distanceInKm?: number;
   limit?: number;
+  location?: Location;
   skills: string[];
   startDate: Date;
   userId: number;

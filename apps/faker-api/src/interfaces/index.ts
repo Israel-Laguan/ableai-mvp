@@ -62,3 +62,7 @@ export interface FakeUserData {
   user?: FakeUser;
   worker?: FakeWorker;
 }
+
+export interface GenerateFakeWorkersInput {
+  limit: number;
+}
