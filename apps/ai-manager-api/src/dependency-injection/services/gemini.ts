@@ -1,15 +1,21 @@
+import { SchemaType } from '@google/generative-ai';
+
 import { AiManager } from '@product-domain/backend';
 import { env } from '../../config/env.config';
-import { Instructions } from '../ai';
-import { SchemaType } from '@google/generative-ai';
+import { Ai, UseCases } from '..';
 
 const {
   Infra: {
     Gemini: {
       Client: {
         makeGeminiClient,
-        Tools: { createListResourceToolManager, createReadonlyQueryToolManager },
+        Tools: {
+          createListResourceToolManager,
+          createReadonlyQueryToolManager,
+          MakeMatchWorkerService,
+        },
       },
+      Schemas: { MatchWorkersOutputSchema },
     },
   },
 } = AiManager;
@@ -23,7 +29,6 @@ export const geminiService = {
       generationConfig: {
         temperature: 0.2,
         topP: 0.95,
-        maxOutputTokens: 1024,
         stopSequences: ['\n\n'],
         topK: 40,
         responseMimeType: 'application/json',
@@ -34,6 +39,7 @@ export const geminiService = {
               type: SchemaType.STRING,
               description: 'The response text from the AI model.',
             },
+            matchedWorkers: MatchWorkersOutputSchema,
           },
           required: ['text'],
         },
@@ -42,9 +48,10 @@ export const geminiService = {
       tools: [
         createReadonlyQueryToolManager(env.MCP_SERVER_URL),
         createListResourceToolManager(env.MCP_SERVER_URL),
+        MakeMatchWorkerService(UseCases.matchWorkers),
       ],
 
-      systemInstruction: Instructions.gigDbAssistantInstructions,
+      systemInstruction: Ai.Instructions.gigDbAssistantInstructions,
     },
   }),
 };

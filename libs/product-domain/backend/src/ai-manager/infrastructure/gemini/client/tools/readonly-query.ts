@@ -1,5 +1,7 @@
-import { FunctionDeclaration, SchemaType } from '@google/generative-ai';
-import { ToolManager } from '../../types';
+import { SchemaType } from '@google/generative-ai';
+
+import type { ToolManager } from '../../types';
+
 import { runMcpRequest } from '../mcp/request';
 
 export function createReadonlyQueryToolManager(mcpServerUrl: string): ToolManager<{ sql: string }> {
@@ -20,7 +22,8 @@ export function createReadonlyQueryToolManager(mcpServerUrl: string): ToolManage
         },
         required: ['sql'],
       },
-    } as const as FunctionDeclaration,
+    },
+
     execute: async toolArguments => {
       return await runMcpRequest({
         mcpServerUrl,
