@@ -24,8 +24,6 @@ export function makeGetNearPrivateUserDataIds(
 
     const queryResult = await db.execute(query);
 
-    console.log({ latitude, longitude, query, queryResult });
-
     return (queryResult.rows as QueryRow[]).map(row => row.id);
   };
 }
