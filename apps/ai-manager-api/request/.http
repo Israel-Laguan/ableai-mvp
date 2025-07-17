@@ -21,3 +21,14 @@ Content-Type: application/json
 {
     "prompt": "What are the available tables in the database?"
 }
+
+### Match workers based on criteria
+POST {{baseUrlIAManager}}/match-workers
+Content-Type: application/json
+
+{
+  "skills": ["python", "C++", "Java", "PHP"],
+  "gigDate": "2025-07-17",
+  "latitude": 51.5,
+  "longitude": 0.0,
+}

@@ -9,4 +9,8 @@ export const InputValidation = {
   validateAssistantInput: validateInputMiddleware({
     bodySchema: AiManager.Infra.Zod.Schemas.AiManagerSchema,
   }),
+
+  validateMatchWorkersInput: validateInputMiddleware({
+    bodySchema: AiManager.Infra.Zod.Schemas.MatchWorkersInputSchema,
+  }),
 };

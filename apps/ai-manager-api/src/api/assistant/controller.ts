@@ -10,4 +10,9 @@ export const assistantController = {
     const response = await assistantService.handleUserPrompt(req.body.prompt);
     res.send(response);
   }),
+
+  matchWorkers: tryCatchAndNext(async (req: Request, res: Response) => {
+    const response = await assistantService.matchWorkers(req.body);
+    res.send(response);
+  }),
 };
