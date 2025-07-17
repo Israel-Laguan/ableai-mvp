@@ -13,30 +13,32 @@ const envSchema = z.object({
 
   GOOGLE_SERVICE_ACCOUNT: z
     .string()
-    .transform(v => {
-      const decoded = Buffer.from(v, 'base64').toString('utf8');
-      return JSON.parse(decoded);
+    .transform((v, ctx) => {
+      try {
+        const decoded = Buffer.from(v, 'base64').toString('utf8');
+        return JSON.parse(decoded);
+      } catch {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Invalid GOOGLE_SERVICE_ACCOUNT. Must be a base64 encoded JSON object.',
+        });
+        return z.NEVER;
+      }
     })
-    .refine(v =>
-      z
-        .object({
-          project_id: z.string(),
-          client_email: z.string(),
-          private_key: z.string().refine(val => val.includes('-----BEGIN PRIVATE KEY-----'), {
-            message: 'Invalid private key format',
-          }),
-        })
-        .parse(v)
-    ),
+    .pipe(
+      z.object({
+        project_id: z.string().min(1),
+        client_email: z.string().email(),
+        private_key: z.string().refine(val => val.includes('-----BEGIN PRIVATE KEY-----'), {
+          message: 'Invalid private key format',
+        }),
+      })
+    )
+    .transform(creds => ({
+      projectId: creds.project_id,
+      clientEmail: creds.client_email,
+      privateKey: creds.private_key.replace(/\\n/g, '\n'),
+    })),
 });
 
-const draw = envSchema.parse(process.env);
-
-export const env = {
-  ...draw,
-  GOOGLE_SERVICE_ACCOUNT: {
-    projectId: draw.GOOGLE_SERVICE_ACCOUNT.project_id,
-    clientEmail: draw.GOOGLE_SERVICE_ACCOUNT.client_email,
-    privateKey: draw.GOOGLE_SERVICE_ACCOUNT.private_key.replace(/\\n/g, '\n'), // Ensure newlines are correctly formatted
-  },
-};
+export const env = envSchema.parse(process.env);
