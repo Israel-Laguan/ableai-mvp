@@ -6,7 +6,6 @@ import path from 'path';
 
 // Zod schema for CLI arguments
 const argSchema = z.object({
-  scope: z.string().regex(/^[\w.-]+$/),
   dbName: z.string().regex(/^[\w.-]+$/),
   migrationName: z.string().regex(/^[\w.-]+$/),
   custom: z.boolean().optional(),
@@ -14,25 +13,23 @@ const argSchema = z.object({
 
 // Parse CLI args
 const args = process.argv.slice(2);
-if (args.length < 3) {
-  console.error(
-    'Usage: tsx scripts/drizzle-migrations.ts <scope> <dbName> <migrationName> [custom]'
-  );
+if (args.length < 2) {
+  console.error('Usage: tsx scripts/drizzle-migrations.ts <dbName> <migrationName> [custom]');
   process.exit(1);
 }
 
-const [scope, dbName, migrationName, ...rest] = args;
+const [dbName, migrationName, ...rest] = args;
 const custom = rest.includes('custom');
 
 // Validate inputs
-const parsed = argSchema.safeParse({ scope, dbName, migrationName, custom });
+const parsed = argSchema.safeParse({ dbName, migrationName, custom });
 if (!parsed.success) {
   console.error('Invalid arguments:', parsed.error.format());
   process.exit(1);
 }
 
 // Build paths
-const schemaPath = `libs/product-domain/backend/src/${scope}/infrastructure/drizzle/schemas/${dbName}`;
+const schemaPath = `libs/product-domain/backend/src/shared/infrastructure/drizzle/schemas/${dbName}`;
 const outPath = `libs/product-domain/backend/src/shared/infrastructure/drizzle/migrations/${dbName}`;
 const baseTsConfigPath = path.resolve(process.cwd(), 'tsconfig.base.json');
 const envForDrizzleKit = {
