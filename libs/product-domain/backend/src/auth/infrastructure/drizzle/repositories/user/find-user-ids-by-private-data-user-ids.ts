@@ -17,7 +17,7 @@ const {
   },
 } = Infra;
 
-export function MakeFindUserIdsByPrivateDataUserIds(
+export function makeFindUserIdsByPrivateDataUserIds(
   db: NodePgDatabase
 ): Repositories.FindUserIdsByPrivateDataUserIds {
   return async privateDataUserIds => {

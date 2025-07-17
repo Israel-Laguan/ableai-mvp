@@ -8,7 +8,7 @@ import type { Repositories } from '../../../../domain';
 import { Infra } from '../../../../../shared';
 import { ROLES } from '../../../../domain/constants';
 import { users } from '../../schemas';
-import { MakeFindUserIdsByPrivateDataUserIds } from './find-user-ids-by-private-data-user-ids';
+import { makeFindUserIdsByPrivateDataUserIds } from './find-user-ids-by-private-data-user-ids';
 
 export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgDatabase> = ({
   db,
@@ -39,6 +39,6 @@ export const makeDrizzleUserRepository: Repositories.UserRepositoryMaker<NodePgD
       return await db.select().from(users).where(eq(users.uid, uid)).limit(1);
     },
 
-    findUserIdsByPrivateDataUserIds: MakeFindUserIdsByPrivateDataUserIds(db),
+    findUserIdsByPrivateDataUserIds: makeFindUserIdsByPrivateDataUserIds(db),
   };
 };
