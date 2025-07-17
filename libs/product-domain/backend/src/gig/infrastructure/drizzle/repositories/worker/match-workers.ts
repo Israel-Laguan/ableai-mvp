@@ -30,7 +30,7 @@ const baseSelect = [
   sql`row_to_json(${sql.raw(`${getTableConfig(workers).name}.*`)}) AS worker`,
 ];
 
-const EQUIPMENT_MATCH_COUNT = 'equipment_match_count';
+const EQUIPMENT_MATCH_COUNT = sql.raw('equipment_match_count');
 
 const baseOrderBy = [
   sql`${statistics.wouldWork.name} DESC`,
