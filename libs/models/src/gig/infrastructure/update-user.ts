@@ -1,6 +1,6 @@
-import type { UpdateEntityInput } from '../shared';
-import type { User } from '../auth';
-import type { Buyer, Worker } from '.';
+import type { UpdateEntityInput } from '../../shared';
+import type { User } from '../../auth';
+import type { Buyer, Worker } from '..';
 
 export type IUpdateUserInput = Pick<User, 'id'>;
 
