@@ -3,14 +3,15 @@ import z from 'zod';
 import type { Interfaces } from '../../../domain';
 
 import { Infra } from '../../../../shared';
-import { LocationSchema } from '.';
 
 export const MatchWorkersInputSchema =
   Infra.Zod.Utils.makeZodObjectSchema<Interfaces.MatchWorkersInput>({
-    userId: z.number().int().positive(),
-    distanceInKm: z.number().int().positive().default(10),
+    gigDate: z.string().date(),
+    hourlyRate: z.number().int().positive().optional(),
     limit: z.number().int().positive().default(5),
-    location: LocationSchema.optional(),
+    latitude: z.number().min(-90).max(90),
+    longitude: z.number().min(-180).max(180),
+    radius: z.number().int().positive().default(10),
+    required: z.array(z.string()).min(1).optional(),
     skills: z.array(z.string()).min(1),
-    startDate: z.string().date(),
   }).strict();
