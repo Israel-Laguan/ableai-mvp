@@ -45,9 +45,9 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
 
     const sqlGigDate = gigDate ? sql`${gigDate?.toISOString()}` : blankSql;
     const sqlHourlyRate = typeof hourlyRate === 'number' ? sql`${hourlyRate}` : blankSql;
-    const sqlRequiredArray = required.length > 0 ? makeSQLArray(required) : blankSql;
-    const sqlSkillsArray = makeSQLArray(skills);
-    const sqlUserIdsArray = makeSQLArray(userIds);
+    const sqlRequiredArray = required.length > 0 ? makeSQLArray(required, 'text') : blankSql;
+    const sqlSkillsArray = makeSQLArray(skills, 'text');
+    const sqlUserIdsArray = makeSQLArray(userIds, 'int');
 
     const select = baseSelect.concat(
       [

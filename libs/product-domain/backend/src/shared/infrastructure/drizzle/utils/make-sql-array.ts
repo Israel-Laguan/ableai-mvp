@@ -1,17 +1,5 @@
 import { sql } from 'drizzle-orm';
 
-const arrayValue = {
-  string: (value: string) => `'${value}'`,
-  number: (value: string) => Number(value),
-};
-
-export function makeSQLArray(array: (string | number)[]) {
-  return sql.raw(
-    `ARRAY[${array
-      .map(item => {
-        const key = typeof item === 'number' ? 'number' : 'string';
-        return arrayValue[key](String(item));
-      })
-      .join(', ')}]`
-  );
+export function makeSQLArray<T extends string | number>(array: T[], pgType: 'text' | 'int') {
+  return sql`ARRAY[${sql.join(array, sql`, `)}]::${sql.raw(pgType + '[]')}`;
 }

@@ -24,7 +24,7 @@ export function MakeFindUserIdsByPrivateDataUserIds(
     if (privateDataUserIds.length === 0) {
       return [];
     }
-    const sqlPrivateDataUserIdArray = makeSQLArray(privateDataUserIds);
+    const sqlPrivateDataUserIdArray = makeSQLArray(privateDataUserIds, 'int');
 
     const query = sql`
         SELECT ${users.id} FROM ${users}
