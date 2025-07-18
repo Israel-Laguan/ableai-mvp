@@ -6,7 +6,7 @@ import { Errors } from '@shared';
 
 const PATH = 'FIREBASE_SWITCH_USER_ROLE';
 
-export function MakeFirebaseSwitchUserRoleUseCase({
+export function MakeFirebaseSwitchUserRoleService({
   auth,
 }: {
   auth: Modules.FirebaseAuthModule;
@@ -29,10 +29,11 @@ export function MakeFirebaseSwitchUserRoleUseCase({
       appRole,
     };
 
-    auth.setCustomUserClaims(uid, newCustomClaims).catch(() => {
+    try {
+      await auth.setCustomUserClaims(uid, newCustomClaims);
+    } catch {
       throw Errors.InternalServerError.create('Failed to set custom user claims', PATH);
-    });
-
+    }
     return {};
   };
 }
