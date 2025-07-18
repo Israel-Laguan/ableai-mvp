@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { assistantController } from './controller';
 import { Middlewares, Validation } from '../../dependency-injection';
 
-const { handleRequest, matchWorkers } = assistantController;
+const { handleRecommendationRequest, handleRequest, matchWorkers } = assistantController;
 const { validateAssistantInput, validateMatchWorkersInput } = Validation.InputValidation;
 const { authorizationMiddleware } = Middlewares;
 
@@ -15,6 +15,12 @@ assistantsRouter.post(
   authorizationMiddleware,
   validateMatchWorkersInput,
   matchWorkers
+);
+assistantsRouter.post(
+  '/recommendations',
+  authorizationMiddleware,
+  validateAssistantInput,
+  handleRecommendationRequest
 );
 
 export default assistantsRouter;
