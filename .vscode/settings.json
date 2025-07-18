@@ -21,5 +21,14 @@
       "baseUrlGig": "https://ableia.vercel.app/api/gig/v1"
     }
   },
-  "cSpell.words": ["ableai", "geopoint", "ISQL", "modelcontextprotocol", "postgis", "Streamable", "zxcvbn"]
+  "cSpell.words": [
+    "ableai",
+    "fkey",
+    "geopoint",
+    "ISQL",
+    "modelcontextprotocol",
+    "postgis",
+    "Streamable",
+    "zxcvbn"
+  ]
 }
