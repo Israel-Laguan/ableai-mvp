@@ -2,14 +2,15 @@ import type { ChatSession, FunctionDeclaration, ModelParams, Part } from '@googl
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
+import type { Interfaces } from '../../../domain';
 import type { LlmGeminiServiceConfig, ToolsManager } from '../types';
 
 import { Errors } from '@shared';
 
 const PATH = 'GEMINI_CLIENT';
 
-export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) {
-  const toolsManager: ToolsManager = {
+export function makeGeminiClient<ServerArgs>({ apiKey, llmConfig }: LlmGeminiServiceConfig) {
+  const toolsManager: ToolsManager<unknown, ServerArgs> = {
     undefined: { execute: async () => 'Unknown tool.' },
   };
 
@@ -63,7 +64,10 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
   const mcpContext = `Reminder: You are interacting with an MCP server. You can use the available function calls to query information, execute actions, and resolve your own doubts. You may perform multiple queries to the MCP server during the conversation. If you need more context, request additional information using function calls.`;
 
   // Conversational function call loop
-  return async ({ prompt }: { prompt: string }): Promise<string> => {
+  return async ({
+    prompt,
+    serverArgs,
+  }: Interfaces.AssistantsInput<ServerArgs>): Promise<string> => {
     const chat = llm.startChat();
     const accumulatedText: string[] = [];
 
@@ -102,7 +106,7 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
                 throw Errors.InternalServerError.create(`Error: Tool "${name}" not found.`, PATH);
               }
 
-              const toolResult = await tool.execute(args);
+              const toolResult = await tool.execute({ modelArgs: args, serverArgs });
 
               toolResponsePart.functionResponse.response = { result: toolResult, mcpContext };
             } catch (error) {
@@ -138,7 +142,7 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
 
         const last = accumulatedText[accumulatedText.length - 1];
 
-        if (last.trim().endsWith(':') && remainingLoops > 0) {
+        if (typeof last === 'string' && last.trim().endsWith(':') && remainingLoops > 0) {
           remainingLoops--;
 
           if (remainingLoops > 0) {

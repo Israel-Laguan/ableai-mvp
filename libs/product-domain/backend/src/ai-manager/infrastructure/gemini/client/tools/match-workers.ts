@@ -1,9 +1,9 @@
 import type { Interfaces, UseCases } from '../../../../domain';
 import type { ToolManager } from '../../types';
 
+import { Errors } from '@shared';
 import { MatchWorkersInputSchema } from '../../schemas';
 import { Schemas } from '../../../zod';
-import { Errors } from '@shared';
 
 const PATH = 'MATCH_WORKER_SERVICE';
 
@@ -17,18 +17,18 @@ export function MakeMatchWorkerTool(
       parameters: MatchWorkersInputSchema,
     },
 
-    execute: async input => {
-      const { success, error } = Schemas.MatchWorkersInputSchema.safeParse(input);
+    execute: async ({ modelArgs }) => {
+      if (!modelArgs) {
+        throw Errors.BadRequestError.create('Invalid input for matchWorkers', PATH);
+      }
+      const { success, error, data } = Schemas.MatchWorkersInputSchema.safeParse(modelArgs);
       if (!success) {
         throw Errors.BadRequestError.create(
           `Invalid input for matchWorkers: ${JSON.stringify(error.issues)}`,
           PATH
         );
       } else {
-        console.time('WORKER_MATCHING');
-        const result = await matchWorkers(input);
-        console.timeEnd('WORKER_MATCHING');
-        return result;
+        return await matchWorkers(data as Interfaces.MatchWorkersInput);
       }
     },
   };
