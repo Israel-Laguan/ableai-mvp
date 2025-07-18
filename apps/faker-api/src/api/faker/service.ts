@@ -46,18 +46,49 @@ const {
 
 const FAKE_BADGES = ['Top Performer', 'Outstanding Contributor', 'Innovation Award'];
 const FAKE_EQUIPMENT = ['Laptop', 'Smartphone', 'desktop', 'mac', 'camera', 'microphone'];
-const FAKE_SKILLS = ['JavaScript', 'Python', 'Java', 'C#', 'Ruby', 'PHP', 'Go', 'Swift', 'Kotlin'];
+const FAKE_SKILLS = [
+  'JavaScript',
+  'Python',
+  'Java',
+  'C#',
+  'Ruby',
+  'PHP',
+  'Go',
+  'Swift',
+  'Kotlin',
+  'Bartender',
+];
+
+const FAKE_BARTENDER_EQUIPMENT = [
+  'Cocktail Shaker',
+  'Black shirt',
+  'apron',
+  'outdoor',
+  'indoor',
+  'bar tools',
+  'Bar Spoon',
+  'Jigger',
+];
 
 export const fakerService = {
-  generateFakeUserData: async (input: FakeUserData = {}) => {
-    const { buyer, privateDataUser, user, worker } = input;
+  generateFakeUserData: async ({ buyer, privateDataUser, user, worker }: FakeUserData = {}) => {
+    let fakeUser = user as unknown as { id: number };
+    let fakePrivateDataUser = {};
 
-    const [fakePrivateDataUser] = await fakerService.generateFakePrivateDataUser(privateDataUser);
+    if (!user) {
+      const [newFakePrivateDataUser] = await fakerService.generateFakePrivateDataUser(
+        privateDataUser
+      );
 
-    const [fakeUser] = await fakerService.generateFakeUser({
-      ...user,
-      privateDataUserId: fakePrivateDataUser.id,
-    });
+      fakePrivateDataUser = newFakePrivateDataUser;
+
+      const [newFakeUser] = await fakerService.generateFakeUser({
+        ...user,
+        privateDataUserId: newFakePrivateDataUser.id,
+      });
+
+      fakeUser = newFakeUser;
+    }
 
     const [fakeBuyer] = await fakerService.generateFakeBuyer({
       ...buyer,
@@ -257,10 +288,25 @@ export const fakerService = {
   },
 
   generateFakeSkill: async (input: FakeSkillInput) => {
+    let equipment = '';
+
+    const name = faker.helpers.arrayElement(FAKE_SKILLS);
+
+    if (name === 'Bartender') {
+      equipment = faker.helpers
+        .arrayElements(FAKE_BARTENDER_EQUIPMENT, {
+          min: 5,
+          max: FAKE_BARTENDER_EQUIPMENT.length,
+        })
+        .join(', ');
+    } else {
+      equipment = faker.helpers.arrayElements(FAKE_EQUIPMENT, { min: 1, max: 2 }).join(', ');
+    }
+
     const fakeSkill: FakeSkill = {
-      name: faker.helpers.arrayElement(FAKE_SKILLS),
+      name,
       badgesAwarded: String(faker.helpers.arrayElements(FAKE_BADGES, { min: 1, max: 3 })),
-      equipment: faker.helpers.arrayElements(FAKE_EQUIPMENT, { min: 1, max: 2 }).join(', '),
+      equipment,
       experienceMonth: faker.number.int({ min: 1, max: 120 }),
       gigsCompleted: faker.number.int({ min: 1, max: 100 }),
       imagesUrl: faker.image.url(),
