@@ -3,7 +3,7 @@ import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { getTableConfig } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
-import type { Infra } from '@models/gig';
+import type { Infra, Statistic } from '@models/gig';
 import type { MatchWorkers } from '../../../../domain/repositories';
 
 import { Infra as SharedInfra } from '../../../../../shared';
@@ -107,7 +107,7 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
 
     const matchedWorkers: Infra.MatchedWorker[] = (queryResult.rows as QueryRow[]).map(row => {
       /* eslint-disable @typescript-eslint/no-unused-vars */
-      const { userId: _, ...newStatistic } = row.statistic;
+      const { userId: _, ...newStatistic } = row.statistic ? row.statistic : ({} as Statistic);
       const { userId: __, ...newWorker } = row.worker;
       /* eslint-enable @typescript-eslint/no-unused-vars */
 
