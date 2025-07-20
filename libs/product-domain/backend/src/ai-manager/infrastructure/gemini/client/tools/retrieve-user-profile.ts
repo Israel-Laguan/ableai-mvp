@@ -1,28 +1,27 @@
-import type { UseCases } from '../../../../domain';
+import type { Interfaces, UseCases } from '../../../../domain';
 import type { ToolManager } from '../../types';
 
-import { SchemaType } from '@google/generative-ai';
+import { Errors } from '@shared';
+
+const PATH = 'RETRIEVE_USER_PROFILE_SERVICE';
 
 export function MakeRetrieveUserProfileTool(
   retrieveUserProfile: UseCases.RetrieveUserProfile
-): ToolManager<{ userId: number }> {
+): ToolManager<undefined, Interfaces.RecommendationsServerArgs> {
   return {
     definition: {
       name: 'retrieveUserProfile',
-      description: 'Retrieves the user profile based on the provided userId.',
-      parameters: {
-        type: SchemaType.OBJECT,
-        properties: {
-          userId: {
-            type: SchemaType.NUMBER,
-            description: 'The userId of the user profile to retrieve',
-          },
-        },
-        required: ['userId'],
-      },
+      description: 'Retrieves the user profile.',
     },
 
-    execute: async ({ userId }) => {
+    execute: async ({ serverArgs }) => {
+      if (!serverArgs || !serverArgs.userId) {
+        throw Errors.BadRequestError.create(
+          'Invalid input for retrieveBuyerProfile: userId is required',
+          PATH
+        );
+      }
+      const { userId } = serverArgs;
       return await retrieveUserProfile(userId);
     },
   };

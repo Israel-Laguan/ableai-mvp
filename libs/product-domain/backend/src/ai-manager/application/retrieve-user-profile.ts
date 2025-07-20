@@ -41,10 +41,6 @@ export function makeRetrieveUserProfileUseCase({
       })
     ).results[0];
 
-    if (!statistic) {
-      throw Errors.NotFoundResourceError.create('User statistic not found', PATH);
-    }
-
     return {
       privateDataUser: checkedPrivateDataUser,
       reviews,
