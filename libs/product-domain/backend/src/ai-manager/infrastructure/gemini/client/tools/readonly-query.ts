@@ -2,7 +2,10 @@ import { SchemaType } from '@google/generative-ai';
 
 import type { ToolManager } from '../../types';
 
+import { Errors } from '@shared';
 import { runMcpRequest } from '../mcp/request';
+
+const PATH = 'READONLY_QUERY_SERVICE';
 
 export function createReadonlyQueryToolManager(mcpServerUrl: string): ToolManager<{ sql: string }> {
   const toolName = 'query';
@@ -24,10 +27,16 @@ export function createReadonlyQueryToolManager(mcpServerUrl: string): ToolManage
       },
     },
 
-    execute: async toolArguments => {
+    execute: async ({ modelArgs }) => {
+      if (!modelArgs || typeof modelArgs.sql !== 'string') {
+        throw Errors.BadRequestError.create(
+          'Invalid input for retrieveBuyerProfile: userId is required',
+          PATH
+        );
+      }
       return await runMcpRequest({
         mcpServerUrl,
-        toolArguments,
+        toolArguments: modelArgs,
         toolName,
       });
     },

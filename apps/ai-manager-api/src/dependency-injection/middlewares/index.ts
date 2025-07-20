@@ -1,8 +1,19 @@
 import { Express } from '@backend';
+import { Auth } from '@product-domain/backend';
 import { firebaseService } from '../services';
 
 const {
-  Middlewares: { makeAuthorizationMiddleware },
+  Middlewares: { makeAuthorizationMiddleware, makeRoleAuthorizationMiddleware },
 } = Express;
 
+const {
+  Domain: {
+    Constants: { ROLES },
+  },
+} = Auth;
+
 export const authorizationMiddleware = makeAuthorizationMiddleware(firebaseService.authorization);
+
+export const roleAuthorizationMiddlewares = {
+  superAdminGuard: makeRoleAuthorizationMiddleware([ROLES.SUPER_ADMIN]),
+};

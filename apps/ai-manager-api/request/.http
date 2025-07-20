@@ -29,7 +29,7 @@ Authorization: Bearer {{accessToken}}
 
 {
   "skills": ["python", "C++", "Java", "PHP"],
-  "gigDate": "2025-07-17",
+  "gigDate": "<yyyy-mm-dd>",
   "latitude": 51.5,
   "longitude": 0.0,
   "radius": 30,
@@ -37,3 +37,13 @@ Authorization: Bearer {{accessToken}}
   "hourlyRate": 50,
   "required": ["mac"]
 }
+
+### Get recommendation
+POST {{baseUrlIAManager}}/recommendations
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "prompt": "Give me suggestions about my user profile."
+}
+

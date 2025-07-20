@@ -4,5 +4,9 @@ import { MatchWorkersInput } from '../../interfaces';
 
 export const assistantService = {
   handleUserPrompt: async (prompt: string) => await geminiService.handleUserPrompt({ prompt }),
+
   matchWorkers: async (input: MatchWorkersInput) => await UseCases.matchWorkers(input),
+
+  handleRecommendationRequest: async (prompt: string, userId: number) =>
+    await geminiService.profileRecommendationAssistant({ prompt, serverArgs: { userId } }),
 };

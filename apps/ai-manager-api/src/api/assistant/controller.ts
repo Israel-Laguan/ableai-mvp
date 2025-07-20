@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 
+import type { UserClaims } from '@models/auth';
+
 import { Express } from '@backend';
 import { assistantService } from './service';
 
@@ -15,4 +17,13 @@ export const assistantController = {
     const response = await assistantService.matchWorkers(req.body);
     res.send(response);
   }),
+
+  handleRecommendationRequest: tryCatchAndNext(
+    async (req: Express.Types.AuthorizedRequest<UserClaims>, res: Response) => {
+      const { prompt } = req.body;
+      const { id } = req.user;
+      const response = await assistantService.handleRecommendationRequest(prompt, id);
+      res.send(response);
+    }
+  ),
 };
