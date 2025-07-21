@@ -72,7 +72,7 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
         isNotBlankSQL(sqlRequiredArray)
           ? sql`EXISTS (
                 SELECT 1 FROM unnest(string_to_array(${skillSchema.equipment}, ',')) AS eq
-                WHERE eq ILIKE ANY(${sqlRequiredArray})
+                WHERE trim(eq) ILIKE ANY(${sqlRequiredArray})
               )`
           : blankSql,
 

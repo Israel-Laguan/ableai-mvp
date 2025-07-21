@@ -15,7 +15,7 @@ export const assistantService = {
     }),
 
   handleWorkerRecommendationRequest: async (userId: number) =>
-    await geminiService.buyerProfileRecommendationAssistant({
+    await geminiService.workerProfileRecommendationAssistant({
       prompt:
         'give me some suggestion about my user and my worker profile. Use the provided call functions to rich this goal.',
       serverArgs: { userId },
