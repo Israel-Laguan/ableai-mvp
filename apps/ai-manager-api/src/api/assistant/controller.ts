@@ -18,11 +18,18 @@ export const assistantController = {
     res.send(response);
   }),
 
-  handleRecommendationRequest: tryCatchAndNext(
+  handleBuyerRecommendationRequest: tryCatchAndNext(
     async (req: Express.Types.AuthorizedRequest<UserClaims>, res: Response) => {
-      const { prompt } = req.body;
       const { id } = req.user;
-      const response = await assistantService.handleRecommendationRequest(prompt, id);
+      const response = await assistantService.handleBuyerRecommendationRequest(id);
+      res.send(response);
+    }
+  ),
+
+  handleWorkerRecommendationRequest: tryCatchAndNext(
+    async (req: Express.Types.AuthorizedRequest<UserClaims>, res: Response) => {
+      const { id } = req.user;
+      const response = await assistantService.handleWorkerRecommendationRequest(id);
       res.send(response);
     }
   ),

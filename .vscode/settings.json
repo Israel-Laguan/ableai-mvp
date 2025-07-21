@@ -25,6 +25,7 @@
     "ableai",
     "fkey",
     "geopoint",
+    "ILIKE",
     "ISQL",
     "modelcontextprotocol",
     "postgis",
