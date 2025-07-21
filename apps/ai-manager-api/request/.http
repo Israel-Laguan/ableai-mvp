@@ -38,12 +38,15 @@ Authorization: Bearer {{accessToken}}
   "required": ["mac"]
 }
 
-### Get recommendation
-POST {{baseUrlIAManager}}/recommendations
+### Get buyer recommendation
+GET {{baseUrlIAManager}}/recommendations/buyer
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
-{
-    "prompt": "Give me suggestions about my user profile."
-}
+### Get worker recommendation
+GET {{baseUrlIAManager}}/recommendations/worker
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+
 

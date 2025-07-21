@@ -3,7 +3,12 @@ import { Router } from 'express';
 import { assistantController } from './controller';
 import { Middlewares, Validation } from '../../dependency-injection';
 
-const { handleRecommendationRequest, handleRequest, matchWorkers } = assistantController;
+const {
+  handleBuyerRecommendationRequest,
+  handleWorkerRecommendationRequest,
+  handleRequest,
+  matchWorkers,
+} = assistantController;
 const { validateAssistantInput, validateMatchWorkersInput } = Validation.InputValidation;
 const {
   authorizationMiddleware,
@@ -25,11 +30,19 @@ assistantsRouter.post(
   validateMatchWorkersInput,
   matchWorkers
 );
-assistantsRouter.post(
-  '/recommendations',
+
+const RECOMMENDATIONS = '/recommendations';
+
+assistantsRouter.get(
+  RECOMMENDATIONS + '/buyer',
   authorizationMiddleware,
-  validateAssistantInput,
-  handleRecommendationRequest
+  handleBuyerRecommendationRequest
+);
+
+assistantsRouter.get(
+  RECOMMENDATIONS + '/worker',
+  authorizationMiddleware,
+  handleWorkerRecommendationRequest
 );
 
 export default assistantsRouter;

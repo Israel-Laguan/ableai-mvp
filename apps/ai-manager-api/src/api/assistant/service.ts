@@ -7,6 +7,17 @@ export const assistantService = {
 
   matchWorkers: async (input: MatchWorkersInput) => await UseCases.matchWorkers(input),
 
-  handleRecommendationRequest: async (prompt: string, userId: number) =>
-    await geminiService.profileRecommendationAssistant({ prompt, serverArgs: { userId } }),
+  handleBuyerRecommendationRequest: async (userId: number) =>
+    await geminiService.buyerProfileRecommendationAssistant({
+      prompt:
+        'give me some suggestion about my user and my buyer profile. Use the provided call functions to rich this goal.',
+      serverArgs: { userId },
+    }),
+
+  handleWorkerRecommendationRequest: async (userId: number) =>
+    await geminiService.buyerProfileRecommendationAssistant({
+      prompt:
+        'give me some suggestion about my user and my worker profile. Use the provided call functions to rich this goal.',
+      serverArgs: { userId },
+    }),
 };
