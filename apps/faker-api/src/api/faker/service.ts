@@ -45,29 +45,45 @@ const {
 } = repositories;
 
 const FAKE_BADGES = ['Top Performer', 'Outstanding Contributor', 'Innovation Award'];
-const FAKE_EQUIPMENT = ['Laptop', 'Smartphone', 'desktop', 'mac', 'camera', 'microphone'];
-const FAKE_SKILLS = [
-  'JavaScript',
-  'Python',
-  'Java',
-  'C#',
-  'Ruby',
-  'PHP',
-  'Go',
-  'Swift',
-  'Kotlin',
-  'Bartender',
-];
-
-const FAKE_BARTENDER_EQUIPMENT = [
+const FAKE_EQUIPMENT = [
   'Cocktail Shaker',
-  'Black shirt',
-  'apron',
-  'outdoor',
-  'indoor',
-  'bar tools',
+  'POS Terminal',
+  'Serving Tray',
+  'Wine Opener',
+  'Coffee Machine',
+  'Apron',
   'Bar Spoon',
-  'Jigger',
+  'Ice Bucket',
+  'Glassware',
+  'Order Pad',
+  'Bottle Opener',
+  'Uniform',
+  'Espresso Machine',
+  'Wine Glass',
+  'Cutlery Set',
+  'Luggage Cart',
+  'Security Radio',
+];
+const FAKE_SKILLS = [
+  'Bartender',
+  'Waitstaff',
+  'Barista',
+  'Sommelier',
+  'Host',
+  `Maitre d'hotel`,
+  'Banquet Server',
+  'Mixologist',
+  'Hotel Receptionist',
+  'Concierge',
+  'Event Coordinator',
+  'Porter',
+  'Doorman',
+  'Usher',
+  'Banquet Captain',
+  'Front Office Manager',
+  'Night Auditor',
+  'Box Office Attendant',
+  'Security Guard',
 ];
 
 export const fakerService = {
@@ -288,25 +304,10 @@ export const fakerService = {
   },
 
   generateFakeSkill: async (input: FakeSkillInput) => {
-    let equipment = '';
-
-    const name = faker.helpers.arrayElement(FAKE_SKILLS);
-
-    if (name === 'Bartender') {
-      equipment = faker.helpers
-        .arrayElements(FAKE_BARTENDER_EQUIPMENT, {
-          min: 5,
-          max: FAKE_BARTENDER_EQUIPMENT.length,
-        })
-        .join(', ');
-    } else {
-      equipment = faker.helpers.arrayElements(FAKE_EQUIPMENT, { min: 1, max: 2 }).join(', ');
-    }
-
     const fakeSkill: FakeSkill = {
-      name,
+      name: faker.helpers.arrayElement(FAKE_SKILLS),
       badgesAwarded: String(faker.helpers.arrayElements(FAKE_BADGES, { min: 1, max: 3 })),
-      equipment,
+      equipment: faker.helpers.arrayElements(FAKE_EQUIPMENT, { min: 1, max: 2 }).join(', '),
       experienceMonth: faker.number.int({ min: 1, max: 120 }),
       gigsCompleted: faker.number.int({ min: 1, max: 100 }),
       imagesUrl: faker.image.url(),
