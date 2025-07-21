@@ -1,5 +1,7 @@
-import { FunctionDeclaration, SchemaType } from '@google/generative-ai';
-import { ToolManager } from '../../types';
+import { SchemaType } from '@google/generative-ai';
+
+import type { ToolManager } from '../../types';
+
 import { runMcpRequest } from '../mcp/request';
 
 export function createListResourceToolManager(mcpServerUrl: string): ToolManager {
@@ -14,7 +16,8 @@ export function createListResourceToolManager(mcpServerUrl: string): ToolManager
         properties: {},
         required: [],
       },
-    } as const as FunctionDeclaration,
+    },
+
     execute: async () => {
       return await runMcpRequest({
         mcpServerUrl,

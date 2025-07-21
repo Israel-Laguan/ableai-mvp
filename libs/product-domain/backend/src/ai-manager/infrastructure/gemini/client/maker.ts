@@ -2,14 +2,15 @@ import type { ChatSession, FunctionDeclaration, ModelParams, Part } from '@googl
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
+import type { Interfaces } from '../../../domain';
 import type { LlmGeminiServiceConfig, ToolsManager } from '../types';
 
 import { Errors } from '@shared';
 
 const PATH = 'GEMINI_CLIENT';
 
-export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) {
-  const toolsManager: ToolsManager = {
+export function makeGeminiClient<ServerArgs>({ apiKey, llmConfig }: LlmGeminiServiceConfig) {
+  const toolsManager: ToolsManager<unknown, ServerArgs> = {
     undefined: { execute: async () => 'Unknown tool.' },
   };
 
@@ -22,7 +23,7 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
       })
     : [];
 
-  const llmConfig_1: ModelParams = {
+  const llmOriginalConfig: ModelParams = {
     ...llmConfig,
     tools: [{ functionDeclarations }],
   };
@@ -33,16 +34,16 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
   }) => Promise<string> = async ({ accumulatedText }) => accumulatedText.join('');
 
   if (
-    llmConfig_1.generationConfig?.responseMimeType === 'application/json' &&
-    llmConfig_1.generationConfig?.responseSchema
+    llmOriginalConfig.generationConfig?.responseMimeType === 'application/json' &&
+    llmOriginalConfig.generationConfig?.responseSchema
   ) {
-    const llmConfig_2 = JSON.parse(JSON.stringify(llmConfig_1));
+    const llmWithResponseSchemaConfig = JSON.parse(JSON.stringify(llmOriginalConfig));
 
-    delete llmConfig_1.generationConfig.responseMimeType;
-    delete llmConfig_1.generationConfig.responseSchema;
+    delete llmOriginalConfig.generationConfig.responseMimeType;
+    delete llmOriginalConfig.generationConfig.responseSchema;
 
     const llmWithOutputSchema = new GoogleGenerativeAI(apiKey).getGenerativeModel({
-      ...llmConfig_2,
+      ...llmWithResponseSchemaConfig,
     });
 
     getFinalAnswer = async ({ chat }) => {
@@ -58,12 +59,15 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
     };
   }
 
-  const llm = new GoogleGenerativeAI(apiKey).getGenerativeModel(llmConfig_1);
+  const llm = new GoogleGenerativeAI(apiKey).getGenerativeModel(llmOriginalConfig);
 
   const mcpContext = `Reminder: You are interacting with an MCP server. You can use the available function calls to query information, execute actions, and resolve your own doubts. You may perform multiple queries to the MCP server during the conversation. If you need more context, request additional information using function calls.`;
 
   // Conversational function call loop
-  return async ({ prompt }: { prompt: string }): Promise<string> => {
+  return async ({
+    prompt,
+    serverArgs,
+  }: Interfaces.AssistantsInput<ServerArgs>): Promise<string> => {
     const chat = llm.startChat();
     const accumulatedText: string[] = [];
 
@@ -102,12 +106,19 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
                 throw Errors.InternalServerError.create(`Error: Tool "${name}" not found.`, PATH);
               }
 
-              const toolResult = await tool.execute(args);
+              const toolResult = await tool.execute({ modelArgs: args, serverArgs });
 
               toolResponsePart.functionResponse.response = { result: toolResult, mcpContext };
             } catch (error) {
-              console.error('Error while running the too: \n', { name, args });
               const errorMessage = error instanceof Error ? error.message : String(error);
+
+              console.error(
+                Errors.InternalServerError.create(
+                  `Error while running the tool: ${JSON.stringify({ name, args, errorMessage })}`,
+                  PATH
+                )
+              );
+
               toolResponsePart.functionResponse.response = {
                 error: errorMessage,
               };
@@ -131,7 +142,7 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
 
         const last = accumulatedText[accumulatedText.length - 1];
 
-        if (last.trim().endsWith(':') && remainingLoops > 0) {
+        if (typeof last === 'string' && last.trim().endsWith(':') && remainingLoops > 0) {
           remainingLoops--;
 
           if (remainingLoops > 0) {
@@ -148,7 +159,14 @@ export function makeGeminiClient({ apiKey, llmConfig }: LlmGeminiServiceConfig) 
         return await getFinalAnswer({ accumulatedText, chat });
       }
     } catch (error) {
-      console.error('Error in LLM tool manager:', error);
+      console.error(
+        Errors.InternalServerError.create(
+          `Error in LLM tool manager:
+        ${error instanceof Error ? error.message : String(error)}`,
+          PATH
+        )
+      );
+
       return `Sorry, I couldn't complete your request at this time. Please try again later.`;
     }
   };

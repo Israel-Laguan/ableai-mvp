@@ -22,6 +22,8 @@ export const firebaseService = {
 
   runBeforeRegister: services.makeRunBeforeRegisterService({ auth }),
 
+  runInSwitchUserRole: services.MakeFirebaseSwitchUserRoleService({ auth }),
+
   update: services.makeFirebaseUpdateService({
     auth,
   }),

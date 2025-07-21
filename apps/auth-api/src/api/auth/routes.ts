@@ -29,4 +29,11 @@ authRouter.patch(
   updateUser
 );
 
+authRouter.patch(
+  '/user/:id/switch-role',
+  authorizationMiddleware,
+  superAdminGuard,
+  authController.switchUserRole
+);
+
 export default authRouter;

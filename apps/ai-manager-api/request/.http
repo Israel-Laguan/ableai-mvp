@@ -21,3 +21,32 @@ Content-Type: application/json
 {
     "prompt": "What are the available tables in the database?"
 }
+
+### Match workers based on criteria
+POST {{baseUrlIAManager}}/match-workers
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "skills": ["python", "C++", "Java", "PHP"],
+  "gigDate": "<yyyy-mm-dd>",
+  "latitude": 51.5,
+  "longitude": 0.0,
+  "radius": 30,
+  "limit": 20,
+  "hourlyRate": 50,
+  "required": ["mac"]
+}
+
+### Get buyer recommendation
+GET {{baseUrlIAManager}}/recommendations/buyer
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Get worker recommendation
+GET {{baseUrlIAManager}}/recommendations/worker
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+
+
