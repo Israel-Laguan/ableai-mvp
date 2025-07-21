@@ -11,7 +11,8 @@ export function MakeRetrieveWorkerProfileTool(
   return {
     definition: {
       name: 'retrieveWorkerProfile',
-      description: 'Retrieves the worker profile.',
+      description: `Retrieves the worker profile.
+        If the worker is not found. Invite the user to create a worker profile.`,
     },
 
     execute: async ({ serverArgs }) => {
