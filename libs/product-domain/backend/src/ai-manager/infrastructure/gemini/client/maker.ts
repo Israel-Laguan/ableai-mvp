@@ -23,7 +23,7 @@ export function makeGeminiClient<ServerArgs>({ apiKey, llmConfig }: LlmGeminiSer
       })
     : [];
 
-  const llmConfig1: ModelParams = {
+  const llmOriginalConfig: ModelParams = {
     ...llmConfig,
     tools: [{ functionDeclarations }],
   };
@@ -34,16 +34,16 @@ export function makeGeminiClient<ServerArgs>({ apiKey, llmConfig }: LlmGeminiSer
   }) => Promise<string> = async ({ accumulatedText }) => accumulatedText.join('');
 
   if (
-    llmConfig1.generationConfig?.responseMimeType === 'application/json' &&
-    llmConfig1.generationConfig?.responseSchema
+    llmOriginalConfig.generationConfig?.responseMimeType === 'application/json' &&
+    llmOriginalConfig.generationConfig?.responseSchema
   ) {
-    const llmConfig2 = JSON.parse(JSON.stringify(llmConfig1));
+    const llmWithResponseSchemaConfig = JSON.parse(JSON.stringify(llmOriginalConfig));
 
-    delete llmConfig1.generationConfig.responseMimeType;
-    delete llmConfig1.generationConfig.responseSchema;
+    delete llmOriginalConfig.generationConfig.responseMimeType;
+    delete llmOriginalConfig.generationConfig.responseSchema;
 
     const llmWithOutputSchema = new GoogleGenerativeAI(apiKey).getGenerativeModel({
-      ...llmConfig2,
+      ...llmWithResponseSchemaConfig,
     });
 
     getFinalAnswer = async ({ chat }) => {
@@ -59,7 +59,7 @@ export function makeGeminiClient<ServerArgs>({ apiKey, llmConfig }: LlmGeminiSer
     };
   }
 
-  const llm = new GoogleGenerativeAI(apiKey).getGenerativeModel(llmConfig1);
+  const llm = new GoogleGenerativeAI(apiKey).getGenerativeModel(llmOriginalConfig);
 
   const mcpContext = `Reminder: You are interacting with an MCP server. You can use the available function calls to query information, execute actions, and resolve your own doubts. You may perform multiple queries to the MCP server during the conversation. If you need more context, request additional information using function calls.`;
 
