@@ -1,4 +1,4 @@
 export * from './login';
 export * from './register';
-export * from './switch-app-role';
+export * from './switch-user-role';
 export * from './update';

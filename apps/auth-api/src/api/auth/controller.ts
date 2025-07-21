@@ -30,6 +30,16 @@ export const authController = {
     res.status(HTTP_STATUS_CODE.CREATED).json(result);
   }),
 
+  switchUserRole: tryCatchAndNext(async (req: Request, res: Response) => {
+    const result = await authService.switchUserRole({
+      role: req.body.role,
+      userId: req.params.id,
+      customInput: req.body.customInput,
+    });
+
+    res.status(HTTP_STATUS_CODE.UPDATED).json(result);
+  }),
+
   updateUser: tryCatchAndNext(
     async (req: Express.Types.AuthorizedRequest<UpdateInput['idTokenClaims']>, res: Response) => {
       const result = await authService.updateUser({

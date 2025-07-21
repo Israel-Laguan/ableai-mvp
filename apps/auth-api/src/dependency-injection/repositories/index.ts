@@ -4,13 +4,17 @@ import { gigDb, privateGigDb } from '../../db';
 const {
   Infra: {
     Drizzle: {
-      Repositories: { makeDrizzlePrivateUserDataRepository, makeDrizzleUserRepository },
+      Repositories: {
+        makeDrizzlePrivateUserDataRepository,
+        makeDrizzleRoleRepository,
+        makeDrizzleUserRepository,
+      },
     },
   },
 } = Auth;
 
-export const userRepository = makeDrizzleUserRepository({ db: gigDb });
-
 export const privateDataUserRepository = makeDrizzlePrivateUserDataRepository({
   db: privateGigDb,
 });
+export const roleRepository = makeDrizzleRoleRepository({ db: gigDb });
+export const userRepository = makeDrizzleUserRepository({ db: gigDb });

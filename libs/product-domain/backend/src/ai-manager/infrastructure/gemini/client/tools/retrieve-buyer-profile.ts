@@ -11,7 +11,8 @@ export function MakeRetrieveBuyerProfileTool(
   return {
     definition: {
       name: 'retrieveBuyerProfile',
-      description: 'Retrieves the buyer profile based on the provided userId.',
+      description: `Retrieves the buyer profile.
+        If the buyer is not found. Invite the user to create a buyer profile.`,
     },
 
     execute: async ({ serverArgs }) => {
