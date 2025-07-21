@@ -1,5 +1,5 @@
 import { UseCases } from '../../dependency-injection';
-import { LoginInput, RegisterInput, UpdateInput } from '../../interfaces';
+import { LoginInput, RegisterInput, SwitchUserRoleInput, UpdateInput } from '../../interfaces';
 
 export const authService = {
   async login(input: LoginInput) {
@@ -8,6 +8,10 @@ export const authService = {
 
   async register(input: RegisterInput) {
     return await UseCases.register(input);
+  },
+
+  async switchUserRole(input: SwitchUserRoleInput) {
+    return await UseCases.switchUserRole(input);
   },
 
   async updateUser(input: UpdateInput) {
