@@ -1,8 +1,14 @@
 import type { PrivateDataUser } from '@models/auth';
 import type { ISQLCustomRepository, ISQLRepositoryMaker } from '@models/shared';
 
+export type GetNearPrivateDataUserIds = (
+  latitude: number,
+  longitude: number,
+  radius?: number
+) => Promise<number[]>;
+
 interface CustomMethods {
-  findNearUsers(privateDataUserId: string, distanceInKm?: number): Promise<PrivateDataUser[]>;
+  getNearPrivateDataUserIds: GetNearPrivateDataUserIds;
 }
 
 export type PrivateDataUserRepository = ISQLCustomRepository<PrivateDataUser, CustomMethods>;

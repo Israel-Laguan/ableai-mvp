@@ -1,5 +1,7 @@
 import type { FunctionDeclaration, ModelParams, ObjectSchema, Schema } from '@google/generative-ai';
 
+import type { Interfaces } from '../../../domain';
+
 export interface JsonRpcRequest<Params = unknown> {
   jsonrpc: '2.0';
   method: string;
@@ -27,9 +29,9 @@ export interface McpExecutorConfig<ToolArgs = unknown> {
   method?: 'tools/call' | 'resources/list';
 }
 
-export interface ToolManager<ToolArgs = unknown, ToolOutput = unknown> {
+export interface ToolManager<ToolArgs = unknown, ServerArgs = unknown, ToolOutput = unknown> {
   definition: FunctionDeclaration;
-  execute: (args: ToolArgs) => Promise<ToolOutput>;
+  execute: (input: Interfaces.FunctionCallsInput<ToolArgs, ServerArgs>) => Promise<ToolOutput>;
 }
 
 export interface LlmGeminiServiceConfig {
@@ -37,7 +39,10 @@ export interface LlmGeminiServiceConfig {
   llmConfig: Omit<ModelParams, 'tools'> & { tools?: ToolManager[] };
 }
 
-export type ToolsManager = Record<string, Omit<ToolManager, 'definition'>>;
+export type ToolsManager<ToolArgs = unknown, ServerArgs = unknown, ToolOutput = unknown> = Record<
+  string,
+  Omit<ToolManager<ToolArgs, ServerArgs, ToolOutput>, 'definition'>
+>;
 
 export type TypedObjectSchema<TSchema extends object> = ObjectSchema & {
   properties: {

@@ -1,8 +1,60 @@
-import { Schema, SchemaType } from '@google/generative-ai';
+import type { FunctionDeclarationSchema, Schema } from '@google/generative-ai';
+
+import { SchemaType } from '@google/generative-ai';
 
 import type { Slot } from '@models/gig';
 import type { Interfaces } from '../../../domain';
 import type { TypedObjectSchema } from '../types';
+
+export const MatchWorkersInputSchema: FunctionDeclarationSchema = {
+  type: SchemaType.OBJECT,
+  properties: {
+    userId: {
+      type: SchemaType.NUMBER,
+      description: 'The id of the user to match workers for.',
+    },
+    gigDate: {
+      type: SchemaType.STRING,
+      description: 'The a valid timestamp in start date for the workers availability.',
+    },
+    hourlyRate: {
+      type: SchemaType.NUMBER,
+      description: 'The maximum hourly rate for the workers.',
+    },
+    latitude: {
+      type: SchemaType.NUMBER,
+      description: 'The latitude of the user location to match workers for.',
+    },
+    longitude: {
+      type: SchemaType.NUMBER,
+      description: 'The latitude of the user location to match workers for.',
+    },
+    limit: {
+      type: SchemaType.NUMBER,
+      description: 'The maximum number of workers to return.',
+    },
+    radius: {
+      type: SchemaType.NUMBER,
+      description: 'The distance radius of the search.',
+    },
+    required: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.STRING,
+        description: 'The required equipment for the workers.',
+      },
+      description: 'The required equipment for the workers to match.',
+    },
+    skills: {
+      type: SchemaType.ARRAY,
+      items: {
+        type: SchemaType.STRING,
+        description: 'The skills to match workers for.',
+      },
+    },
+  },
+  required: ['userId', 'skills', 'gigDate'],
+} as TypedObjectSchema<Interfaces.MatchWorkersInput>;
 
 export const MatchWorkersOutputSchema: Schema = {
   type: SchemaType.ARRAY,
@@ -42,7 +94,7 @@ export const MatchWorkersOutputSchema: Schema = {
         },
       },
 
-      slot: {
+      slots: {
         type: SchemaType.ARRAY,
         items: {
           type: SchemaType.OBJECT,

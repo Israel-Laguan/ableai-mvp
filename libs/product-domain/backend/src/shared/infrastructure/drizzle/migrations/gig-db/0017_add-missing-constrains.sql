@@ -1,13 +1,14 @@
-ALTER TABLE buyers DROP CONSTRAINT IF EXISTS buyers_user_id_fkey;
-ALTER TABLE gig_works DROP CONSTRAINT IF EXISTS gig_works_buyer_id_fkey;
-ALTER TABLE gig_work_teams DROP CONSTRAINT IF EXISTS gig_work_teams_gig_work_id_fkey;
-ALTER TABLE recommendations DROP CONSTRAINT IF EXISTS recommendations_worker_id_fkey;
-ALTER TABLE recommendations DROP CONSTRAINT IF EXISTS recommendations_user_id_fkey;
-ALTER TABLE reviews DROP CONSTRAINT IF EXISTS review_user_id_fkey;
-ALTER TABLE skills DROP CONSTRAINT IF EXISTS skills_worker_id_fkey;
-ALTER TABLE skill_hires DROP CONSTRAINT IF EXISTS skill_hires_buyer_id_fkey;
-ALTER TABLE statistics DROP CONSTRAINT IF EXISTS statistics_user_id_fkey;
-ALTER TABLE workers DROP CONSTRAINT IF EXISTS worker_user_id_fkey;
+ALTER TABLE "buyers" DROP CONSTRAINT IF EXISTS "buyers_user_id_fkey";
+ALTER TABLE "gig_works" DROP CONSTRAINT IF EXISTS "gig_works_buyer_id_fkey";
+ALTER TABLE "gig_work_teams" DROP CONSTRAINT IF EXISTS "gig_work_teams_gig_work_id_fkey";
+ALTER TABLE "recommendations" DROP CONSTRAINT IF EXISTS "recommendations_worker_id_fkey";
+ALTER TABLE "recommendations" DROP CONSTRAINT IF EXISTS "recommendations_user_id_fkey";
+ALTER TABLE "reviews" DROP CONSTRAINT IF EXISTS "review_user_id_fkey";
+ALTER TABLE "skills" DROP CONSTRAINT IF EXISTS "skills_worker_id_fkey";
+ALTER TABLE "skill_hires" DROP CONSTRAINT IF EXISTS "skill_hires_buyer_id_fkey";
+ALTER TABLE statistics DROP CONSTRAINT IF EXISTS "statistics_user_id_fkey";
+ALTER TABLE "workers" DROP CONSTRAINT IF EXISTS "worker_user_id_fkey";
+ALTER TABLE "gig_work_teams" DROP CONSTRAINT IF EXISTS "gig_work_teams_worker_id_fkey";
 
 ALTER TABLE buyers
   ADD CONSTRAINT buyers_user_id_fkey

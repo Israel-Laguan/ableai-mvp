@@ -13,3 +13,11 @@ Content-Type: application/json
 
 ### DELETE Remove Fake User Data
 DELETE {{baseUrlFaker}}/user/<userId>
+
+### POST Generate Fake Workers
+POST {{baseUrlFaker}}/workers
+Content-Type: application/json
+
+{
+    "limit": 1000
+}
