@@ -22,4 +22,5 @@ export const RecommendationOutputSchema: Schema = {
       },
     },
   } as TypedObjectSchema<Interfaces.Recommendations>,
+  minItems: 1,
 };

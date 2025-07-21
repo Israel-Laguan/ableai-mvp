@@ -59,7 +59,7 @@ export const geminiService = {
     },
   }),
 
-  profileRecommendationAssistant:
+  buyerProfileRecommendationAssistant:
     makeGeminiClient<AiManager.Domain.Interfaces.RecommendationsServerArgs>({
       apiKey: env.AI_API_KEY,
 
@@ -85,6 +85,43 @@ export const geminiService = {
         },
         tools: [
           MakeRetrieveBuyerProfileTool(UseCases.retrieveBuyerProfile),
+          MakeRetrieveUserProfileTool(UseCases.retrieveUserProfile),
+          MakeRetrieveRawData(
+            'retrieveHospitalityAndEventsSkillsTaxonomy',
+            'Retrieves useful info about the hospitality and events skills taxonomy',
+            Ai.Instructions.HOSPITALITY_AND_EVENTS_SKILLS_TAXONOMY
+          ),
+        ],
+
+        systemInstruction: Ai.Instructions.gigDbAssistantInstructions,
+      },
+    }),
+
+  workerProfileRecommendationAssistant:
+    makeGeminiClient<AiManager.Domain.Interfaces.RecommendationsServerArgs>({
+      apiKey: env.AI_API_KEY,
+
+      llmConfig: {
+        model: 'gemini-2.0-flash',
+        generationConfig: {
+          temperature: 0.2,
+          topP: 0.95,
+          stopSequences: ['\n\n'],
+          topK: 40,
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: SchemaType.OBJECT,
+            properties: {
+              text: {
+                type: SchemaType.STRING,
+                description: 'The response text from the AI model.',
+              },
+              recommendations: RecommendationOutputSchema,
+            },
+            required: ['text', 'recommendations'],
+          },
+        },
+        tools: [
           MakeRetrieveUserProfileTool(UseCases.retrieveUserProfile),
           MakeRetrieveWorkerProfileTool(UseCases.retrieveWorkerProfile),
           MakeRetrieveRawData(

@@ -35,6 +35,7 @@ const EQUIPMENT_MATCH_COUNT = sql.raw('equipment_match_count');
 const baseOrderBy = [
   sql`${statistics.wouldWork.name} DESC`,
   sql`${skillSchema.gigsCompleted.name} DESC`,
+  sql`${skillSchema.ratePerHour} ASC`,
 ];
 
 export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
@@ -65,11 +66,14 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
 
     const where = [
       sql`${workers.userId} = ANY(${sqlUserIdsArray})`,
-      sql`${skillSchema.name} = ANY(${sqlSkillsArray})`,
+      sql`${skillSchema.name} ILIKE ANY(${sqlSkillsArray})`,
     ].concat(
       [
         isNotBlankSQL(sqlRequiredArray)
-          ? sql`string_to_array(${skillSchema.equipment}, ',') && ${sqlRequiredArray}`
+          ? sql`EXISTS (
+                SELECT 1 FROM unnest(string_to_array(${skillSchema.equipment}, ',')) AS eq
+                WHERE trim(eq) ILIKE ANY(${sqlRequiredArray})
+              )`
           : blankSql,
 
         isNotBlankSQL(sqlHourlyRate)
@@ -85,10 +89,9 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
     );
 
     const orderBy = baseOrderBy.concat(
-      [
-        isNotBlankSQL(sqlRequiredArray) ? sql`${EQUIPMENT_MATCH_COUNT} DESC` : blankSql,
-        isNotBlankSQL(sqlHourlyRate) ? sql`${skillSchema.ratePerHour} ASC` : blankSql,
-      ].filter(isNotBlankSQL)
+      [isNotBlankSQL(sqlRequiredArray) ? sql`${EQUIPMENT_MATCH_COUNT} DESC` : blankSql].filter(
+        isNotBlankSQL
+      )
     );
 
     const query = sql`
