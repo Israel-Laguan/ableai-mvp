@@ -10,6 +10,6 @@ const apiV1 = Router();
 
 apiV1.use(pingRoutes);
 apiV1.use(limiterMiddleware.middleware, gigRouter);
-apiV1.use(buyerRouter);
+apiV1.use(limiterMiddleware.middleware, buyerRouter);
 
 export default apiV1;

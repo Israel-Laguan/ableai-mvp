@@ -12,11 +12,13 @@ export function makeRegisterBuyerUseCase({
     return await runInTransaction(async repositoryManager => {
       const buyerRepository = repositoryManager.getRepository(BUYER_REPOSITORY);
       const statisticRepository = repositoryManager.getRepository(STATISTIC_REPOSITORY);
-      const [buyer] = await buyerRepository.create(input);
-      const statistic = await statisticRepository.create({
-        appRole: APP_ROLE.BUYER,
-        userId: input.userId,
-      });
+      const [[buyer], statistic] = await Promise.all([
+        buyerRepository.create(input),
+        statisticRepository.create({
+          appRole: APP_ROLE.BUYER,
+          userId: input.userId,
+        }),
+      ]);
 
       return { buyer, statistic };
     });

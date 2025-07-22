@@ -11,6 +11,6 @@ export const RegisterBuyerSchema =
     businessRegistrationNumber: z.string().optional(),
     businessRole: z.string().optional(),
     representativeId: z.string().optional(),
-    socialNetworkUrl: z.string().optional(),
-    videoUrl: z.string().optional(),
+    socialNetworkUrl: z.string().url().optional(),
+    videoUrl: z.string().url().optional(),
   }).strict();
