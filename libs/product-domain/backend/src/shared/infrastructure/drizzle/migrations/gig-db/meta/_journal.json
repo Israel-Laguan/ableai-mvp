@@ -155,6 +155,13 @@
       "when": 1753190641215,
       "tag": "0021_update-schemas",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1753207008998,
+      "tag": "0022_fix-gig-work-teams",
+      "breakpoints": true
     }
   ]
 }
