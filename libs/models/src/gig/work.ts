@@ -18,6 +18,7 @@ export interface GigWorkTeam extends IBase {
   delegateTo: number;
   endDateOffer: Date;
   endGig?: boolean;
+  expenses?: number;
   feedback?: string;
   gigWorkId: number;
   isAcceptedOffer: boolean;

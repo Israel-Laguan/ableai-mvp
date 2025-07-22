@@ -20,6 +20,6 @@ export interface Payment extends IBase {
 
 export interface PaymentCard {
   provider: string;
-  cardNumber: number;
+  cardNumber: string;
   privateDataUserId: number;
 }
