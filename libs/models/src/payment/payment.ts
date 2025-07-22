@@ -10,7 +10,7 @@ type EntityType = keyof typeof ENTITY_TYPE;
 export interface Payment extends IBase {
   entityId: number;
   entityType: EntityType;
-  invoiceUrl: string;
+  invoiceUrl?: string;
   payId: string;
   provider: string;
   status: PaymentStatus;
