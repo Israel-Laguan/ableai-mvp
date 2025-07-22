@@ -148,6 +148,13 @@
       "when": 1753138959908,
       "tag": "0020_add-payments",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1753190641215,
+      "tag": "0021_update-schemas",
+      "breakpoints": true
     }
   ]
 }
