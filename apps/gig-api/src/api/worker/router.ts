@@ -15,6 +15,6 @@ router.post(
 );
 
 const suffix = '/worker';
-const buyerRouter = Router().use(suffix, router);
+const workerRouter = Router().use(suffix, router);
 
-export default buyerRouter;
+export default workerRouter;

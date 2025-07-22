@@ -6,6 +6,6 @@ import { Infra } from '../../../../shared';
 
 export const RegisterWorkerSchema =
   Infra.Zod.Utils.makeZodObjectSchema<Interfaces.RegisterWorkerRequestBody>({
-    socialNetworkUrl: z.string().optional(),
+    socialNetworkUrl: z.string().url().optional(),
     tags: z.string().optional(),
   }).strict();
