@@ -1,4 +1,5 @@
-import { IBase } from '../shared';
+import type { IBase } from '../shared';
+import type { Constants } from '.';
 
 export interface GigWork extends IBase {
   additionalInstructions?: string;
@@ -13,6 +14,8 @@ export interface GigWork extends IBase {
   title: string;
 }
 
+type GigWorkStatus = keyof typeof Constants.GIG_WORK_TEAM_STATUS;
+
 export interface GigWorkTeam extends IBase {
   awardedBadge?: string;
   delegateTo: number;
@@ -21,8 +24,9 @@ export interface GigWorkTeam extends IBase {
   feedback?: string;
   gigWorkId: number;
   isAcceptedOffer: boolean;
-  paymentId: number;
+  paymentId?: number;
   skillId: number;
+  status: GigWorkStatus;
   tips?: number;
   totalPayment: number;
   workerId: number;
