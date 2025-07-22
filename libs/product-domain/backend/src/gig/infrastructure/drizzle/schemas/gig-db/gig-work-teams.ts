@@ -9,6 +9,7 @@ export const gigWorkTeams = Schemas.withBaseSchema<GigWorkTeam>('gig_work_teams'
   delegateTo: p.integer('delegate_to'),
   endDateOffer: p.timestamp('end_date_offer'),
   endGig: p.boolean('end_gig'),
+  expenses: p.numeric('expenses', { mode: 'number' }).default(0),
   feedback: p.varchar('feedback'),
   gigWorkId: p.integer('gig_work_id'),
   isAcceptedOffer: p.boolean('is_accepted_offer'),
