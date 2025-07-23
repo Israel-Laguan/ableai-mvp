@@ -20,7 +20,7 @@ export const gigWorkTeams = Schemas.withBaseSchema<GigWorkTeam>('gig_work_teams'
   paymentId: p.integer('payment_id'),
   skillId: p.integer('skill_id'),
   status: p
-    .varchar({
+    .varchar('status', {
       enum: [PENDING, ACCEPTED, REJECTED, COMPLETED, CANCELLED, PAID],
     })
     .default(PENDING),
