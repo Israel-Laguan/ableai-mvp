@@ -9,7 +9,7 @@ const { HTTP_STATUS_CODE } = CONSTANTS;
 const { tryCatchAndNext } = Express;
 
 export const gigController = {
-  registerWorker: tryCatchAndNext(async (req: Request, res: Response) => {
+  registerGigWorkTeam: tryCatchAndNext(async (req: Request, res: Response) => {
     const result = await gigService.registerGigWorkTeam(req.body);
     res.status(HTTP_STATUS_CODE.CREATED).json(result);
   }),
