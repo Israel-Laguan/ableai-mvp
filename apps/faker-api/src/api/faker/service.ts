@@ -26,6 +26,7 @@ import type {
   GenerateFakeWorkersInput,
 } from '../../interfaces';
 
+import { Constants } from '@models/gig';
 import { APP_ROLE } from '@models/shared';
 import { repositories } from '../../dependency-injection';
 
@@ -86,6 +87,8 @@ const FAKE_SKILLS = [
   'Security Guard',
 ];
 
+const GitWorkTeamStatus = Object.values(Constants.GIG_WORK_TEAM_STATUS);
+
 export const fakerService = {
   generateFakeUserData: async ({ buyer, privateDataUser, user, worker }: FakeUserData = {}) => {
     let fakeUser = user as unknown as { id: number };
@@ -129,7 +132,7 @@ export const fakerService = {
       workerId: fakeWorker.id,
     });
 
-    const [gigWorkTeam] = await fakerService.generateFakeGigWorkTeam({
+    const gigWorkTeam = await fakerService.generateFakeGigWorkTeam({
       gigWorkId: gigWork.id,
       workerId: fakeWorker.id,
       delegateTo: fakeWorker.id,
@@ -283,6 +286,8 @@ export const fakerService = {
       feedback: faker.lorem.sentence(),
       isAcceptedOffer: faker.datatype.boolean(),
       paymentId: faker.number.int({ min: 1, max: 1000 }),
+      expenses: faker.number.int({ min: 0, max: 100 }),
+      status: faker.helpers.arrayElement(GitWorkTeamStatus),
       tips: faker.number.int({ min: 0, max: 100 }),
       totalPayment: faker.number.int({ min: 10, max: 1000 }),
       workTime: faker.number.int({ min: 1, max: 100 }),

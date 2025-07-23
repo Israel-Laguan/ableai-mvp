@@ -64,6 +64,20 @@
       "when": 1752066908218,
       "tag": "0008_fix-latitude-longitude",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1753139026838,
+      "tag": "0009_add-payment-cards",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1753190706839,
+      "tag": "0010_fix-payment-cards",
+      "breakpoints": true
     }
   ]
 }
