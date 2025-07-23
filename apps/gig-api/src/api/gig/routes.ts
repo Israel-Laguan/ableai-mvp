@@ -4,12 +4,18 @@ import { gigController } from './controller';
 import { GigValidationInput } from '../../dependency-injection';
 import { authorizationMiddleware } from '../../dependency-injection/middlewares';
 
-const { updateProfile } = gigController;
+const { registerGigWork, updateProfile } = gigController;
 
-const { validateUpdateUserProfile } = GigValidationInput;
+const { validateRegisterGigWork, validateUpdateUserProfile } = GigValidationInput;
 
-const gigRouter = Router();
+const suffix = '/gig';
 
-gigRouter.patch('/profile', authorizationMiddleware, validateUpdateUserProfile, updateProfile);
+const router = Router();
+
+router.patch('/profile', authorizationMiddleware, validateUpdateUserProfile, updateProfile);
+
+router.post('/work', authorizationMiddleware, validateRegisterGigWork, registerGigWork);
+
+const gigRouter = Router().use(suffix, router);
 
 export default gigRouter;
