@@ -2,25 +2,37 @@
 GET {{baseUrlGig}}/health
 
 ### Update Settings me user
-PATCH {{baseUrlGig}}/profile
+PATCH {{baseUrlGig}}/gig/profile
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
   "buyer":{
-    "badgesAwarded": "<badges>",
-    "businessAddress": "business_address>",
-    "businessName": "<business_name>",
-    "businessRegistrationNumber": "<business_registration_number>",
-    "businessRole": "<business_role>",
-    "representativeId": "representative_id",
-    "socialNetworkUrl": "https://example.com",
-    "videoUrl": "https://example.com"
+  "badgesAwarded": "<badges>",
+  "businessAddress": "business_address>",
+  "businessName": "<business_name>",
+  "businessRegistrationNumber": "<business_registration_number>",
+  "businessRole": "<business_role>",
+  "representativeId": "representative_id",
+  "socialNetworkUrl": "https://example.com",
+  "videoUrl": "https://example.com"
   },
 
   "worker":{
-    "feedbackSummary": "<feedback_summary>",
-    "socialNetworkUrl": "https://example.com",
-    "tags": "<tags>"
+  "feedbackSummary": "<feedback_summary>",
+  "socialNetworkUrl": "https://example.com",
+  "tags": "<tags>"
   }
+}
+
+### Register Gig Work Team
+POST {{baseUrlGig}}/gig/work-team
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "endDateOffer": "2023-12-31",
+  "gigWorkId": 1,
+  "skillId": 2,
+  "totalPayment": 15
 }

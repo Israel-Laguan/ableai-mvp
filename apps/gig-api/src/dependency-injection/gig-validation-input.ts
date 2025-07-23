@@ -8,6 +8,10 @@ const {
 } = Express;
 
 export const GigValidationInput = {
+  validateRegisterGigWorkTeam: validateInputMiddleware({
+    bodySchema: Gig.Infra.Zod.Schemas.RegisterGigWorkTeamSchema,
+  }),
+
   validateUpdateUserProfile: validateInputMiddleware({
     bodySchema: UpdateUserProfileSchema,
   }),
