@@ -269,6 +269,7 @@ export const fakerService = {
       endDate: faker.date.future(),
       startDate: faker.date.recent(),
       title: faker.lorem.sentence(),
+      skills: String(faker.helpers.arrayElements(FAKE_SKILLS, { min: 1, max: 3 })),
       latitude: faker.location.latitude({ min: 51.4, max: 51.55 }),
       longitude: faker.location.longitude({ min: -0.25, max: 0.05 }),
       paymentPerHour: faker.number.int({ min: 10, max: 100 }),
