@@ -286,6 +286,7 @@ export const fakerService = {
       feedback: faker.lorem.sentence(),
       isAcceptedOffer: faker.datatype.boolean(),
       paymentId: faker.number.int({ min: 1, max: 1000 }),
+      expenses: faker.number.int({ min: 0, max: 100 }),
       status: faker.helpers.arrayElement(GitWorkTeamStatus),
       tips: faker.number.int({ min: 0, max: 100 }),
       totalPayment: faker.number.int({ min: 10, max: 1000 }),

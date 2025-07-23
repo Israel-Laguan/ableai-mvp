@@ -21,6 +21,7 @@
       "@models/gig": ["libs/models/src/gig/index.ts"],
       "@models/payment": ["libs/models/src/payment/index.ts"],
       "@models/shared": ["libs/models/src/shared/index.ts"],
+      "@models/payment": ["libs/models/src/payment/index.ts"],
       "@product-domain/backend": ["libs/product-domain/backend/src/index.ts"],
       "@product-domain/frontend": ["libs/product-domain/frontend/src/index.ts"],
       "@shared": ["libs/shared/src/index.ts"]
