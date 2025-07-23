@@ -16,6 +16,7 @@ export function makeRegisterGigWorkTeamUseCase({
 
     return await gigWorkTeamRepository.create({
       ...input,
+      endDateOffer: new Date(input.endDateOffer),
       workerId: skill.workerId,
     });
   };

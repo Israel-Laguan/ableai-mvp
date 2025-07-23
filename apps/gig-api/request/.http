@@ -31,7 +31,7 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "endDateOffer": "2023-12-31",
+  "endDateOffer": "2025-07-22",
   "gigWorkId": 1,
   "skillId": 2,
   "totalPayment": 15
