@@ -20,7 +20,8 @@ export interface GigWorkTeam extends IBase {
   awardedBadge?: string;
   delegateTo?: number;
   endDateOffer: Date;
-  endGig?: boolean;
+  endGig: boolean;
+  expense: number;
   feedback?: string;
   gigWorkId: number;
   isAcceptedOffer: boolean;
