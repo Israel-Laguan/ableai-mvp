@@ -1,4 +1,2 @@
+export * from './register-gig-work';
 export * from './update-user';
-
-//TODO: register buyer use case
-//TODO: register worker use case
