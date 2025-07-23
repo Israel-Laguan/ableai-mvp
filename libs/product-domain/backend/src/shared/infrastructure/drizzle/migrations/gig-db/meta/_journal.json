@@ -143,6 +143,27 @@
       "breakpoints": true
     },
     {
+      "idx": 20,
+      "version": "7",
+      "when": 1753138959908,
+      "tag": "0020_add-payments",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1753190641215,
+      "tag": "0021_update-schemas",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1753207008998,
+      "tag": "0022_fix-gig-work-teams",
+      "breakpoints": true
+    },
+    {
       "idx": 23,
       "version": "7",
       "when": 1753227256686,

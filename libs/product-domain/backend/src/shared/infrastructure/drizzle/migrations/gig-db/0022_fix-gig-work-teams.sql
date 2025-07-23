@@ -1,0 +1,1 @@
+ALTER TABLE "gig_work_teams" ALTER COLUMN "end_gig" SET DEFAULT false;
