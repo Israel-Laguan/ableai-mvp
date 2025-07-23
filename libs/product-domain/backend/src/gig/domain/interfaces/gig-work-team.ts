@@ -13,6 +13,7 @@ export type RegisterGigWorkTeamInput = CreateEntityInput<
     | 'awardedBadge'
     | 'delegateTo'
     | 'endGig'
+    | 'expenses'
     | 'feedback'
     | 'isAcceptedOffer'
     | 'paymentId'
