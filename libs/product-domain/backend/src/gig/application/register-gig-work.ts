@@ -8,14 +8,14 @@ export function makeRegisterGigWorkUseCase({
   gigWorkRepository,
 }: Interfaces.MakeRegisterGigWorkUseCase): UseCases.RegisterGigWork {
   return async input => {
-    const buyer = await buyerRepository
-      .getAll({
-        limit: 1,
-        where: {
-          fields: [{ field: 'userId', value: input.userId }],
-        },
-      })
-      .then(result => result.results[0]);
+    const { results } = await buyerRepository.getAll({
+      limit: 1,
+      where: {
+        fields: [{ field: 'userId', value: input.userId }],
+      },
+    });
+
+    const buyer = results[0];
 
     if (!buyer) {
       throw Errors.NotFoundResourceError.create(`Buyer not found`, PATH);
