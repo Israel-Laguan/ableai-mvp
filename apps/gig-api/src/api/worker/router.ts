@@ -7,14 +7,10 @@ const router = Router();
 const { authorizationMiddleware } = Middlewares;
 const { validateRegisterWorkerRequest } = GigValidationInput;
 
-router.post(
-  '/register',
-  authorizationMiddleware,
-  validateRegisterWorkerRequest,
-  workerController.register
-);
-
 const suffix = '/worker';
+
+router.post('', authorizationMiddleware, validateRegisterWorkerRequest, workerController.register);
+
 const workerRouter = Router().use(suffix, router);
 
 export default workerRouter;

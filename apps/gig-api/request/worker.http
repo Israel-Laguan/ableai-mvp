@@ -1,6 +1,6 @@
 ### Register worker
 
-POST {{baseUrlGig}}/worker/register
+POST {{baseUrlGig}}/worker
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
