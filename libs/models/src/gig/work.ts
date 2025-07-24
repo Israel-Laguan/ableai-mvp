@@ -19,7 +19,7 @@ type GigWorkStatus = keyof typeof Constants.GIG_WORK_TEAM_STATUS;
 
 export interface GigWorkTeam extends IBase {
   awardedBadge?: string;
-  delegateTo?: number;
+  delegateTo?: string;
   endDateOffer: Date;
   endGig: boolean;
   expenses: number;
