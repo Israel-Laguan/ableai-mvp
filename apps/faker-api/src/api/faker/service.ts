@@ -187,6 +187,7 @@ export const fakerService = {
       workerId: fakeWorker.id,
     });
     await fakerService.generateFakeStatistic({
+      appRole: APP_ROLE.WORKER,
       userId: fakeUser.id,
     });
 
