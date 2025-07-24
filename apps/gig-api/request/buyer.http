@@ -1,5 +1,5 @@
 ### Register Buyer
-POST {{baseUrlGig}}/buyer/register
+POST {{baseUrlGig}}/buyer
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

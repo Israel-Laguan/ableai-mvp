@@ -7,14 +7,10 @@ const router = Router();
 const { authorizationMiddleware } = Middlewares;
 const { validateRegisterBuyerRequest } = GigValidationInput;
 
-router.post(
-  '/register',
-  authorizationMiddleware,
-  validateRegisterBuyerRequest,
-  buyerController.register
-);
-
 const suffix = '/buyer';
+
+router.post('', authorizationMiddleware, validateRegisterBuyerRequest, buyerController.register);
+
 const buyerRouter = Router().use(suffix, router);
 
 export default buyerRouter;
