@@ -28,14 +28,16 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "skills": ["python", "C++", "Java", "PHP"],
+  "skills": ["Bartender", "Waitstaff", "Barista"],
   "gigDate": "<yyyy-mm-dd>",
+  "discardedWorkers": [1, 2, 3],
   "latitude": 51.5,
   "longitude": 0.0,
   "radius": 30,
   "limit": 20,
+  "offset": 0,
   "hourlyRate": 50,
-  "required": ["mac"]
+  "required": ["Cocktail Shaker"]
 }
 
 ### Get buyer recommendation
