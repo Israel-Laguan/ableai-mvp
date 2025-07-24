@@ -10,11 +10,13 @@ export function makeMatchWorkersUseCase({
 }: Interfaces.MakeMatchWorkersConfig): UseCases.MatchWorkers {
   return async input => {
     const {
+      discardedWorkers,
       radius = 10,
       hourlyRate,
       latitude,
       limit = 5,
       longitude,
+      offset,
       skills,
       gigDate,
       required,
@@ -37,7 +39,9 @@ export function makeMatchWorkersUseCase({
       }
 
       return await workerRepository.matchWorkers({
+        discardedWorkers,
         gigDate: new Date(gigDate),
+        offset,
         skills,
         userIds,
         hourlyRate,

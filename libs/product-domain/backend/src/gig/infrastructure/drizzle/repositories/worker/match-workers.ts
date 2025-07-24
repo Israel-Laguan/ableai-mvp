@@ -6,6 +6,7 @@ import { sql } from 'drizzle-orm';
 import type { Infra, Statistic } from '@models/gig';
 import type { MatchWorkers } from '../../../../domain/repositories';
 
+import { APP_ROLE } from '@models/shared';
 import { Infra as SharedInfra } from '../../../../../shared';
 import { workers, skills as skillSchema, slots, statistics } from '../../schemas';
 
@@ -39,11 +40,23 @@ const baseOrderBy = [
 ];
 
 export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
-  return async ({ gigDate, skills, hourlyRate, limit = 5, userIds, required = [] }) => {
+  return async ({
+    discardedWorkers,
+    gigDate,
+    hourlyRate,
+    offset = 0,
+    skills,
+    limit = 5,
+    userIds,
+    required = [],
+  }) => {
     if (userIds.length === 0) {
       return [];
     }
 
+    const sqlDiscardedWorkersArray = discardedWorkers
+      ? makeSQLArray(discardedWorkers, 'int')
+      : blankSql;
     const sqlGigDate = gigDate ? sql`${gigDate?.toISOString()}` : blankSql;
     const sqlHourlyRate = typeof hourlyRate === 'number' ? sql`${hourlyRate}` : blankSql;
     const sqlRequiredArray = required.length > 0 ? makeSQLArray(required, 'text') : blankSql;
@@ -69,6 +82,10 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
       sql`${skillSchema.name} ILIKE ANY(${sqlSkillsArray})`,
     ].concat(
       [
+        isNotBlankSQL(sqlDiscardedWorkersArray)
+          ? sql`${workers.id} != ALL(${sqlDiscardedWorkersArray})`
+          : blankSql,
+
         isNotBlankSQL(sqlRequiredArray)
           ? sql`EXISTS (
                 SELECT 1 FROM unnest(string_to_array(${skillSchema.equipment}, ',')) AS eq
@@ -99,11 +116,14 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
           FROM ${workers}
           LEFT JOIN ${skillSchema} ON ${skillSchema.workerId} = ${workers.id}
           LEFT JOIN ${slots} ON ${slots.workerId} = ${workers.id}
-          LEFT JOIN ${statistics} ON ${statistics.userId} = ${workers.userId}
+          LEFT JOIN ${statistics} 
+            ON ${statistics.userId} = ${workers.userId}
+            AND ${statistics.appRole} = ${APP_ROLE.WORKER}
           WHERE ${sql.join(where, sql` AND `)}
           GROUP BY ${workers.id}, ${skillSchema.id}, ${statistics.id}
           ORDER BY ${sql.join(orderBy, sql`, `)}
           LIMIT ${limit}
+          OFFSET ${offset}
         `;
 
     const queryResult = await db.execute(query);
