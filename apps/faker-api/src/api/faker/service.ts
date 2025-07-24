@@ -152,7 +152,7 @@ export const fakerService = {
       workerId: fakeWorker.id,
     });
 
-    const [statistic] = await fakerService.generateFakeStatistic({
+    const statistic = await fakerService.generateFakeStatistic({
       userId: fakeUser.id,
     });
 

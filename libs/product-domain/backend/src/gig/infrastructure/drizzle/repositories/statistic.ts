@@ -16,5 +16,17 @@ export const makeDrizzleStatisticsRepository: StatisticRepositoryMaker<NodePgDat
 
   return {
     ...repository,
+
+    create: async ({ appRole, userId }) => {
+      const [statistic] = await db
+        .insert(statistics)
+        .values({
+          appRole,
+          userId,
+        })
+        .returning();
+
+      return statistic;
+    },
   };
 };
