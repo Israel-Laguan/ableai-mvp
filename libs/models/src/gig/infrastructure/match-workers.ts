@@ -8,8 +8,10 @@ export interface MatchedWorker {
 }
 
 export interface MatchWorkersInput {
+  discardedWorkers?: number[];
   hourlyRate?: number;
   limit?: number;
+  offset?: number;
   required?: string[];
   skills: string[];
   gigDate: Date;
