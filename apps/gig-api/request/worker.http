@@ -1,0 +1,10 @@
+### Register worker
+
+POST {{baseUrlGig}}/worker
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "socialNetworkUrl": "https://www.example.com/profile",
+    "tags": "JavaScript, Node.js"
+}
