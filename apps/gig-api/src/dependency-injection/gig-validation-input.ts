@@ -11,4 +11,8 @@ export const GigValidationInput = {
   validateUpdateUserProfile: validateInputMiddleware({
     bodySchema: UpdateUserProfileSchema,
   }),
+
+  validateRegisterBuyerRequest: validateInputMiddleware({
+    bodySchema: Gig.Infra.Zod.Schemas.RegisterBuyerSchema,
+  }),
 };

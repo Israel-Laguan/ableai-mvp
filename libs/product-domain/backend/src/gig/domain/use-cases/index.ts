@@ -1,5 +1,7 @@
 import { UpdateInput } from '../interfaces';
 
+export * from './register-buyer';
+
 export type UpdateMeUserUseCase<
   CustomInput extends object = object,
   CustomOutput extends object = object

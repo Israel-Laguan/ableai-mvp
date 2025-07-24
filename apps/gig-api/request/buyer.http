@@ -1,0 +1,14 @@
+### Register Buyer
+POST {{baseUrlGig}}/buyer
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "businessAddress": "123 Main St",
+  "businessName": "My Business",
+  "businessRegistrationNumber": "123456789",
+  "businessRole": "Owner",
+  "representativeId": "rep-123",
+  "socialNetworkUrl": "https://example.com",
+  "videoUrl": "https://example.com/video"
+}
