@@ -1,3 +1,4 @@
+export * from './register-worker';
 import { UpdateInput } from '../interfaces';
 
 export * from './register-buyer';
