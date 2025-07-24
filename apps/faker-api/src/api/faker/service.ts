@@ -135,7 +135,6 @@ export const fakerService = {
     const gigWorkTeam = await fakerService.generateFakeGigWorkTeam({
       gigWorkId: gigWork.id,
       workerId: fakeWorker.id,
-      delegateTo: fakeWorker.id,
       skillId: skill.id,
     });
 
