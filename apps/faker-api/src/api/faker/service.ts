@@ -87,7 +87,7 @@ const FAKE_SKILLS = [
   'Security Guard',
 ];
 
-const GitWorkTeamStatus = Object.values(Constants.GIG_WORK_TEAM_STATUS);
+const GigWorkTeamStatus = Object.values(Constants.GIG_WORK_TEAM_STATUS);
 
 export const fakerService = {
   generateFakeUserData: async ({ buyer, privateDataUser, user, worker }: FakeUserData = {}) => {
@@ -288,7 +288,7 @@ export const fakerService = {
       isAcceptedOffer: faker.datatype.boolean(),
       paymentId: faker.number.int({ min: 1, max: 1000 }),
       expenses: faker.number.int({ min: 0, max: 100 }),
-      status: faker.helpers.arrayElement(GitWorkTeamStatus),
+      status: faker.helpers.arrayElement(GigWorkTeamStatus),
       tips: faker.number.int({ min: 0, max: 100 }),
       totalPayment: faker.number.int({ min: 10, max: 1000 }),
       workTime: faker.number.int({ min: 1, max: 100 }),

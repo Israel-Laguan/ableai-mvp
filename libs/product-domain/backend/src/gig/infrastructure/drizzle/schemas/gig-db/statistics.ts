@@ -6,7 +6,7 @@ import { Schemas } from '../../../../../shared/infrastructure/drizzle';
 
 export const statistics = Schemas.withBaseSchema<Statistic>('statistics', {
   appRole: p.varchar('app_role').default('BUYER'),
-  responseRate: p.numeric('response_rate', { mode: 'number' }).default(15),
+  responseRate: p.numeric('response_rate', { mode: 'number' }).default(0),
   userId: p.integer('user_id').notNull(),
-  wouldWork: p.integer('would_work').default(100),
+  wouldWork: p.integer('would_work').default(0),
 });
