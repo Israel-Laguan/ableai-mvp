@@ -8,7 +8,6 @@ Authorization: Bearer {{accessToken}}
   "businessName": "My Business",
   "businessRegistrationNumber": "123456789",
   "businessRole": "Owner",
-  "representativeId": "rep-123",
   "socialNetworkUrl": "https://example.com",
   "videoUrl": "https://example.com/video"
 }
