@@ -1,7 +1,8 @@
 import { Express } from '@backend';
 import { Gig } from '@product-domain/backend';
 
-const { RegisterWorkerSchema, UpdateUserProfileSchema } = Gig.Infra.Zod.Schemas;
+const { RegisterBuyerSchema, RegisterWorkerSchema, UpdateUserProfileSchema } =
+  Gig.Infra.Zod.Schemas;
 
 const {
   Middlewares: { validateInputMiddleware },
@@ -10,6 +11,10 @@ const {
 export const GigValidationInput = {
   validateUpdateUserProfile: validateInputMiddleware({
     bodySchema: UpdateUserProfileSchema,
+  }),
+
+  validateRegisterBuyerRequest: validateInputMiddleware({
+    bodySchema: RegisterBuyerSchema,
   }),
 
   validateRegisterWorkerRequest: validateInputMiddleware({

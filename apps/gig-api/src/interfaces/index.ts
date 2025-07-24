@@ -1,4 +1,4 @@
-import { Gig } from '@product-domain/backend';
+import type { Gig } from '@product-domain/backend';
 
 export type UpdateInput = Gig.Domain.Interfaces.UpdateInput;
 
