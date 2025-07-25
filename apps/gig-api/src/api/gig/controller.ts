@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import type { Request, Response } from 'express';
 
 import type { UserClaims } from '@models/auth';
 
@@ -21,6 +21,11 @@ export const gigController = {
       res.status(HTTP_STATUS_CODE.CREATED).json(result);
     }
   ),
+
+  registerGigWorkTeam: tryCatchAndNext(async (req: Request, res: Response) => {
+    const result = await gigService.registerGigWorkTeam(req.body);
+    res.status(HTTP_STATUS_CODE.CREATED).json(result);
+  }),
 
   updateProfile: tryCatchAndNext(
     async (req: Express.Types.AuthorizedRequest<{ id: number }>, res: Response) => {
