@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import type { Request, Response } from 'express';
 
 import { Express } from '@backend';
 import { CONSTANTS } from '@shared';
@@ -9,6 +9,11 @@ const { HTTP_STATUS_CODE } = CONSTANTS;
 const { tryCatchAndNext } = Express;
 
 export const gigController = {
+  registerGigWorkTeam: tryCatchAndNext(async (req: Request, res: Response) => {
+    const result = await gigService.registerGigWorkTeam(req.body);
+    res.status(HTTP_STATUS_CODE.CREATED).json(result);
+  }),
+
   updateProfile: tryCatchAndNext(
     async (req: Express.Types.AuthorizedRequest<{ id: number }>, res: Response) => {
       const result = await gigService.updateUser({
