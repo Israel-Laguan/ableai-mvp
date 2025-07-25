@@ -2,6 +2,7 @@ import { Express } from '@backend';
 import { Gig } from '@product-domain/backend';
 
 const {
+  RegisterGigWorkSchema,
   RegisterBuyerSchema,
   RegisterGigWorkTeamSchema,
   RegisterWorkerSchema,
@@ -19,6 +20,10 @@ export const GigValidationInput = {
 
   validateUpdateUserProfile: validateInputMiddleware({
     bodySchema: UpdateUserProfileSchema,
+  }),
+
+  validateRegisterGigWork: validateInputMiddleware({
+    bodySchema: RegisterGigWorkSchema,
   }),
 
   validateRegisterBuyerRequest: validateInputMiddleware({
