@@ -1,4 +1,5 @@
-import { Constants, Interfaces, UseCases } from '../domain';
+import type { Interfaces, UseCases } from '../domain';
+
 import { Errors } from '@shared';
 
 type PgError = {
@@ -7,23 +8,20 @@ type PgError = {
 
 const PATH = 'REGISTER_WORKER_USE_CASE';
 
-const {
-  REGISTER_WORKER_REPOSITORIES: { WORKER_REPOSITORY },
-} = Constants;
-
 export function makeRegisterWorkerUseCase({
-  runInTransaction,
+  workerRepository,
 }: Interfaces.MakeRegisterWorkerInput): UseCases.RegisterWorker {
-  return async input => {
+  return async ({ recommendations, skills, slots, worker }) => {
     try {
-      return await runInTransaction(async repositoryManager => {
-        const workerRepository = repositoryManager.getRepository(WORKER_REPOSITORY);
-
-        const [[worker]] = await Promise.all([workerRepository.create(input)]);
-
-        return { worker, skills: [], slots: [] };
+      return await workerRepository.registerWorker({
+        worker,
+        recommendations,
+        skills,
+        slots,
       });
     } catch (e) {
+      console.log(e);
+
       if ((e as PgError)?.code === '23505') {
         throw Errors.AlreadyExistError.create('Worker already exists', PATH);
       }
