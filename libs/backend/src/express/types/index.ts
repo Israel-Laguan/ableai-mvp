@@ -11,5 +11,4 @@ export type AuthorizedRequest<
   /* eslint-enable @typescript-eslint/no-explicit-any */
 > = Request<ReqParams, ResBody, ReqBody, ReqQuery, Locals> & {
   user?: UserCredentials;
-  body?: ReqBody;
 };
