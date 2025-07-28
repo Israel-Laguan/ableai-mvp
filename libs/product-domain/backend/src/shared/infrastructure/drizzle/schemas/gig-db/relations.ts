@@ -10,7 +10,6 @@ import {
   skillHires,
   skills,
   slots,
-  statistics,
   users,
   workers,
 } from '.';
@@ -24,7 +23,6 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   buyers: many(buyers),
   recommendations: many(recommendations),
   reviews: many(reviews),
-  statistics: many(statistics),
 }));
 
 export const rolesRelations = relations(roles, ({ many }) => ({
@@ -110,12 +108,5 @@ export const slotsRelations = relations(slots, ({ one }) => ({
   worker: one(workers, {
     fields: [slots.workerId],
     references: [workers.id],
-  }),
-}));
-
-export const statisticsRelations = relations(statistics, ({ one }) => ({
-  user: one(users, {
-    fields: [statistics.userId],
-    references: [users.id],
   }),
 }));

@@ -7,7 +7,9 @@ export interface Buyer extends IBase {
   businessRegistrationNumber?: string;
   businessRole?: string;
   representativeId?: string;
+  responseRate: number;
   socialNetworkUrl?: string;
   userId: number;
   videoUrl?: string;
+  wouldWork: number;
 }

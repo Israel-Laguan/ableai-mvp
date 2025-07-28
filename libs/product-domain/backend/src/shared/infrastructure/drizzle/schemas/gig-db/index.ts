@@ -8,7 +8,6 @@ export {
   skillHires,
   skills,
   slots,
-  statistics,
   workers,
 } from '../../../../../gig/infrastructure/drizzle/schemas/gig-db';
 export { payments } from '../../../../../payment/infrastructure/drizzle/schemas/gig-db';

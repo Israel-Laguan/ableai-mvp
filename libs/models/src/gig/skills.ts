@@ -14,8 +14,10 @@ export interface Skill extends IBase {
   imagesUrl?: string;
   name: string;
   ratePerHour: number;
+  responseRate: number;
   summary: string;
   trainingDescription: string;
   videoUrl?: string;
   workerId: number;
+  wouldWork: number;
 }

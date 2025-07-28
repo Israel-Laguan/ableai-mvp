@@ -91,6 +91,12 @@ export const MatchWorkersOutputSchema: Schema = {
           videoUrl: {
             type: SchemaType.STRING,
           },
+          responseRate: {
+            type: SchemaType.NUMBER,
+          },
+          wouldWork: {
+            type: SchemaType.NUMBER,
+          },
         },
       },
 
@@ -109,18 +115,6 @@ export const MatchWorkersOutputSchema: Schema = {
             },
           },
         } as TypedObjectSchema<Slot>,
-      },
-
-      statistic: {
-        type: SchemaType.OBJECT,
-        properties: {
-          responseRate: {
-            type: SchemaType.NUMBER,
-          },
-          wouldWork: {
-            type: SchemaType.NUMBER,
-          },
-        },
       },
 
       worker: {

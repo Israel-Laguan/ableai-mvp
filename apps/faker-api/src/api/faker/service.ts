@@ -17,10 +17,8 @@ import type {
   FakeSkillInput,
   FakeSlot,
   FakeSlotInput,
-  FakeStatistic,
   FakeUser,
   FakeUserData,
-  FakeStatisticInput,
   FakeWorker,
   FakeGigWorkTeamInput,
   GenerateFakeWorkersInput,
@@ -40,7 +38,6 @@ const {
   skillHiresRepository,
   skillsRepository,
   slotsRepository,
-  statisticsRepository,
   userRepository,
   workerRepository,
 } = repositories;
@@ -151,10 +148,6 @@ export const fakerService = {
       workerId: fakeWorker.id,
     });
 
-    const statistic = await fakerService.generateFakeStatistic({
-      userId: fakeUser.id,
-    });
-
     return {
       buyer: fakeBuyer,
       gigWork,
@@ -165,7 +158,6 @@ export const fakerService = {
       skillHire,
       skill,
       slot,
-      statistic,
       user: fakeUser,
       worker: fakeWorker,
     };
@@ -185,10 +177,6 @@ export const fakerService = {
     await fakerService.generateFakeSlot({
       workerId: fakeWorker.id,
     });
-    await fakerService.generateFakeStatistic({
-      appRole: APP_ROLE.WORKER,
-      userId: fakeUser.id,
-    });
 
     return fakeUser.id;
   },
@@ -205,19 +193,19 @@ export const fakerService = {
   },
 
   generateFakeBuyer: async (input: FakeBuyer) => {
-    const fakeBuyer: FakeBuyer = {
+    return await buyerRepository.create({
       badgesAwarded: String(faker.helpers.arrayElements(FAKE_BADGES, { min: 1, max: 3 })),
       businessAddress: faker.location.streetAddress(),
       businessName: faker.company.name(),
       businessRegistrationNumber: faker.string.alphanumeric(10),
       businessRole: faker.person.jobTitle(),
       representativeId: faker.string.uuid(),
+      responseRate: faker.number.int({ min: 0, max: 100 }),
       socialNetworkUrl: faker.internet.url(),
+      wouldWork: faker.number.int({ min: 0, max: 100 }),
       videoUrl: faker.internet.url(),
       ...input,
-    };
-
-    return await buyerRepository.create(fakeBuyer);
+    });
   },
 
   generateFakePrivateDataUser: async (input?: FakePrivateDataUser) => {
@@ -318,9 +306,11 @@ export const fakerService = {
       gigsCompleted: faker.number.int({ min: 1, max: 100 }),
       imagesUrl: faker.image.url(),
       ratePerHour: faker.number.int({ min: 10, max: 100 }),
+      responseRate: faker.number.int({ min: 0, max: 100 }),
       summary: faker.lorem.sentence(),
       trainingDescription: faker.lorem.paragraph(),
       videoUrl: faker.internet.url(),
+      wouldWork: faker.number.int({ min: 0, max: 100 }),
       ...input,
     };
 
@@ -341,6 +331,7 @@ export const fakerService = {
   generateFakeReview: async (input: FakeReviewInput) => {
     const fakeReview: FakeReview = {
       review: faker.lorem.sentence(),
+      appRole: faker.helpers.arrayElement([APP_ROLE.BUYER, APP_ROLE.WORKER]),
       ...input,
     };
 
@@ -356,16 +347,5 @@ export const fakerService = {
     };
 
     return await recommendationsRepository.create(fakeRecommendation);
-  },
-
-  generateFakeStatistic: async (input: FakeStatisticInput) => {
-    const fakeStatistic: FakeStatistic = {
-      appRole: faker.helpers.arrayElement([APP_ROLE.BUYER, APP_ROLE.WORKER]),
-      responseRate: faker.number.int({ min: 0, max: 100 }),
-      wouldWork: faker.number.int({ min: 0, max: 100 }),
-      ...input,
-    };
-
-    return await statisticsRepository.create(fakeStatistic);
   },
 };

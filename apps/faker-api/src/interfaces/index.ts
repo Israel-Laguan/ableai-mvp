@@ -8,7 +8,6 @@ import {
   Skill,
   SkillHire,
   Slot,
-  Statistic,
   Worker,
 } from '@models/gig';
 import type { IOmitBase } from '@models/shared';
@@ -40,9 +39,6 @@ export type FakeSkillHireInput = Partial<FakeSkillHire> & Pick<SkillHire, 'buyer
 export type FakeSlot = Omit<Slot, IOmitBase>;
 export type FakeSlotInput = Partial<FakeSlot> & Pick<Slot, 'workerId'>;
 
-export type FakeStatistic = Omit<Statistic, IOmitBase>;
-export type FakeStatisticInput = Partial<FakeStatistic> & Pick<Statistic, 'userId'>;
-
 export type FakeUser = Omit<User, IOmitBase>;
 export type FakerUserInput = Partial<FakeUser> & Pick<User, 'privateDataUserId'>;
 
@@ -58,7 +54,6 @@ export interface FakeUserData {
   skill?: FakeSkill;
   skillHire?: FakeSkillHire;
   slot?: FakeSlot;
-  statistic?: FakeStatistic;
   user?: FakeUser;
   worker?: FakeWorker;
 }

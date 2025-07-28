@@ -7,7 +7,6 @@ const PATH = 'RETRIEVE_USER_PROFILE';
 export function makeRetrieveUserProfileUseCase({
   privateDataUserRepository,
   reviewRepository,
-  statisticRepository,
   userRepository,
 }: Interfaces.MakeRetrieveUserProfileConfig): UseCases.RetrieveUserProfile {
   return async userId => {
@@ -35,17 +34,10 @@ export function makeRetrieveUserProfileUseCase({
       })
     ).results;
 
-    const statistic = (
-      await statisticRepository.getAll({
-        where: { fields: [{ field: 'userId', value: userId }] },
-      })
-    ).results[0];
-
     return {
       privateDataUser: checkedPrivateDataUser,
       reviews,
       user,
-      statistic,
     };
   };
 }
