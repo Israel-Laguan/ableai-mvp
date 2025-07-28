@@ -27,7 +27,7 @@ export interface GigWorkTeam extends IBase {
   gigWorkId: number;
   isAcceptedOffer: boolean;
   paymentId?: number;
-  skillId: number;
+  workerSkillId: number;
   status: GigWorkStatus;
   tips?: number;
   totalPayment: number;

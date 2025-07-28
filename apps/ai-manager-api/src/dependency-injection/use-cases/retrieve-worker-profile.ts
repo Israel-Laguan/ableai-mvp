@@ -1,7 +1,7 @@
 import { AiManager } from '@product-domain/backend';
-import { skillRepository, workerRepository } from '../repositories';
+import { workerSkillRepository, workerRepository } from '../repositories';
 
 export const retrieveWorkerProfile = AiManager.App.makeRetrieveWorkerProfileUseCase({
-  skillRepository,
+  workerSkillRepository: workerSkillRepository,
   workerRepository,
 });

@@ -18,7 +18,7 @@ export const gigWorkTeams = Schemas.withBaseSchema<GigWorkTeam>('gig_work_teams'
   gigWorkId: p.integer('gig_work_id'),
   isAcceptedOffer: p.boolean('is_accepted_offer').default(false),
   paymentId: p.integer('payment_id'),
-  skillId: p.integer('skill_id'),
+  workerSkillId: p.integer('worker_skill_id'),
   status: p
     .varchar('status', {
       enum: [PENDING, ACCEPTED, REJECTED, COMPLETED, CANCELLED, PAID],

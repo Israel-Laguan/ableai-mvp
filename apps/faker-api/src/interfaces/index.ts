@@ -5,7 +5,7 @@ import {
   GigWorkTeam,
   Recommendation,
   Review,
-  Skill,
+  WorkerSkill,
   SkillHire,
   Slot,
   Worker,
@@ -19,7 +19,7 @@ export type FakeGigWorkInput = Partial<FakeGigWork> & Pick<GigWork, 'buyerId'>;
 
 export type FakeGigWorkTeam = Omit<GigWorkTeam, IOmitBase>;
 export type FakeGigWorkTeamInput = Partial<FakeGigWorkTeam> &
-  Pick<GigWorkTeam, 'gigWorkId' | 'workerId' | 'delegateTo' | 'skillId'>;
+  Pick<GigWorkTeam, 'gigWorkId' | 'workerId' | 'delegateTo' | 'workerSkillId'>;
 
 export type FakePrivateDataUser = Omit<PrivateDataUser, IOmitBase>;
 
@@ -30,8 +30,8 @@ export type FakeRecommendationInput = Partial<FakeRecommendation> &
 export type FakeReview = Omit<Review, IOmitBase>;
 export type FakeReviewInput = Partial<FakeReview> & Pick<Review, 'userId'>;
 
-export type FakeSkill = Omit<Skill, IOmitBase>;
-export type FakeSkillInput = Partial<FakeSkill> & Pick<Skill, 'workerId'>;
+export type FakeWorkerSkill = Omit<WorkerSkill, IOmitBase>;
+export type FakeWorkerSkillInput = Partial<FakeWorkerSkill> & Pick<WorkerSkill, 'workerId'>;
 
 export type FakeSkillHire = Omit<SkillHire, IOmitBase>;
 export type FakeSkillHireInput = Partial<FakeSkillHire> & Pick<SkillHire, 'buyerId'>;
@@ -51,7 +51,7 @@ export interface FakeUserData {
   privateDataUser?: FakePrivateDataUser;
   recommendation?: FakeRecommendation;
   review?: FakeReview;
-  skill?: FakeSkill;
+  workerSkill?: FakeWorkerSkill;
   skillHire?: FakeSkillHire;
   slot?: FakeSlot;
   user?: FakeUser;

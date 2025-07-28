@@ -5,19 +5,22 @@ const PATH = 'REGISTER_GIG_WORK_TEAM';
 
 export function makeRegisterGigWorkTeamUseCase({
   gigWorkTeamRepository,
-  skillRepository,
+  workerSkillRepository: workerSkillRepository,
 }: Interfaces.MakeRegisterGigWorkTeam): UseCases.RegisterGigWorkTeamUseCase {
   return async input => {
-    const skill = await skillRepository.getById(String(input.skillId));
+    const workerSkill = await workerSkillRepository.getById(String(input.workerSkillId));
 
-    if (!skill) {
-      throw Errors.NotFoundResourceError.create(`Skill with ID ${input.skillId} not found`, PATH);
+    if (!workerSkill) {
+      throw Errors.NotFoundResourceError.create(
+        `Skill with ID ${input.workerSkillId} not found`,
+        PATH
+      );
     }
 
     return await gigWorkTeamRepository.create({
       ...input,
       endDateOffer: new Date(input.endDateOffer),
-      workerId: skill.workerId,
+      workerId: workerSkill.workerId,
     });
   };
 }

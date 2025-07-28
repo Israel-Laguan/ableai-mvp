@@ -2,18 +2,18 @@ import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import type { Domain } from '../../../..';
 
-import { recommendations, skills, slots, workers } from '../../schemas';
+import { recommendations, workerSkills, slots, workers } from '../../schemas';
 
 export function makeWorkerRegister(db: NodePgDatabase): Domain.Repositories.RegisterWorker {
-  return async ({ recommendations: recs, skills: skl, slots: slt, worker }) => {
+  return async ({ recommendations: recs, workerSkills: skl, slots: slt, worker }) => {
     return await db.transaction(async tx => {
       const [workerResult] = await tx.insert(workers).values(worker).returning();
 
       const workerId = workerResult.id;
 
-      const [skillsResult, slotResult, recommendationsResult] = await Promise.all([
+      const [workerSkillsResult, slotResult, recommendationsResult] = await Promise.all([
         await tx
-          .insert(skills)
+          .insert(workerSkills)
           .values(skl.map(s => ({ ...s, workerId })))
           .returning(),
 
@@ -29,7 +29,7 @@ export function makeWorkerRegister(db: NodePgDatabase): Domain.Repositories.Regi
       ]);
 
       return {
-        skills: skillsResult,
+        workerSkills: workerSkillsResult,
         slots: slotResult,
         worker: workerResult,
         recommendations: recommendationsResult,

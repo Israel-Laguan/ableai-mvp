@@ -11,12 +11,12 @@ const PATH = 'REGISTER_WORKER_USE_CASE';
 export function makeRegisterWorkerUseCase({
   workerRepository,
 }: Interfaces.MakeRegisterWorkerInput): UseCases.RegisterWorker {
-  return async ({ recommendations, skills, slots, worker }) => {
+  return async ({ recommendations, workerSkills, slots, worker }) => {
     try {
       return await workerRepository.registerWorker({
         worker,
         recommendations,
-        skills,
+        workerSkills,
         slots,
       });
     } catch (e) {
