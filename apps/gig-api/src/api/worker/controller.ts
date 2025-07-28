@@ -2,12 +2,24 @@ import type { UserClaims } from '@models/auth';
 
 import { Express } from '@backend';
 import { workerServices } from './service';
-
-type AuthorizedRequest = Express.Types.AuthorizedRequest<UserClaims>;
+import { Gig } from '@product-domain/backend';
 
 export const workerController = {
-  register: Express.tryCatchAndNext(async (req: AuthorizedRequest, res) => {
-    const result = await workerServices.register({ ...req.body, userId: req.user.id });
-    res.status(201).json(result);
-  }),
+  register: Express.tryCatchAndNext(
+    async (
+      req: Express.Types.AuthorizedRequest<
+        UserClaims,
+        never,
+        object,
+        Gig.Domain.Interfaces.RegisterWorkerRequestBody
+      >,
+      res
+    ) => {
+      const result = await workerServices.register({
+        ...req.body,
+        worker: { ...req.body.worker, userId: req.user.id },
+      });
+      res.status(201).json(result);
+    }
+  ),
 };

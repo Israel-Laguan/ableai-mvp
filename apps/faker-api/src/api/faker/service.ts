@@ -17,10 +17,8 @@ import type {
   FakeSkillInput,
   FakeSlot,
   FakeSlotInput,
-  FakeStatistic,
   FakeUser,
   FakeUserData,
-  FakeStatisticInput,
   FakeWorker,
   FakeGigWorkTeamInput,
   GenerateFakeWorkersInput,
@@ -40,7 +38,6 @@ const {
   skillHiresRepository,
   skillsRepository,
   slotsRepository,
-  statisticsRepository,
   userRepository,
   workerRepository,
 } = repositories;
@@ -109,12 +106,12 @@ export const fakerService = {
       fakeUser = newFakeUser;
     }
 
-    const [fakeBuyer] = await fakerService.generateFakeBuyer({
+    const fakeBuyer = await fakerService.generateFakeBuyer({
       ...buyer,
       userId: fakeUser.id,
     });
 
-    const [fakeWorker] = await fakerService.generateFakeWorker({
+    const fakeWorkerOutput = await fakerService.generateFakeWorker({
       ...worker,
       userId: fakeUser.id,
     });
@@ -128,30 +125,13 @@ export const fakerService = {
       buyerId: fakeBuyer.id,
     });
 
-    const [skill] = await fakerService.generateFakeSkill({
-      workerId: fakeWorker.id,
-    });
-
     const gigWorkTeam = await fakerService.generateFakeGigWorkTeam({
       gigWorkId: gigWork.id,
-      workerId: fakeWorker.id,
-      skillId: skill.id,
-    });
-
-    const [slot] = await fakerService.generateFakeSlot({
-      workerId: fakeWorker.id,
+      workerId: fakeWorkerOutput.worker.id,
+      skillId: fakeWorkerOutput.skills[0].id,
     });
 
     const [review] = await fakerService.generateFakeReview({
-      userId: fakeUser.id,
-    });
-
-    const [recommendation] = await fakerService.generateFakeRecommendation({
-      userId: fakeUser.id,
-      workerId: fakeWorker.id,
-    });
-
-    const statistic = await fakerService.generateFakeStatistic({
       userId: fakeUser.id,
     });
 
@@ -161,13 +141,11 @@ export const fakerService = {
       gigWorkTeam,
       privateDataUser: fakePrivateDataUser,
       review,
-      recommendation,
       skillHire,
-      skill,
-      slot,
-      statistic,
+      skill: fakeWorkerOutput.skills[0],
+      slot: fakeWorkerOutput.slots[0],
       user: fakeUser,
-      worker: fakeWorker,
+      worker: fakeWorkerOutput,
     };
   },
 
@@ -176,17 +154,7 @@ export const fakerService = {
     const [fakeUser] = await fakerService.generateFakeUser({
       privateDataUserId: fakePrivateDataUser.id,
     });
-    const [fakeWorker] = await fakerService.generateFakeWorker({
-      userId: fakeUser.id,
-    });
-    await fakerService.generateFakeSkill({
-      workerId: fakeWorker.id,
-    });
-    await fakerService.generateFakeSlot({
-      workerId: fakeWorker.id,
-    });
-    await fakerService.generateFakeStatistic({
-      appRole: APP_ROLE.WORKER,
+    await fakerService.generateFakeWorker({
       userId: fakeUser.id,
     });
 
@@ -205,19 +173,19 @@ export const fakerService = {
   },
 
   generateFakeBuyer: async (input: FakeBuyer) => {
-    const fakeBuyer: FakeBuyer = {
+    return await buyerRepository.create({
       badgesAwarded: String(faker.helpers.arrayElements(FAKE_BADGES, { min: 1, max: 3 })),
       businessAddress: faker.location.streetAddress(),
       businessName: faker.company.name(),
       businessRegistrationNumber: faker.string.alphanumeric(10),
       businessRole: faker.person.jobTitle(),
       representativeId: faker.string.uuid(),
+      responseRate: faker.number.int({ min: 0, max: 100 }),
       socialNetworkUrl: faker.internet.url(),
+      wouldWork: faker.number.int({ min: 0, max: 100 }),
       videoUrl: faker.internet.url(),
       ...input,
-    };
-
-    return await buyerRepository.create(fakeBuyer);
+    });
   },
 
   generateFakePrivateDataUser: async (input?: FakePrivateDataUser) => {
@@ -252,14 +220,37 @@ export const fakerService = {
   },
 
   generateFakeWorker: async (input: FakeWorker) => {
-    const fakeWorker: FakeWorker = {
-      feedbackSummary: faker.lorem.sentence(),
-      socialNetworkUrl: faker.internet.url(),
-      tags: String(faker.helpers.arrayElements(FAKE_SKILLS, { min: 1, max: 3 })),
-      ...input,
-    };
-
-    return await workerRepository.create(fakeWorker);
+    return await workerRepository.registerWorker({
+      worker: {
+        socialNetworkUrl: faker.internet.url(),
+        tags: String(faker.helpers.arrayElements(FAKE_SKILLS, { min: 1, max: 3 })),
+        userId: input.userId,
+      },
+      recommendations: [
+        {
+          isExternal: true,
+          name: faker.person.fullName(),
+          recommendation: faker.lorem.paragraph(),
+        },
+      ],
+      skills: [
+        {
+          name: faker.helpers.arrayElement(FAKE_SKILLS),
+          ratePerHour: faker.number.int({ min: 10, max: 100 }),
+          summary: faker.lorem.sentence(),
+          trainingDescription: faker.lorem.paragraph(),
+          videoUrl: faker.internet.url(),
+          equipment: faker.helpers.arrayElements(FAKE_EQUIPMENT, { min: 1, max: 2 }).join(', '),
+          imagesUrl: faker.image.url(),
+        },
+      ],
+      slots: [
+        {
+          startTime: faker.date.recent(),
+          endTime: faker.date.future(),
+        },
+      ],
+    });
   },
 
   generateFakeGigWork: async (input: FakeGigWorkInput) => {
@@ -318,9 +309,11 @@ export const fakerService = {
       gigsCompleted: faker.number.int({ min: 1, max: 100 }),
       imagesUrl: faker.image.url(),
       ratePerHour: faker.number.int({ min: 10, max: 100 }),
+      responseRate: faker.number.int({ min: 0, max: 100 }),
       summary: faker.lorem.sentence(),
       trainingDescription: faker.lorem.paragraph(),
       videoUrl: faker.internet.url(),
+      wouldWork: faker.number.int({ min: 0, max: 100 }),
       ...input,
     };
 
@@ -341,6 +334,7 @@ export const fakerService = {
   generateFakeReview: async (input: FakeReviewInput) => {
     const fakeReview: FakeReview = {
       review: faker.lorem.sentence(),
+      appRole: faker.helpers.arrayElement([APP_ROLE.BUYER, APP_ROLE.WORKER]),
       ...input,
     };
 
@@ -356,16 +350,5 @@ export const fakerService = {
     };
 
     return await recommendationsRepository.create(fakeRecommendation);
-  },
-
-  generateFakeStatistic: async (input: FakeStatisticInput) => {
-    const fakeStatistic: FakeStatistic = {
-      appRole: faker.helpers.arrayElement([APP_ROLE.BUYER, APP_ROLE.WORKER]),
-      responseRate: faker.number.int({ min: 0, max: 100 }),
-      wouldWork: faker.number.int({ min: 0, max: 100 }),
-      ...input,
-    };
-
-    return await statisticsRepository.create(fakeStatistic);
   },
 };

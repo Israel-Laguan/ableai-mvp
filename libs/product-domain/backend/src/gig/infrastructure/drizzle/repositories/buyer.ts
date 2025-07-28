@@ -18,5 +18,10 @@ export const makeDrizzleBuyerRepository: BuyerRepositoryMaker<NodePgDatabase> = 
     updateByUserId: async (userId, input) => {
       return await db.update(buyers).set(input).where(eq(buyers.userId, userId)).returning();
     },
+
+    create: async buyer => {
+      const queryResult = await db.insert(buyers).values(buyer).returning();
+      return queryResult[0];
+    },
   };
 };

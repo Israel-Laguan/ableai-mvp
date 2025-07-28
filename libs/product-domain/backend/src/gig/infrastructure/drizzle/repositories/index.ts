@@ -6,5 +6,4 @@ export * from './review';
 export * from './skill';
 export * from './skill-hire';
 export * from './slot';
-export * from './statistic';
 export * from './worker';

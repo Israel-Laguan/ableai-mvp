@@ -3,17 +3,15 @@ import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { getTableConfig } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
-import type { Infra, Statistic } from '@models/gig';
+import type { Infra } from '@models/gig';
 import type { MatchWorkers } from '../../../../domain/repositories';
 
-import { APP_ROLE } from '@models/shared';
 import { Infra as SharedInfra } from '../../../../../shared';
-import { workers, skills as skillSchema, slots, statistics } from '../../schemas';
+import { workers, skills as skillSchema, slots } from '../../schemas';
 
 type QueryRow = {
   skill: Infra.MatchedWorker['skill'];
   slots: Infra.MatchedWorker['slots'];
-  statistic: Infra.MatchedWorker['statistic'] & { userId?: number };
   worker: Infra.MatchedWorker['worker'] & { userId?: number };
 };
 
@@ -27,16 +25,16 @@ const {
 const baseSelect = [
   sql`row_to_json(${sql.raw(`${getTableConfig(skillSchema).name}.*`)}) AS skill`,
   sql`ARRAY_AGG(row_to_json(${sql.raw(`${getTableConfig(slots).name}.*`)})) AS slots`,
-  sql`row_to_json(${sql.raw(`${getTableConfig(statistics).name}.*`)}) AS statistic`,
   sql`row_to_json(${sql.raw(`${getTableConfig(workers).name}.*`)}) AS worker`,
 ];
 
 const EQUIPMENT_MATCH_COUNT = sql.raw('equipment_match_count');
 
 const baseOrderBy = [
-  sql`${statistics.wouldWork.name} DESC`,
   sql`${skillSchema.gigsCompleted.name} DESC`,
   sql`${skillSchema.ratePerHour} ASC`,
+  sql`${skillSchema.responseRate} ASC`,
+  sql`${skillSchema.wouldWork} DESC`,
 ];
 
 export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
@@ -111,16 +109,14 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
       )
     );
 
+    //TODO: handle skill statistics filter
     const query = sql`
           SELECT ${sql.join(select, sql`, `)}
           FROM ${workers}
           LEFT JOIN ${skillSchema} ON ${skillSchema.workerId} = ${workers.id}
           LEFT JOIN ${slots} ON ${slots.workerId} = ${workers.id}
-          LEFT JOIN ${statistics} 
-            ON ${statistics.userId} = ${workers.userId}
-            AND ${statistics.appRole} = ${APP_ROLE.WORKER}
           WHERE ${sql.join(where, sql` AND `)}
-          GROUP BY ${workers.id}, ${skillSchema.id}, ${statistics.id}
+          GROUP BY ${workers.id}, ${skillSchema.id}
           ORDER BY ${sql.join(orderBy, sql`, `)}
           LIMIT ${limit}
           OFFSET ${offset}
@@ -130,14 +126,12 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
 
     const matchedWorkers: Infra.MatchedWorker[] = (queryResult.rows as QueryRow[]).map(row => {
       /* eslint-disable @typescript-eslint/no-unused-vars */
-      const { userId: _, ...newStatistic } = row.statistic ? row.statistic : ({} as Statistic);
       const { userId: __, ...newWorker } = row.worker;
       /* eslint-enable @typescript-eslint/no-unused-vars */
 
       return {
         skill: row.skill,
         slots: row.slots,
-        statistic: newStatistic,
         worker: newWorker,
       };
     });
