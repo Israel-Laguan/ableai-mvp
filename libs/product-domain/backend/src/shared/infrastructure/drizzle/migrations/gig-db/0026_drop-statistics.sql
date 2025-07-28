@@ -24,3 +24,6 @@ ALTER TABLE "reviews" ADD COLUMN "app_role" varchar NOT NULL;
 ALTER TABLE "skills"
     ADD COLUMN "response_rate" integer DEFAULT 0,
     ADD COLUMN "would_work" integer DEFAULT 0;
+
+ALTER TABLE "recommendations"
+ALTER COLUMN "user_id" DROP NOT NULL;
