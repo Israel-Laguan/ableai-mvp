@@ -52,7 +52,7 @@ export const RegisterWorkerSchema =
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'At least two recommendations must be provided for each skill.',
-          path: ['skills'],
+          path: ['workerSkills'],
         });
       }
 
@@ -60,7 +60,7 @@ export const RegisterWorkerSchema =
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'At least one slot must be provided for each skill.',
-          path: ['skills'],
+          path: ['workerSkills'],
         });
       }
     });
