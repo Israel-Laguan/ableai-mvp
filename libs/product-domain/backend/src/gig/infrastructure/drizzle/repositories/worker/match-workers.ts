@@ -33,6 +33,8 @@ const EQUIPMENT_MATCH_COUNT = sql.raw('equipment_match_count');
 const baseOrderBy = [
   sql`${skillSchema.gigsCompleted.name} DESC`,
   sql`${skillSchema.ratePerHour} ASC`,
+  sql`${skillSchema.responseRate} ASC`,
+  sql`${skillSchema.wouldWork} DESC`,
 ];
 
 export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
