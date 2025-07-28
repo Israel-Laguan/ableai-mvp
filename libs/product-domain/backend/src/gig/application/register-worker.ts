@@ -20,8 +20,6 @@ export function makeRegisterWorkerUseCase({
         slots,
       });
     } catch (e) {
-      console.log(e);
-
       if ((e as PgError)?.code === '23505') {
         throw Errors.AlreadyExistError.create('Worker already exists', PATH);
       }
