@@ -25,7 +25,7 @@ export const gigWorkTeams = Schemas.withBaseSchema<GigWorkTeam>('gig_work_teams'
     })
     .default(PENDING),
   tips: p.numeric('tips', { mode: 'number' }).default(0),
-  totalPayment: p.numeric('total_payment', { mode: 'number' }).notNull(),
+  totalPayment: p.numeric('total_payment', { mode: 'number' }).default(0),
   workerId: p.integer('worker_id').notNull(),
   workTime: p.integer('work_time').default(0),
   wouldWork: p.boolean('would_work').default(true),
