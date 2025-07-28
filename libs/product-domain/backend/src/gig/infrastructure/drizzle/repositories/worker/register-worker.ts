@@ -11,7 +11,7 @@ export function makeWorkerRegister(db: NodePgDatabase): Domain.Repositories.Regi
 
       const workerId = workerResult.id;
 
-      const [skillsResult, slotResult] = await Promise.all([
+      const [skillsResult, slotResult, recommendationsResult] = await Promise.all([
         await tx
           .insert(skills)
           .values(skl.map(s => ({ ...s, workerId })))
@@ -32,6 +32,7 @@ export function makeWorkerRegister(db: NodePgDatabase): Domain.Repositories.Regi
         skills: skillsResult,
         slots: slotResult,
         worker: workerResult,
+        recommendations: recommendationsResult,
       };
     });
   };

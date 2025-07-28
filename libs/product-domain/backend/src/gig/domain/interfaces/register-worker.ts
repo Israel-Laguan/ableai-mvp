@@ -1,4 +1,4 @@
-import type { Worker, Skill, Slot } from '@models/gig';
+import type { Worker, Skill, Slot, Recommendation } from '@models/gig';
 import type { CreateEntityInput } from '@models/shared';
 import type { Repositories } from '..';
 import type { RegisterRecommendationInput, RegisterSkillInput, RegisterSlotInput } from '.';
@@ -29,4 +29,5 @@ export type RegisterWorkerOutput = {
   worker: Worker;
   skills: Skill[];
   slots: Slot[];
+  recommendations: Recommendation[];
 };
