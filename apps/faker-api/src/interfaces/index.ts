@@ -42,7 +42,7 @@ export type FakeSlotInput = Partial<FakeSlot> & Pick<Slot, 'workerId'>;
 export type FakeUser = Omit<User, IOmitBase>;
 export type FakerUserInput = Partial<FakeUser> & Pick<User, 'privateDataUserId'>;
 
-export type FakeWorker = Partial<Omit<Worker, IOmitBase>> & Pick<Worker, 'userId'>;
+export type FakeWorker = Pick<Worker, 'userId'>;
 
 export interface FakeUserData {
   buyer?: FakeBuyer;

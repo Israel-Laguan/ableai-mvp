@@ -111,7 +111,7 @@ export const fakerService = {
       userId: fakeUser.id,
     });
 
-    const [fakeWorker] = await fakerService.generateFakeWorker({
+    const fakeWorkerOutput = await fakerService.generateFakeWorker({
       ...worker,
       userId: fakeUser.id,
     });
@@ -125,27 +125,14 @@ export const fakerService = {
       buyerId: fakeBuyer.id,
     });
 
-    const [skill] = await fakerService.generateFakeSkill({
-      workerId: fakeWorker.id,
-    });
-
     const gigWorkTeam = await fakerService.generateFakeGigWorkTeam({
       gigWorkId: gigWork.id,
-      workerId: fakeWorker.id,
-      skillId: skill.id,
-    });
-
-    const [slot] = await fakerService.generateFakeSlot({
-      workerId: fakeWorker.id,
+      workerId: fakeWorkerOutput.worker.id,
+      skillId: fakeWorkerOutput.skills[0].id,
     });
 
     const [review] = await fakerService.generateFakeReview({
       userId: fakeUser.id,
-    });
-
-    const [recommendation] = await fakerService.generateFakeRecommendation({
-      userId: fakeUser.id,
-      workerId: fakeWorker.id,
     });
 
     return {
@@ -154,12 +141,11 @@ export const fakerService = {
       gigWorkTeam,
       privateDataUser: fakePrivateDataUser,
       review,
-      recommendation,
       skillHire,
-      skill,
-      slot,
+      skill: fakeWorkerOutput.skills[0],
+      slot: fakeWorkerOutput.slots[0],
       user: fakeUser,
-      worker: fakeWorker,
+      worker: fakeWorkerOutput,
     };
   },
 
@@ -168,14 +154,8 @@ export const fakerService = {
     const [fakeUser] = await fakerService.generateFakeUser({
       privateDataUserId: fakePrivateDataUser.id,
     });
-    const [fakeWorker] = await fakerService.generateFakeWorker({
+    await fakerService.generateFakeWorker({
       userId: fakeUser.id,
-    });
-    await fakerService.generateFakeSkill({
-      workerId: fakeWorker.id,
-    });
-    await fakerService.generateFakeSlot({
-      workerId: fakeWorker.id,
     });
 
     return fakeUser.id;
@@ -240,14 +220,37 @@ export const fakerService = {
   },
 
   generateFakeWorker: async (input: FakeWorker) => {
-    const fakeWorker: FakeWorker = {
-      feedbackSummary: faker.lorem.sentence(),
-      socialNetworkUrl: faker.internet.url(),
-      tags: String(faker.helpers.arrayElements(FAKE_SKILLS, { min: 1, max: 3 })),
-      ...input,
-    };
-
-    return await workerRepository.create(fakeWorker);
+    return await workerRepository.registerWorker({
+      worker: {
+        socialNetworkUrl: faker.internet.url(),
+        tags: String(faker.helpers.arrayElements(FAKE_SKILLS, { min: 1, max: 3 })),
+        userId: input.userId,
+      },
+      recommendations: [
+        {
+          isExternal: true,
+          name: faker.person.fullName(),
+          recommendation: faker.lorem.paragraph(),
+        },
+      ],
+      skills: [
+        {
+          name: faker.helpers.arrayElement(FAKE_SKILLS),
+          ratePerHour: faker.number.int({ min: 10, max: 100 }),
+          summary: faker.lorem.sentence(),
+          trainingDescription: faker.lorem.paragraph(),
+          videoUrl: faker.internet.url(),
+          equipment: faker.helpers.arrayElements(FAKE_EQUIPMENT, { min: 1, max: 2 }).join(', '),
+          imagesUrl: faker.image.url(),
+        },
+      ],
+      slots: [
+        {
+          startTime: faker.date.recent(),
+          endTime: faker.date.future(),
+        },
+      ],
+    });
   },
 
   generateFakeGigWork: async (input: FakeGigWorkInput) => {
