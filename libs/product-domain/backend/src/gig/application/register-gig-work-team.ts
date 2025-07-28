@@ -5,7 +5,7 @@ const PATH = 'REGISTER_GIG_WORK_TEAM';
 
 export function makeRegisterGigWorkTeamUseCase({
   gigWorkTeamRepository,
-  workerSkillRepository: workerSkillRepository,
+  workerSkillRepository,
 }: Interfaces.MakeRegisterGigWorkTeam): UseCases.RegisterGigWorkTeamUseCase {
   return async input => {
     const workerSkill = await workerSkillRepository.getById(String(input.workerSkillId));

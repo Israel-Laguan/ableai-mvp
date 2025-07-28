@@ -300,8 +300,8 @@ export const fakerService = {
     return await skillHiresRepository.create(fakeSkillHire);
   },
 
-  generateFakeSkill: async (input: FakeWorkerSkillInput) => {
-    const fakeSkill: FakeWorkerSkill = {
+  generateFakeWorkerSkill: async (input: FakeWorkerSkillInput) => {
+    const fakeWorkerSkill: FakeWorkerSkill = {
       name: faker.helpers.arrayElement(FAKE_SKILLS),
       badgesAwarded: String(faker.helpers.arrayElements(FAKE_BADGES, { min: 1, max: 3 })),
       equipment: faker.helpers.arrayElements(FAKE_EQUIPMENT, { min: 1, max: 2 }).join(', '),
@@ -317,7 +317,7 @@ export const fakerService = {
       ...input,
     };
 
-    return await workerSkillsRepository.create(fakeSkill);
+    return await workerSkillsRepository.create(fakeWorkerSkill);
   },
 
   generateFakeSlot: async (input: FakeSlotInput) => {

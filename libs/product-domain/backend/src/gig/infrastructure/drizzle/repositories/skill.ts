@@ -6,7 +6,9 @@ import type { WorkerSkillRepositoryMaker } from '../../../domain/repositories';
 import { Infra } from '../../../../shared';
 import { workerSkills } from '../schemas';
 
-export const makeDrizzleSkillsRepository: WorkerSkillRepositoryMaker<NodePgDatabase> = ({ db }) => {
+export const makeDrizzleWorkerSkillRepository: WorkerSkillRepositoryMaker<NodePgDatabase> = ({
+  db,
+}) => {
   const repository = Infra.Drizzle.Repositories.makeDrizzleBaseRepository<WorkerSkill>({
     db,
     schema: workerSkills,

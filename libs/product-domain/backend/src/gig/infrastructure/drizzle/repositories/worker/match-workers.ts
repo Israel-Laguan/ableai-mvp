@@ -10,7 +10,7 @@ import { Infra as SharedInfra } from '../../../../../shared';
 import { workers, workerSkills as workerSkillSchema, slots } from '../../schemas';
 
 type QueryRow = {
-  skill: Infra.MatchedWorker['workerSkill'];
+  worker_skill: Infra.MatchedWorker['workerSkill'];
   slots: Infra.MatchedWorker['slots'];
   worker: Infra.MatchedWorker['worker'] & { userId?: number };
 };
@@ -23,7 +23,7 @@ const {
 } = SharedInfra;
 
 const baseSelect = [
-  sql`row_to_json(${sql.raw(`${getTableConfig(workerSkillSchema).name}.*`)}) AS skill`,
+  sql`row_to_json(${sql.raw(`${getTableConfig(workerSkillSchema).name}.*`)}) AS worker_skill`,
   sql`ARRAY_AGG(row_to_json(${sql.raw(`${getTableConfig(slots).name}.*`)})) AS slots`,
   sql`row_to_json(${sql.raw(`${getTableConfig(workers).name}.*`)}) AS worker`,
 ];
@@ -129,7 +129,7 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
       /* eslint-enable @typescript-eslint/no-unused-vars */
 
       return {
-        workerSkill: row.skill,
+        workerSkill: row.worker_skill,
         slots: row.slots,
         worker: newWorker,
       };
