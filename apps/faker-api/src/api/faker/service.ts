@@ -106,7 +106,7 @@ export const fakerService = {
       fakeUser = newFakeUser;
     }
 
-    const [fakeBuyer] = await fakerService.generateFakeBuyer({
+    const fakeBuyer = await fakerService.generateFakeBuyer({
       ...buyer,
       userId: fakeUser.id,
     });
