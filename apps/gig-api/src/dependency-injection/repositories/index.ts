@@ -8,7 +8,7 @@ const {
         makeDrizzleBuyerRepository,
         makeDrizzleGigWorksRepository,
         makeDrizzleGigWorkTeamsRepository,
-        makeDrizzleSkillsRepository,
+        makeDrizzleWorkerSkillRepository,
         makeDrizzleWorkerRepository,
       },
     },
@@ -18,5 +18,5 @@ const {
 export const gigWorkRepository = makeDrizzleGigWorksRepository({ db: gigDb });
 export const buyerRepository = makeDrizzleBuyerRepository({ db: gigDb });
 export const gigWorkTeamRepository = makeDrizzleGigWorkTeamsRepository({ db: gigDb });
-export const workerSkillRepository = makeDrizzleSkillsRepository({ db: gigDb });
+export const workerSkillRepository = makeDrizzleWorkerSkillRepository({ db: gigDb });
 export const workerRepository = makeDrizzleWorkerRepository({ db: gigDb });
