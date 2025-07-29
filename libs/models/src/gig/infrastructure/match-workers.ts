@@ -1,9 +1,8 @@
-import type { Skill, Slot, Statistic, Worker } from '..';
+import type { WorkerSkill, Slot, Worker } from '..';
 
 export interface MatchedWorker {
-  skill: Skill;
+  workerSkill: WorkerSkill;
   slots: Slot[];
-  statistic: Omit<Statistic, 'userId'>;
   worker: Omit<Worker, 'userId'>;
 }
 

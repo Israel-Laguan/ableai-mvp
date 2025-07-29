@@ -1,5 +1,5 @@
-import { APP_ROLE } from '@models/shared';
-import { Constants, Interfaces, UseCases } from '../domain';
+import type { Interfaces, UseCases } from '../domain';
+
 import { Errors } from '@shared';
 
 type PgError = {
@@ -8,27 +8,16 @@ type PgError = {
 
 const PATH = 'REGISTER_WORKER_USE_CASE';
 
-const {
-  REGISTER_WORKER_REPOSITORIES: { STATISTIC_REPOSITORY, WORKER_REPOSITORY },
-} = Constants;
-
 export function makeRegisterWorkerUseCase({
-  runInTransaction,
+  workerRepository,
 }: Interfaces.MakeRegisterWorkerInput): UseCases.RegisterWorker {
-  return async input => {
+  return async ({ recommendations, workerSkills, slots, worker }) => {
     try {
-      return await runInTransaction(async repositoryManager => {
-        const workerRepository = repositoryManager.getRepository(WORKER_REPOSITORY);
-        const statisticRepository = repositoryManager.getRepository(STATISTIC_REPOSITORY);
-        const [[worker], statistic] = await Promise.all([
-          workerRepository.create(input),
-          statisticRepository.create({
-            appRole: APP_ROLE.WORKER,
-            userId: input.userId,
-          }),
-        ]);
-
-        return { worker, statistic };
+      return await workerRepository.registerWorker({
+        worker,
+        recommendations,
+        workerSkills,
+        slots,
       });
     } catch (e) {
       if ((e as PgError)?.code === '23505') {

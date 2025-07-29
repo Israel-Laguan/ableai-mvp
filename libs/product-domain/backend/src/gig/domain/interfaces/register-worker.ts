@@ -1,21 +1,33 @@
-import type { Worker, Statistic } from '@models/gig';
+import type { Worker, WorkerSkill, Slot, Recommendation } from '@models/gig';
 import type { CreateEntityInput } from '@models/shared';
-import type { Constants, Repositories, Services } from '..';
-
-export type RegisterWorkerRepositoriesRecord = {
-  [Constants.REGISTER_WORKER_REPOSITORIES.WORKER_REPOSITORY]: Repositories.WorkerRepository;
-  [Constants.REGISTER_WORKER_REPOSITORIES.STATISTIC_REPOSITORY]: Repositories.StatisticRepository;
-};
+import type { Repositories } from '..';
+import type { RegisterRecommendationInput, RegisterSkillInput, RegisterSlotInput } from '.';
 
 export interface MakeRegisterWorkerInput {
-  runInTransaction: Services.RegisterWorkerTransaction;
+  workerRepository: Repositories.WorkerRepository;
 }
 
-export type RegisterWorkerInput = CreateEntityInput<Omit<Worker, 'feedbackSummary'>>;
+export type RegisterWorkerInput = {
+  worker: CreateEntityInput<Omit<Worker, 'feedbackSummary'>>;
+  workerSkills: RegisterSkillInput[];
+  slots: RegisterSlotInput[];
+  recommendations: RegisterRecommendationInput[];
+};
 
-export type RegisterWorkerRequestBody = Omit<RegisterWorkerInput, 'userId'>;
+export type RegisterWorkerServiceInput = Omit<RegisterWorkerInput, 'workerSkills' | 'worker'> & {
+  worker: Omit<RegisterWorkerInput['worker'], 'tags'> & { tags?: string[] };
+  workerSkills: (Omit<RegisterWorkerInput['workerSkills'][number], 'equipment'> & {
+    equipment?: string[];
+  })[];
+};
+
+export type RegisterWorkerRequestBody = Omit<RegisterWorkerServiceInput, 'worker'> & {
+  worker: Omit<RegisterWorkerServiceInput['worker'], 'userId'>;
+};
 
 export type RegisterWorkerOutput = {
   worker: Worker;
-  statistic: Statistic;
+  workerSkills: WorkerSkill[];
+  slots: Slot[];
+  recommendations: Recommendation[];
 };

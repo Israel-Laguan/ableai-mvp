@@ -5,6 +5,38 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-    "socialNetworkUrl": "https://www.example.com/profile",
-    "tags": "JavaScript, Node.js"
+    "workerSkills": [
+        {
+            "name": "Bartender",
+            "equipment": ["Shaker", "Jigger", "Strainer"],
+            "imagesUrl": "https://www.example.com/image.jpg",
+            "ratePerHour": 20,
+            "summary": "Experienced bartender with a passion for mixology.",
+            "trainingDescription": "Completed bartending school and has 5 years of experience.",
+            "videoUrl": "https://www.example.com/video.mp4"
+        }
+    ],
+
+    "slots":[
+        {
+            "startTime": "2025-07-28T10:00:00Z",
+            "endTime": "2025-07-29T10:00:00Z"
+        }
+    ],
+
+    "recommendations": [
+        {
+            "name": "John Doe",
+            "recommendation": "Great worker!"
+        },
+        {
+            "name": "Jane Smith",
+            "recommendation": "Highly skilled and reliable."
+        }
+    ],
+
+    "worker": {
+        "socialNetworkUrl": "https://www.example.com/profile",
+        "tags": ["JavaScript", "Node.js"]
+    }
 }

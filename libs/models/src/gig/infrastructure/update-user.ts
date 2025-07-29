@@ -4,7 +4,9 @@ import type { Buyer, Worker } from '..';
 
 export type IUpdateUserInput = Pick<User, 'id'>;
 
-export type UpdateBuyerInput = UpdateEntityInput<Omit<Buyer, 'userId'>>;
+export type UpdateBuyerInput = UpdateEntityInput<
+  Omit<Buyer, 'userId' | 'wouldWork' | 'responseRate'>
+>;
 
 export type UpdateWorkerInput = UpdateEntityInput<Omit<Worker, 'userId'>>;
 

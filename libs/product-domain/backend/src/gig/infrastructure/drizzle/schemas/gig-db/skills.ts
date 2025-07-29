@@ -1,10 +1,10 @@
 import * as p from 'drizzle-orm/pg-core';
 
-import type { Skill } from '@models/gig';
+import type { WorkerSkill } from '@models/gig';
 
 import { Schemas } from '../../../../../shared/infrastructure/drizzle';
 
-export const skills = Schemas.withBaseSchema<Skill>('skills', {
+export const workerSkills = Schemas.withBaseSchema<WorkerSkill>('worker_skills', {
   badgesAwarded: p.varchar('badges_awarded'),
   equipment: p.varchar('equipment'),
   experienceMonth: p.integer('experience_month').default(0),
@@ -16,4 +16,6 @@ export const skills = Schemas.withBaseSchema<Skill>('skills', {
   trainingDescription: p.varchar('training_description'),
   videoUrl: p.varchar('video_url'),
   workerId: p.integer('worker_id').notNull(),
+  responseRate: p.integer('response_rate').default(0),
+  wouldWork: p.integer('would_work').default(0),
 });

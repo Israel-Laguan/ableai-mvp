@@ -1,6 +1,6 @@
-import type { Skill } from '@models/gig';
+import type { WorkerSkill } from '@models/gig';
 import type { ISQLCustomRepository, ISQLRepositoryMaker } from '@models/shared';
 
-export type SkillRepository = ISQLCustomRepository<Skill>;
+export type WorkerSkillRepository = ISQLCustomRepository<WorkerSkill>;
 
-export type SkillRepositoryMaker<TDatabase> = ISQLRepositoryMaker<TDatabase, Skill>;
+export type WorkerSkillRepositoryMaker<TDatabase> = ISQLRepositoryMaker<TDatabase, WorkerSkill>;

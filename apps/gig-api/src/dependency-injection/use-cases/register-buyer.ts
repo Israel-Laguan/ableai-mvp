@@ -4,12 +4,12 @@ import { gigDb } from '../../db';
 const {
   Domain: {
     Constants: {
-      REGISTER_BUYER_REPOSITORIES: { BUYER_REPOSITORY, STATISTIC_REPOSITORY },
+      REGISTER_BUYER_REPOSITORIES: { BUYER_REPOSITORY },
     },
   },
   Infra: {
     Drizzle: {
-      Repositories: { makeDrizzleBuyerRepository, makeDrizzleStatisticsRepository },
+      Repositories: { makeDrizzleBuyerRepository },
     },
   },
 } = Gig;
@@ -20,11 +20,6 @@ const runInTransaction: Gig.Domain.Services.RegisterBuyerTransaction =
       db: gigDb,
       repositoryName: BUYER_REPOSITORY,
       repositoryMaker: makeDrizzleBuyerRepository,
-    },
-    {
-      db: gigDb,
-      repositoryName: STATISTIC_REPOSITORY,
-      repositoryMaker: makeDrizzleStatisticsRepository,
     },
   ]);
 

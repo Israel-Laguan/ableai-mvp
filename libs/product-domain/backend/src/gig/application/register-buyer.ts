@@ -1,4 +1,3 @@
-import { APP_ROLE } from '@models/shared';
 import { Constants, Interfaces, UseCases } from '../domain';
 import { Errors } from '@shared';
 
@@ -9,7 +8,7 @@ type PgError = {
 const PATH = 'REGISTER_BUYER_USE_CASE';
 
 const {
-  REGISTER_BUYER_REPOSITORIES: { BUYER_REPOSITORY, STATISTIC_REPOSITORY },
+  REGISTER_BUYER_REPOSITORIES: { BUYER_REPOSITORY },
 } = Constants;
 
 export function makeRegisterBuyerUseCase({
@@ -19,16 +18,9 @@ export function makeRegisterBuyerUseCase({
     try {
       return await runInTransaction(async repositoryManager => {
         const buyerRepository = repositoryManager.getRepository(BUYER_REPOSITORY);
-        const statisticRepository = repositoryManager.getRepository(STATISTIC_REPOSITORY);
-        const [[buyer], statistic] = await Promise.all([
-          buyerRepository.create(input),
-          statisticRepository.create({
-            appRole: APP_ROLE.BUYER,
-            userId: input.userId,
-          }),
-        ]);
+        const buyer = await buyerRepository.create(input);
 
-        return { buyer, statistic };
+        return { buyer };
       });
     } catch (e) {
       if ((e as PgError)?.code === '23505') {
