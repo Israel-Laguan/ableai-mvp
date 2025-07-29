@@ -4,7 +4,7 @@ import type { Repositories } from '..';
 
 export interface MakeRegisterGigWorkTeam {
   gigWorkTeamRepository: Repositories.GigWorkTeamRepository;
-  skillRepository: Repositories.SkillRepository;
+  workerSkillRepository: Repositories.WorkerSkillRepository;
 }
 
 export type RegisterGigWorkTeamInput = CreateEntityInput<
@@ -21,6 +21,7 @@ export type RegisterGigWorkTeamInput = CreateEntityInput<
     | 'tips'
     | 'workTime'
     | 'wouldWork'
+    | 'totalPayment'
   >
 >;
 

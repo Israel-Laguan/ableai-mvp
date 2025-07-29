@@ -61,7 +61,7 @@ export const MatchWorkersOutputSchema: Schema = {
   items: {
     type: SchemaType.OBJECT,
     properties: {
-      skill: {
+      workerSkill: {
         type: SchemaType.OBJECT,
         properties: {
           badgesAwarded: {

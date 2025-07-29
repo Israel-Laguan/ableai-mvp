@@ -1,4 +1,4 @@
-import type { GigWork, Skill } from '@models/gig';
+import type { GigWork, WorkerSkill } from '@models/gig';
 import type { CreateEntityInput } from '@models/shared';
 import type { Repositories } from '..';
 
@@ -9,7 +9,7 @@ export type MakeRegisterGigWorkUseCase = {
 
 export type RegisterGigWorkInput = {
   gigWork: Omit<CreateEntityInput<GigWork>, 'buyerId' | 'skills'> & {
-    skills: Skill['name'][];
+    skills: WorkerSkill['name'][];
   };
   userId: number;
 };

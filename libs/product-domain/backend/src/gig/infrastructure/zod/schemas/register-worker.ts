@@ -13,8 +13,8 @@ const RecommendationsSchema = Infra.Zod.Utils.makeZodObjectSchema<
   userId: z.string().min(1).optional(),
 }).strict();
 
-const SkillsSchema = Infra.Zod.Utils.makeZodObjectSchema<
-  Interfaces.RegisterWorkerRequestBody['skills'][number]
+const WorkerSkillsSchema = Infra.Zod.Utils.makeZodObjectSchema<
+  Interfaces.RegisterWorkerRequestBody['workerSkills'][number]
 >({
   name: z.string().min(1),
   equipment: z.array(z.string()).min(1).nonempty().optional(),
@@ -42,25 +42,25 @@ const WorkerSchema = Infra.Zod.Utils.makeZodObjectSchema<
 export const RegisterWorkerSchema =
   Infra.Zod.Utils.makeZodObjectSchema<Interfaces.RegisterWorkerRequestBody>({
     recommendations: z.array(RecommendationsSchema).min(2).nonempty(),
-    skills: z.array(SkillsSchema).min(1).nonempty(),
+    workerSkills: z.array(WorkerSkillsSchema).min(1).nonempty(),
     slots: z.array(SlotsSchema).min(1).nonempty(),
     worker: WorkerSchema,
   })
     .strict()
     .superRefine((data, ctx) => {
-      if (data.recommendations.length < 2 * data.skills.length) {
+      if (data.recommendations.length < 2 * data.workerSkills.length) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'At least two recommendations must be provided for each skill.',
-          path: ['skills'],
+          path: ['workerSkills'],
         });
       }
 
-      if (data.slots.length < data.skills.length) {
+      if (data.slots.length < data.workerSkills.length) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'At least one slot must be provided for each skill.',
-          path: ['skills'],
+          path: ['workerSkills'],
         });
       }
     });

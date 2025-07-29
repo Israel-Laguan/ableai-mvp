@@ -6,7 +6,7 @@ export {
   recommendations,
   reviews,
   skillHires,
-  skills,
+  workerSkills,
   slots,
   workers,
 } from '../../../../../gig/infrastructure/drizzle/schemas/gig-db';

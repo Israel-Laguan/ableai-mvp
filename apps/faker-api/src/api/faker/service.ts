@@ -11,10 +11,10 @@ import type {
   FakeReview,
   FakeReviewInput,
   FakerUserInput,
-  FakeSkill,
+  FakeWorkerSkill,
   FakeSkillHire,
   FakeSkillHireInput,
-  FakeSkillInput,
+  FakeWorkerSkillInput,
   FakeSlot,
   FakeSlotInput,
   FakeUser,
@@ -36,7 +36,7 @@ const {
   recommendationsRepository,
   reviewsRepository,
   skillHiresRepository,
-  skillsRepository,
+  workerSkillsRepository,
   slotsRepository,
   userRepository,
   workerRepository,
@@ -128,7 +128,7 @@ export const fakerService = {
     const gigWorkTeam = await fakerService.generateFakeGigWorkTeam({
       gigWorkId: gigWork.id,
       workerId: fakeWorkerOutput.worker.id,
-      skillId: fakeWorkerOutput.skills[0].id,
+      workerSkillId: fakeWorkerOutput.workerSkills[0].id,
     });
 
     const [review] = await fakerService.generateFakeReview({
@@ -142,7 +142,7 @@ export const fakerService = {
       privateDataUser: fakePrivateDataUser,
       review,
       skillHire,
-      skill: fakeWorkerOutput.skills[0],
+      workerSkill: fakeWorkerOutput.workerSkills[0],
       slot: fakeWorkerOutput.slots[0],
       user: fakeUser,
       worker: fakeWorkerOutput,
@@ -233,7 +233,7 @@ export const fakerService = {
           recommendation: faker.lorem.paragraph(),
         },
       ],
-      skills: [
+      workerSkills: [
         {
           name: faker.helpers.arrayElement(FAKE_SKILLS),
           ratePerHour: faker.number.int({ min: 10, max: 100 }),
@@ -300,8 +300,8 @@ export const fakerService = {
     return await skillHiresRepository.create(fakeSkillHire);
   },
 
-  generateFakeSkill: async (input: FakeSkillInput) => {
-    const fakeSkill: FakeSkill = {
+  generateFakeWorkerSkill: async (input: FakeWorkerSkillInput) => {
+    const fakeWorkerSkill: FakeWorkerSkill = {
       name: faker.helpers.arrayElement(FAKE_SKILLS),
       badgesAwarded: String(faker.helpers.arrayElements(FAKE_BADGES, { min: 1, max: 3 })),
       equipment: faker.helpers.arrayElements(FAKE_EQUIPMENT, { min: 1, max: 2 }).join(', '),
@@ -317,7 +317,7 @@ export const fakerService = {
       ...input,
     };
 
-    return await skillsRepository.create(fakeSkill);
+    return await workerSkillsRepository.create(fakeWorkerSkill);
   },
 
   generateFakeSlot: async (input: FakeSlotInput) => {

@@ -5,7 +5,7 @@ import { Errors } from '@shared';
 const PATH = 'RETRIEVE_WORKER_PROFILE';
 
 export function makeRetrieveWorkerProfileUseCase({
-  skillRepository,
+  workerSkillRepository,
   workerRepository,
 }: Interfaces.MakeRetrieveWorkerProfileConfig): UseCases.RetrieveWorkerProfile {
   return async userId => {
@@ -21,13 +21,13 @@ export function makeRetrieveWorkerProfileUseCase({
       throw Errors.NotFoundResourceError.create('Worker not found', PATH);
     }
 
-    const skills = await skillRepository.getAll({
+    const workerSkills = await workerSkillRepository.getAll({
       where: { fields: [{ field: 'workerId', value: worker.id }] },
     });
 
     return {
       worker,
-      skills: skills.results,
+      workerSkills: workerSkills.results,
     };
   };
 }
