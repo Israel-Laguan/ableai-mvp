@@ -9,7 +9,7 @@ const {
 } = Constants;
 
 export const gigWorkTeams = Schemas.withBaseSchema<GigWorkTeam>('gig_work_teams', {
-  awardedBadge: p.varchar('awarded_badge'),
+  awardedBadge: p.varchar('awarded_badge').notNull(),
   delegateTo: p.integer('delegate_to'),
   endDateOffer: p.timestamp('end_date_offer'),
   endGig: p.boolean('end_gig').default(false),

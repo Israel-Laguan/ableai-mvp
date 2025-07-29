@@ -17,11 +17,9 @@ export function makeRegisterGigWorkTeamUseCase({
       );
     }
 
-    const { endDateOffer } = input;
-
     return await gigWorkTeamRepository.create({
       ...input,
-      endDateOffer: endDateOffer ? new Date(endDateOffer) : undefined,
+      endDateOffer: new Date(input.endDateOffer),
       workerId: workerSkill.workerId,
     });
   };
