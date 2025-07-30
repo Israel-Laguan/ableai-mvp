@@ -1,7 +1,7 @@
 import { WorkerSkill } from '@models/gig';
 import { CreateEntityInput } from '@models/shared';
 
-export type RegisterSkillInput = CreateEntityInput<
+export type RegisterWorkerSkillInput = CreateEntityInput<
   Omit<
     WorkerSkill,
     | 'experienceMonth'
