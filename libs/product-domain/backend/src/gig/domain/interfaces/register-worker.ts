@@ -1,7 +1,7 @@
 import type { Worker, WorkerSkill, Slot, Recommendation } from '@models/gig';
 import type { CreateEntityInput } from '@models/shared';
 import type { Repositories } from '..';
-import type { RegisterRecommendationInput, RegisterSkillInput, RegisterSlotInput } from '.';
+import type { RegisterRecommendationInput, RegisterWorkerSkillInput, RegisterSlotInput } from '.';
 
 export interface MakeRegisterWorkerInput {
   workerRepository: Repositories.WorkerRepository;
@@ -9,7 +9,7 @@ export interface MakeRegisterWorkerInput {
 
 export type RegisterWorkerInput = {
   worker: CreateEntityInput<Omit<Worker, 'feedbackSummary'>>;
-  workerSkills: RegisterSkillInput[];
+  workerSkills: RegisterWorkerSkillInput[];
   slots: RegisterSlotInput[];
   recommendations: RegisterRecommendationInput[];
 };

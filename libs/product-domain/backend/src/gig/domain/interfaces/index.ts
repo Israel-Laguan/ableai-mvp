@@ -3,6 +3,6 @@ export * from './recommendations';
 export * from './register-gig-work';
 export * from './register-worker';
 export * from './register-buyer';
-export * from './skills';
+export * from './worker-skills';
 export * from './slots';
 export * from './update';
