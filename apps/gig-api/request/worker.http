@@ -40,3 +40,16 @@ Content-Type: application/json
         "tags": ["JavaScript", "Node.js"]
     }
 }
+
+### Update worker
+PATCH {{baseUrlGig}}/gig/profile
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "worker":{
+  "feedbackSummary": "<feedback_summary>",
+  "socialNetworkUrl": "https://example.com",
+  "tags": "<tags>"
+  }
+}
