@@ -19,7 +19,7 @@ export type FakeGigWorkInput = Partial<FakeGigWork> & Pick<GigWork, 'buyerId'>;
 
 export type FakeGigWorkTeam = Omit<GigWorkTeam, IOmitBase>;
 export type FakeGigWorkTeamInput = Partial<FakeGigWorkTeam> &
-  Pick<GigWorkTeam, 'gigWorkId' | 'workerId' | 'delegateTo' | 'workerSkillId'>;
+  Pick<GigWorkTeam, 'gigWorkId' | 'workerId' | 'delegateTo' | 'workerSkillId' | 'createdBy'>;
 
 export type FakePrivateDataUser = Omit<PrivateDataUser, IOmitBase>;
 
