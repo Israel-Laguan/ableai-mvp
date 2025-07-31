@@ -2,10 +2,6 @@ import type { Interfaces, UseCases } from '../domain';
 
 import { Errors } from '@shared';
 
-type PgError = {
-  code: string;
-};
-
 const PATH = 'REGISTER_WORKER_USE_CASE';
 
 export function makeRegisterWorkerUseCase({
@@ -20,7 +16,7 @@ export function makeRegisterWorkerUseCase({
         slots,
       });
     } catch (e) {
-      if ((e as PgError)?.code === '23505') {
+      if (e instanceof Object && 'code' in e && typeof e.code === 'string' && e.code === '23505') {
         throw Errors.AlreadyExistError.create('Worker already exists', PATH);
       }
 

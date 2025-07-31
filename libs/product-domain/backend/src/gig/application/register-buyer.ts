@@ -1,10 +1,6 @@
 import { Constants, Interfaces, UseCases } from '../domain';
 import { Errors } from '@shared';
 
-type PgError = {
-  code: string;
-};
-
 const PATH = 'REGISTER_BUYER_USE_CASE';
 
 const {
@@ -23,7 +19,7 @@ export function makeRegisterBuyerUseCase({
         return { buyer };
       });
     } catch (e) {
-      if ((e as PgError)?.code === '23505') {
+      if (e instanceof Object && 'code' in e && typeof e.code === 'string' && e.code === '23505') {
         throw Errors.AlreadyExistError.create('Buyer already exists', PATH);
       }
 
