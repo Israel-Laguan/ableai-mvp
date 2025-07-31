@@ -23,6 +23,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   buyers: many(buyers),
   recommendations: many(recommendations),
   reviews: many(reviews),
+  gigWorkTeams: many(gigWorkTeams),
 }));
 
 export const rolesRelations = relations(roles, ({ many }) => ({
