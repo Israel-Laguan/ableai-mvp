@@ -2,6 +2,8 @@ import { UseCases } from '../../dependency-injection';
 import { UpdateInput } from '../../interfaces';
 
 export const gigService = {
+  getAllGigWorks: UseCases.getAllGigWorks,
+
   registerGigWork: UseCases.registerGigWork,
 
   registerGigWorkTeam: UseCases.registerGigWorkTeam,
