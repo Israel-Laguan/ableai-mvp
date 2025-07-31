@@ -8,9 +8,8 @@ import {
   reviews,
   roles,
   skillHires,
-  skills,
+  workerSkills,
   slots,
-  statistics,
   users,
   workers,
 } from '.';
@@ -24,7 +23,6 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   buyers: many(buyers),
   recommendations: many(recommendations),
   reviews: many(reviews),
-  statistics: many(statistics),
 }));
 
 export const rolesRelations = relations(roles, ({ many }) => ({
@@ -37,7 +35,7 @@ export const workersRelations = relations(workers, ({ one, many }) => ({
     references: [users.id],
   }),
   recommendations: many(recommendations),
-  skills: many(skills),
+  workerSkills: many(workerSkills),
   slots: many(slots),
   gigWorkTeams: many(gigWorkTeams),
 }));
@@ -64,9 +62,9 @@ export const gigWorkTeamsRelations = relations(gigWorkTeams, ({ one }) => ({
     fields: [gigWorkTeams.gigWorkId],
     references: [gigWorks.id],
   }),
-  skill: one(skills, {
-    fields: [gigWorkTeams.skillId],
-    references: [skills.id],
+  workerSkill: one(workerSkills, {
+    fields: [gigWorkTeams.workerSkillId],
+    references: [workerSkills.id],
   }),
   worker: one(workers, {
     fields: [gigWorkTeams.workerId],
@@ -99,9 +97,9 @@ export const skillHiresRelations = relations(skillHires, ({ one }) => ({
   }),
 }));
 
-export const skillsRelations = relations(skills, ({ one }) => ({
+export const skillsRelations = relations(workerSkills, ({ one }) => ({
   worker: one(workers, {
-    fields: [skills.workerId],
+    fields: [workerSkills.workerId],
     references: [workers.id],
   }),
 }));
@@ -110,12 +108,5 @@ export const slotsRelations = relations(slots, ({ one }) => ({
   worker: one(workers, {
     fields: [slots.workerId],
     references: [workers.id],
-  }),
-}));
-
-export const statisticsRelations = relations(statistics, ({ one }) => ({
-  user: one(users, {
-    fields: [statistics.userId],
-    references: [users.id],
   }),
 }));

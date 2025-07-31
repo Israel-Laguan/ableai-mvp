@@ -14,4 +14,6 @@ export const buyers = Schemas.withBaseSchema<Buyer>('buyers', {
   socialNetworkUrl: p.varchar('social_network_url'),
   userId: p.integer('user_id').notNull().unique(),
   videoUrl: p.varchar('video_url'),
+  responseRate: p.integer('response_rate').default(0),
+  wouldWork: p.integer('would_work').default(0),
 });

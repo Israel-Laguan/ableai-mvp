@@ -1,0 +1,1 @@
+ALTER TABLE "gig_work_teams" ALTER COLUMN "delegate_to" SET DATA TYPE varchar;

@@ -1,0 +1,31 @@
+### Register Buyer
+POST {{baseUrlGig}}/buyer
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "businessAddress": "123 Main St",
+  "businessName": "My Business",
+  "businessRegistrationNumber": "123456789",
+  "businessRole": "Owner",
+  "socialNetworkUrl": "https://example.com",
+  "videoUrl": "https://example.com/video"
+}
+
+### Update buyer
+PATCH {{baseUrlGig}}/gig/profile
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "buyer":{
+  "badgesAwarded": "<badges>",
+  "businessAddress": "business_address>",
+  "businessName": "<business_name>",
+  "businessRegistrationNumber": "<business_registration_number>",
+  "businessRole": "<business_role>",
+  "representativeId": "representative_id",
+  "socialNetworkUrl": "https://example.com",
+  "videoUrl": "https://example.com"
+  }
+}

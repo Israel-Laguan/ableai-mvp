@@ -16,5 +16,9 @@ export const makeDrizzleGigWorkTeamsRepository: GigWorkTeamRepositoryMaker<NodeP
 
   return {
     ...repository,
+    create: async input => {
+      const queryResult = await db.insert(gigWorkTeams).values(input).returning();
+      return queryResult[0];
+    },
   };
 };

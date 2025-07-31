@@ -1,0 +1,55 @@
+### Register worker
+
+POST {{baseUrlGig}}/worker
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "workerSkills": [
+        {
+            "name": "Bartender",
+            "equipment": ["Shaker", "Jigger", "Strainer"],
+            "imagesUrl": "https://www.example.com/image.jpg",
+            "ratePerHour": 20,
+            "summary": "Experienced bartender with a passion for mixology.",
+            "trainingDescription": "Completed bartending school and has 5 years of experience.",
+            "videoUrl": "https://www.example.com/video.mp4"
+        }
+    ],
+
+    "slots":[
+        {
+            "startTime": "2025-07-28T10:00:00Z",
+            "endTime": "2025-07-29T10:00:00Z"
+        }
+    ],
+
+    "recommendations": [
+        {
+            "name": "John Doe",
+            "recommendation": "Great worker!"
+        },
+        {
+            "name": "Jane Smith",
+            "recommendation": "Highly skilled and reliable."
+        }
+    ],
+
+    "worker": {
+        "socialNetworkUrl": "https://www.example.com/profile",
+        "tags": ["JavaScript", "Node.js"]
+    }
+}
+
+### Update worker
+PATCH {{baseUrlGig}}/gig/profile
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "worker":{
+  "feedbackSummary": "<feedback_summary>",
+  "socialNetworkUrl": "https://example.com",
+  "tags": "<tags>"
+  }
+}

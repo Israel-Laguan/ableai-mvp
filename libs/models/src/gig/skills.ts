@@ -6,7 +6,7 @@ export interface SkillHire extends IBase {
   gigsCompleted: number;
 }
 
-export interface Skill extends IBase {
+export interface WorkerSkill extends IBase {
   badgesAwarded?: string;
   equipment?: string;
   experienceMonth: number;
@@ -14,8 +14,10 @@ export interface Skill extends IBase {
   imagesUrl?: string;
   name: string;
   ratePerHour: number;
+  responseRate: number;
   summary: string;
   trainingDescription: string;
   videoUrl?: string;
   workerId: number;
+  wouldWork: number;
 }

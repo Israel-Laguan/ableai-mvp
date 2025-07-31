@@ -7,9 +7,10 @@ export interface GigWork extends IBase {
   buyerId: number;
   description: string;
   endDate: Date;
-  latitude?: number;
-  longitude?: number;
+  latitude: number;
+  longitude: number;
   paymentPerHour: number;
+  skills: string;
   startDate: Date;
   title: string;
 }
@@ -26,7 +27,7 @@ export interface GigWorkTeam extends IBase {
   gigWorkId: number;
   isAcceptedOffer: boolean;
   paymentId?: number;
-  skillId: number;
+  workerSkillId: number;
   status: GigWorkStatus;
   tips?: number;
   totalPayment: number;
