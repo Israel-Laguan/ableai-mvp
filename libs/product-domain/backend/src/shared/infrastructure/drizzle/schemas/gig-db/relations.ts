@@ -67,6 +67,10 @@ export const gigWorkTeamsRelations = relations(gigWorkTeams, ({ one }) => ({
     fields: [gigWorkTeams.workerSkillId],
     references: [workerSkills.id],
   }),
+  user: one(users, {
+    fields: [gigWorkTeams.createdBy],
+    references: [users.id],
+  }),
   worker: one(workers, {
     fields: [gigWorkTeams.workerId],
     references: [workers.id],
