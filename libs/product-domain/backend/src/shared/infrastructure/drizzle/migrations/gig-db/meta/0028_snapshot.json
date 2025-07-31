@@ -104,9 +104,7 @@
         "buyers_user_id_unique": {
           "name": "buyers_user_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "user_id"
-          ]
+          "columns": ["user_id"]
         }
       },
       "policies": {},
@@ -129,8 +127,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "create_by": {
-          "name": "create_by",
+        "created_by": {
+          "name": "created_by",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -589,9 +587,7 @@
         "roles_name_unique": {
           "name": "roles_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       },
       "policies": {},
@@ -806,9 +802,7 @@
         "users_firebase_uid_unique": {
           "name": "users_firebase_uid_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "firebase_uid"
-          ]
+          "columns": ["firebase_uid"]
         }
       },
       "policies": {},
@@ -987,9 +981,7 @@
         "workers_user_id_unique": {
           "name": "workers_user_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "user_id"
-          ]
+          "columns": ["user_id"]
         }
       },
       "policies": {},
