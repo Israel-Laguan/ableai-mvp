@@ -19,13 +19,18 @@ Authorization: Bearer {{accessToken}}
   "title": "Bartender"
 }
 
+### Get Gig Works
+GET {{baseUrlGig}}/gig/work?sort=asc:createdAt&offset=0&limit=10
+Authorization: Bearer {{accessToken}}
+
 ### Register Gig Work Team
 POST {{baseUrlGig}}/gig/work-team
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "endDateOffer": "2025-07-22",
+  "endDateOffer": "2025-08-01",
   "gigWorkId": 1,
   "workerSkillId": 2
 }
+

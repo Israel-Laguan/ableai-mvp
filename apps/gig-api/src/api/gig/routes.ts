@@ -13,6 +13,13 @@ const suffix = '/gig';
 
 const router = Router();
 
+router.get(
+  '/work',
+  authorizationMiddleware,
+  GigValidationInput.validateGetAllGigWorks,
+  gigController.getAllGigWorks
+);
+
 router.patch('/profile', authorizationMiddleware, validateUpdateUserProfile, updateProfile);
 
 router.post('/work', authorizationMiddleware, validateRegisterGigWork, registerGigWork);

@@ -1,8 +1,2 @@
-import z from 'zod';
-
-export function makeZodObjectSchema<RawShape extends object>(
-  shape: Record<keyof RawShape, z.ZodTypeAny>,
-  params?: z.RawCreateParams
-) {
-  return z.object(shape, params);
-}
+export * from './get-all';
+export * from './object-schema';

@@ -1,4 +1,4 @@
-import type { User } from '@models/auth';
+import type { UserClaims } from '@models/auth';
 
 import { Shared } from '@product-domain/backend';
 import { env } from '../../config/env.config';
@@ -14,5 +14,5 @@ const auth = makeFirebaseAuthModule({
 });
 
 export const firebaseService = {
-  authorization: makeAuthorizationService<Pick<User, 'id' | 'roleId'>>({ auth }),
+  authorization: makeAuthorizationService<UserClaims>({ auth }),
 };

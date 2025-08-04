@@ -14,6 +14,10 @@ const {
 } = Express;
 
 export const GigValidationInput = {
+  validateGetAllGigWorks: validateInputMiddleware({
+    querySchema: Gig.Infra.Zod.Schemas.GetAllGigWorksSchema,
+  }),
+
   validateRegisterGigWorkTeam: validateInputMiddleware({
     bodySchema: RegisterGigWorkTeamSchema,
   }),

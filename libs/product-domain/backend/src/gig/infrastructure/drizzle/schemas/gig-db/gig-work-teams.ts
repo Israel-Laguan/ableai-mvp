@@ -9,13 +9,14 @@ const {
 } = Constants;
 
 export const gigWorkTeams = Schemas.withBaseSchema<GigWorkTeam>('gig_work_teams', {
-  awardedBadge: p.varchar('awarded_badge').notNull(),
+  awardedBadge: p.varchar('awarded_badge'),
+  createdBy: p.integer('created_by').notNull(),
   delegateTo: p.integer('delegate_to'),
   endDateOffer: p.timestamp('end_date_offer'),
   endGig: p.boolean('end_gig').default(false),
   expenses: p.numeric('expenses', { mode: 'number' }).default(0),
   feedback: p.varchar('feedback'),
-  gigWorkId: p.integer('gig_work_id'),
+  gigWorkId: p.integer('gig_work_id').notNull(),
   isAcceptedOffer: p.boolean('is_accepted_offer').default(false),
   paymentId: p.integer('payment_id'),
   workerSkillId: p.integer('worker_skill_id'),
