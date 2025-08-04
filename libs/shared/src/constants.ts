@@ -1,4 +1,4 @@
-export const HTTP_STATUS_CODE = {
+export const HTTP_STATUS_CODE = Object.freeze({
   OK: 200,
   CREATED: 201,
   UPDATED: 204,
@@ -8,7 +8,7 @@ export const HTTP_STATUS_CODE = {
   NOT_FOUND: 404,
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
-};
+});
 
 export type HTTPStatusCode = (typeof HTTP_STATUS_CODE)[keyof typeof HTTP_STATUS_CODE];
 

@@ -1,4 +1,7 @@
-import { Literal } from './basic-types';
+import type { Literal } from './basic-types';
+import type { SORT } from './constants';
+
+export type Sort = `${typeof SORT.ASC}:${string}` | `${typeof SORT.DESC}:${string}`;
 
 export type WhereField = {
   field: string;
@@ -6,7 +9,7 @@ export type WhereField = {
 };
 
 export type GetAllInput = {
-  sort?: string;
+  sort?: Sort;
   where?: {
     fields?: Array<WhereField>;
   };

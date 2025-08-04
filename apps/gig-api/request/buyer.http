@@ -19,13 +19,13 @@ Authorization: Bearer {{accessToken}}
 
 {
   "buyer":{
-  "badgesAwarded": "<badges>",
-  "businessAddress": "business_address>",
-  "businessName": "<business_name>",
-  "businessRegistrationNumber": "<business_registration_number>",
-  "businessRole": "<business_role>",
-  "representativeId": "representative_id",
-  "socialNetworkUrl": "https://example.com",
-  "videoUrl": "https://example.com"
-  }
+    "badgesAwarded": "<badges>",
+    "businessAddress": "business_address>",
+    "businessName": "<business_name>",
+    "businessRegistrationNumber": "<business_registration_number>",
+    "businessRole": "<business_role>",
+    "representativeId": "representative_id",
+    "socialNetworkUrl": "https://example.com",
+    "videoUrl": "https://example.com"
+    }
 }

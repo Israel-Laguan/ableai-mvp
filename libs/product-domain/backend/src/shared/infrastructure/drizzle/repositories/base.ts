@@ -11,6 +11,10 @@ import type {
 } from '@models/shared';
 import type { DrizzleBaseRepositoryConfig } from '../../../domain/interfaces';
 
+import { Errors } from '@shared';
+
+const PATH = 'DRIZZLE_BASE_REPOSITORY';
+
 export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
   schema,
 }: Pick<DrizzleBaseRepositoryConfig, 'schema'>): (({
@@ -41,7 +45,10 @@ export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
               conditions.push(eq(column, value));
             }
           } else {
-            console.warn(`The Column '${field}' is not found in the table.`);
+            throw Errors.NotFoundResourceError.create(
+              `The Column '${field}' is not found in the table.`,
+              PATH
+            );
           }
         }
 

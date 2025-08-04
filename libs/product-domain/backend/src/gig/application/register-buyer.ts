@@ -1,11 +1,9 @@
 import { Constants, Interfaces, UseCases } from '../domain';
-import { Errors } from '@shared';
-
-type PgError = {
-  code: string;
-};
+import { Errors, Utils } from '@shared';
 
 const PATH = 'REGISTER_BUYER_USE_CASE';
+
+const validateError = Utils.makeValidateKeys(['code']);
 
 const {
   REGISTER_BUYER_REPOSITORIES: { BUYER_REPOSITORY },
@@ -23,7 +21,9 @@ export function makeRegisterBuyerUseCase({
         return { buyer };
       });
     } catch (e) {
-      if ((e as PgError)?.code === '23505') {
+      const error = validateError(e).data;
+
+      if (error && error.code === '23505') {
         throw Errors.AlreadyExistError.create('Buyer already exists', PATH);
       }
 

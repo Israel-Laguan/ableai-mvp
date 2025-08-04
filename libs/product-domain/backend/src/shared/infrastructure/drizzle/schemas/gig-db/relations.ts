@@ -23,6 +23,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   buyers: many(buyers),
   recommendations: many(recommendations),
   reviews: many(reviews),
+  gigWorkTeams: many(gigWorkTeams),
 }));
 
 export const rolesRelations = relations(roles, ({ many }) => ({
@@ -65,6 +66,10 @@ export const gigWorkTeamsRelations = relations(gigWorkTeams, ({ one }) => ({
   workerSkill: one(workerSkills, {
     fields: [gigWorkTeams.workerSkillId],
     references: [workerSkills.id],
+  }),
+  user: one(users, {
+    fields: [gigWorkTeams.createdBy],
+    references: [users.id],
   }),
   worker: one(workers, {
     fields: [gigWorkTeams.workerId],

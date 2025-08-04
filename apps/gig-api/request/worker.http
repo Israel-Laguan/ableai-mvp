@@ -48,8 +48,8 @@ Authorization: Bearer {{accessToken}}
 
 {
   "worker":{
-  "feedbackSummary": "<feedback_summary>",
-  "socialNetworkUrl": "https://example.com",
-  "tags": "<tags>"
-  }
+    "feedbackSummary": "<feedback_summary>",
+    "socialNetworkUrl": "https://example.com",
+    "tags": "<tags>"
+    }
 }
