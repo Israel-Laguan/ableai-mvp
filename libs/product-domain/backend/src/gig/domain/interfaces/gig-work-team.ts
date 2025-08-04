@@ -25,6 +25,9 @@ export type RegisterGigWorkTeamInput = CreateEntityInput<
   >
 >;
 
-export type RegisterGigWorkTeamRequestBody = Omit<RegisterGigWorkTeamInput, 'workerId'>;
+export type RegisterGigWorkTeamRequestBody = Omit<
+  RegisterGigWorkTeamInput,
+  'workerId' | 'createdBy'
+>;
 
 export type RegisterGigWorkTeamOutput = GigWorkTeam;
