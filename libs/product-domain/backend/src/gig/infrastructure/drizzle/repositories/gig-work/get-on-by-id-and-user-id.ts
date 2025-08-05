@@ -6,7 +6,8 @@ import type { GigWork } from '@models/gig';
 import type { Repositories } from '../../../../domain';
 
 import { Infra as SharedInfra } from '../../../../../shared';
-import { buyers, gigWorks } from '../../schemas';
+import { gigWorks } from '../../schemas';
+import { makeIsGigWorkOwnerClause } from './shared';
 
 const selectAllClause = SharedInfra.Drizzle.Utils.makeSelectSql(gigWorks);
 
@@ -18,9 +19,7 @@ export function makeGetOneByIdAndUserId(
         ${selectAllClause}
         FROM ${gigWorks}
         WHERE ${gigWorks.id} = ${id}
-        AND ${gigWorks.buyerId} = (
-          SELECT ${buyers.id} FROM ${buyers} WHERE ${buyers.userId} = ${userId}
-        )
+        AND ${makeIsGigWorkOwnerClause(userId)}
         `;
     const gigWork = await db.execute<Record<keyof GigWork, GigWork[keyof GigWork]>>(query);
 

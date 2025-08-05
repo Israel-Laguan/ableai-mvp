@@ -8,7 +8,8 @@ import type { GigWork } from '@models/gig';
 
 import { Infra as SharedInfra } from '../../../../../shared';
 import { Constants } from '../../../../domain';
-import { buyers, gigWorks } from '../../schemas';
+import { gigWorks } from '../../schemas';
+import { makeIsGigWorkOwnerClause } from './shared';
 
 type ValidGigWorksSortFields = (typeof Constants.VALID_GIG_WORK_SORT_FIELDS)[number];
 
@@ -19,11 +20,8 @@ export function makeGetAllGigWorks(db: NodePgDatabase): Repositories.GetAllGigWo
     let sortField: ValidGigWorksSortFields = 'createdAt';
     let sortOrder: 'ASC' | 'DESC' = 'ASC';
 
-    const whereClause = sql`
-      ${gigWorks.buyerId} = (
-        SELECT ${buyers.id} FROM ${buyers} WHERE ${buyers.userId} = ${userId}
-      )
-    `;
+    const whereClause = makeIsGigWorkOwnerClause(userId);
+
     const [newSortOrder, newSortField] = sort?.split(':') ?? [];
 
     if (
