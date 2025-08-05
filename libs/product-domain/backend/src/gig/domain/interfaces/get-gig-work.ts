@@ -8,7 +8,6 @@ export type MakeGetAllGigWorkInput = {
 
 export type MakeGetOneGigWorkInput = {
   gigWorkRepository: Repositories.GigWorkRepository;
-  buyerRepository: Repositories.BuyerRepository;
 };
 
 export type GetAllGigWorkInput = Pick<GetAllInput, 'limit' | 'offset' | 'sort'> & {
