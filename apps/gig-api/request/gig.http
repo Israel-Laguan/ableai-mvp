@@ -2,7 +2,7 @@
 GET {{baseUrlGig}}/health
 
 ### Register gig work
-POST {{baseUrlGig}}/gig/work
+POST {{baseUrlGig}}/gig/gig-work
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -20,7 +20,11 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Get Gig Works
-GET {{baseUrlGig}}/gig/work?sort=asc:createdAt&offset=0&limit=10
+GET {{baseUrlGig}}/gig/gig-work?sort=asc:createdAt&offset=0&limit=10
+Authorization: Bearer {{accessToken}}
+
+### Get One Gig Work
+GET {{baseUrlGig}}/gig/gig-work/1
 Authorization: Bearer {{accessToken}}
 
 ### Register Gig Work Team
@@ -31,6 +35,5 @@ Content-Type: application/json
 {
   "endDateOffer": "2025-08-01",
   "gigWorkId": 1,
-  "workerSkillId": 2
+  "workerSkillId": 1
 }
-
