@@ -11,7 +11,6 @@ export function withBaseSchema<Schema extends object>(
   const tableColumns = {
     ...columns,
     id: serial('id').primaryKey(),
-    ...columns,
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at')
       .notNull()
