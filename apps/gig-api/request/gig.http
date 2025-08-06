@@ -20,7 +20,7 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Get Gig Works
-GET {{baseUrlGig}}/gig/gig-work?sort=asc:createdAt&offset=0&limit=10
+GET {{baseUrlGig}}/gig/gig-work?appRole=WORKER&sort=asc:createdAt&offset=0&limit=10&status=PENDING
 Authorization: Bearer {{accessToken}}
 
 ### Get One Gig Work
