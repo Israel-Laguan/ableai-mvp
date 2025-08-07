@@ -1,0 +1,5 @@
+export const GIG_WORK_STATUS = Object.freeze({
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+});

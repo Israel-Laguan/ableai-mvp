@@ -10,21 +10,29 @@ const { validateRegisterGigWork, validateRegisterGigWorkTeam, validateUpdateUser
   GigValidationInput;
 
 const suffix = '/gig';
+const GigWorkSuffix = '/gig-work';
+const GigWorkTeamSuffix = '/work-team';
 
 const router = Router();
 
+router.patch('/profile', authorizationMiddleware, validateUpdateUserProfile, updateProfile);
+
+router.post(GigWorkSuffix, authorizationMiddleware, validateRegisterGigWork, registerGigWork);
 router.get(
-  '/work',
+  GigWorkSuffix,
   authorizationMiddleware,
   GigValidationInput.validateGetAllGigWorks,
   gigController.getAllGigWorks
 );
+router.get(
+  GigWorkSuffix + '/:id',
+  authorizationMiddleware,
+  GigValidationInput.validateGetOneGigWork,
+  gigController.getOneGigWork
+);
 
-router.patch('/profile', authorizationMiddleware, validateUpdateUserProfile, updateProfile);
-
-router.post('/work', authorizationMiddleware, validateRegisterGigWork, registerGigWork);
 router.post(
-  '/work-team',
+  GigWorkTeamSuffix,
   authorizationMiddleware,
   validateRegisterGigWorkTeam,
   registerGigWorkTeam
