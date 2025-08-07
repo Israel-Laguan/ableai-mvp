@@ -3,12 +3,15 @@ import z from 'zod';
 import { SORTS, GetAllInput } from '@models/shared';
 import { makeZodObjectSchema } from '../utils';
 
-type MakeZodGetAllSchema = {
+type MakeZodGetAllSchema<Schema extends object> = {
   validSortFields: string[] | readonly string[];
-  additionalQueryParams?: Record<string, z.ZodTypeAny>;
+  additionalQueryParams?: Omit<Record<keyof Schema, z.ZodTypeAny>, keyof GetAllInput>;
 };
 
-export function makeGetAllSchema({ validSortFields, additionalQueryParams }: MakeZodGetAllSchema) {
+export function makeGetAllSchema<Schema extends object>({
+  validSortFields,
+  additionalQueryParams,
+}: MakeZodGetAllSchema<Schema>) {
   return makeZodObjectSchema<Omit<GetAllInput, 'where'>>({
     ...additionalQueryParams,
     limit: z.string().regex(/^\d+$/, 'Invalid limit').optional(),

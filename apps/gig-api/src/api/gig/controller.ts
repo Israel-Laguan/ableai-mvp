@@ -24,9 +24,24 @@ export const gigController = {
       res: Response
     ) => {
       const result = await gigService.getAllGigWorks({
-        limit: req.query.limit,
-        offset: req.query.offset,
-        sort: req.query.sort,
+        ...req.query,
+        userId: req.user.id,
+      });
+
+      res.status(HTTP_STATUS_CODE.OK).json(result);
+    }
+  ),
+
+  getOneGigWork: tryCatchAndNext(
+    async (
+      req: Express.Types.AuthorizedRequest<
+        UserClaims,
+        Gig.Domain.Interfaces.GetOneGigWorkRequestParams
+      >,
+      res: Response
+    ) => {
+      const result = await gigService.getOneGigWork({
+        id: Number(req.params.id),
         userId: req.user.id,
       });
 

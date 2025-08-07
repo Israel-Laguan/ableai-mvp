@@ -6,26 +6,63 @@ import type { Repositories } from '../../../../domain';
 
 import type { GigWork } from '@models/gig';
 
+import { APP_ROLE } from '@models/shared';
+import { Constants as GigModelConstants } from '@models/gig';
+import { Infra as SharedInfra } from '../../../../../shared';
 import { Constants } from '../../../../domain';
-import { buyers, gigWorks } from '../../schemas';
+import { gigWorks } from '../../schemas';
+import { makeIsGigWorkOwnerClause, makeIsNotGigWorkOwnerClause } from './shared';
 
 type ValidGigWorksSortFields = (typeof Constants.VALID_GIG_WORK_SORT_FIELDS)[number];
 
+const selectSql = SharedInfra.Drizzle.Utils.makeSelectSql<GigWork>(gigWorks);
+
 export function makeGetAllGigWorks(db: NodePgDatabase): Repositories.GetAllGigWorks {
-  return async ({ userId, limit = 10, offset = 0, sort }) => {
-    const whereClause = sql`
-      ${gigWorks.buyerId} = (
-        SELECT ${buyers.id} FROM ${buyers} WHERE ${buyers.userId} = ${userId}
-      )
-    `;
-    const sortField = (sort?.split(':')[1] as ValidGigWorksSortFields) || 'createdAt';
+  return async ({ appRole, userId, limit = 10, offset = 0, sort = 'asc:createdAt', status }) => {
+    let sortField: ValidGigWorksSortFields = 'createdAt';
+    let sortOrder: 'ASC' | 'DESC' = 'ASC';
+    const whereClause = [];
+
+    if (appRole === APP_ROLE.WORKER) {
+      whereClause.push(makeIsNotGigWorkOwnerClause(userId));
+    } else {
+      whereClause.push(makeIsGigWorkOwnerClause(userId));
+    }
+
+    if (status === GigModelConstants.GIG_WORK_STATUS.PENDING) {
+      whereClause.push(sql`${gigWorks.startDate} > CURRENT_DATE`);
+    }
+
+    if (status === GigModelConstants.GIG_WORK_STATUS.IN_PROGRESS) {
+      whereClause.push(sql`${gigWorks.startDate} <= CURRENT_DATE`);
+      whereClause.push(sql`${gigWorks.endDate} >= CURRENT_DATE`);
+    }
+
+    if (status === GigModelConstants.GIG_WORK_STATUS.COMPLETED) {
+      whereClause.push(sql`${gigWorks.endDate} < CURRENT_DATE`);
+    }
+
+    const whereSql = SharedInfra.Drizzle.Utils.makeWhereSql(whereClause);
+
+    const [newSortOrder, newSortField] = sort?.split(':') ?? [];
+
+    if (
+      newSortField &&
+      Constants.VALID_GIG_WORK_SORT_FIELDS.includes(newSortField as ValidGigWorksSortFields)
+    ) {
+      sortField = newSortField as ValidGigWorksSortFields;
+    }
+
+    if (newSortOrder.toUpperCase() === 'DESC') {
+      sortOrder = 'DESC';
+    }
+
     const sortBy = sql`${gigWorks[sortField]}`;
-    const sortOrder = sort?.split(':')[0] === 'desc' ? 'DESC' : 'ASC';
 
     const gigWorksQuery = sql`
-      SELECT *
+      ${selectSql}
       FROM ${gigWorks}
-      WHERE ${whereClause}
+      ${whereSql}
       ORDER BY ${sortBy} ${sql.raw(sortOrder)}
       LIMIT ${limit}
       OFFSET ${offset}
@@ -34,7 +71,7 @@ export function makeGetAllGigWorks(db: NodePgDatabase): Repositories.GetAllGigWo
     const countQuery = sql`
       SELECT COUNT(*)::int AS total
       FROM ${gigWorks}
-      WHERE ${whereClause}
+      ${whereSql}
     `;
 
     const [gigWorksQueryResult, countQueryResult] = await Promise.all([
