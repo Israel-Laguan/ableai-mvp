@@ -32,6 +32,28 @@ export const gigController = {
     }
   ),
 
+  getAllCompletedGigWorkResumes: tryCatchAndNext(
+    async (
+      req: Express.Types.AuthorizedRequest<
+        UserClaims,
+        Request['params'],
+        object,
+        object,
+        Gig.Domain.Interfaces.GetAllCompletedGigWorkResumesRequestQuery
+      >,
+      res: Response
+    ) => {
+      const result = await gigService.getAllCompletedGigWorkResumes({
+        limit: req.query.limit,
+        offset: req.query.offset,
+        sort: req.query.sort,
+        userId: req.user.id,
+      });
+
+      res.status(HTTP_STATUS_CODE.OK).json(result);
+    }
+  ),
+
   getOneGigWork: tryCatchAndNext(
     async (
       req: Express.Types.AuthorizedRequest<

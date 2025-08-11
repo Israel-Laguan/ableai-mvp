@@ -30,6 +30,12 @@ router.get(
   GigValidationInput.validateGetOneGigWork,
   gigController.getOneGigWork
 );
+router.get(
+  GigWorkSuffix + '/completed/resume',
+  authorizationMiddleware,
+  GigValidationInput.validateGetAllCompletedGigWorkResumes,
+  gigController.getAllCompletedGigWorkResumes
+);
 
 router.post(
   GigWorkTeamSuffix,

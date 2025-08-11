@@ -37,3 +37,7 @@ Content-Type: application/json
   "gigWorkId": 1,
   "workerSkillId": 1
 }
+
+### Get All Completed Gig Work Resumes
+GET {{baseUrlGig}}/gig/gig-work/completed/resume?offset=0&limit=10
+Authorization: Bearer {{accessToken}}
