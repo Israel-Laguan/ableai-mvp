@@ -49,7 +49,7 @@ export function makeGetAllGigWorks(db: NodePgDatabase): Repositories.GetAllGigWo
     const [sortOrder, sortField] = sort?.split(':') ?? [];
 
     const isGigWorkOwnerOrWorkerPart = match(appRole)
-      .with(APP_ROLE.BUYER, () => {
+      .with(APP_ROLE.WORKER, () => {
         return makeIsNotGigWorkOwnerClause(userId);
       })
       .otherwise(() => {

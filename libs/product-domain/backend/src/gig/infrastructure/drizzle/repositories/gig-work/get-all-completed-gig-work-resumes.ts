@@ -32,7 +32,7 @@ const users = AuthInfra.Drizzle.Schema.users;
 const gigWorkAlias = 'gw';
 const gigWorkSelectSchema = select<GigWork>(gigWorks, gigWorkAlias);
 const gigWorkId = gigWorkSelectSchema.column('id');
-const gigWWorkCreatedAt = gigWorkSelectSchema.column('createdAt');
+const gigWorkCreatedAt = gigWorkSelectSchema.column('createdAt');
 const workersAlias = 'workers';
 const defaultWorkers = sql.raw(`'{}'`);
 const totalPaymentRowAlias = 'totalPayment';
@@ -88,7 +88,7 @@ const groupByPart = sql`
 `;
 
 const orderByPart = sql`
-  ORDER BY ${gigWWorkCreatedAt} DESC
+  ORDER BY ${gigWorkCreatedAt} DESC
 `;
 
 const limitPart = (limit = 10) => sql`
@@ -113,13 +113,7 @@ export function makeGetAllCompletedGigWorkResumes(
       offsetPart(offset)
     );
 
-    const queryCount = parts(
-      queryCountSelect,
-      fromPart(userId),
-      joinPart,
-      groupByPart,
-      orderByPart
-    );
+    const queryCount = parts(queryCountSelect, fromPart(userId));
 
     const [queryResult, queryCountResult] = await Promise.all([
       db.execute<Utils.InterfaceToRecord<Interfaces.CompletedGigWorkResumes>>(query),

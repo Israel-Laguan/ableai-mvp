@@ -44,9 +44,7 @@ export const gigController = {
       res: Response
     ) => {
       const result = await gigService.getAllCompletedGigWorkResumes({
-        limit: req.query.limit,
-        offset: req.query.offset,
-        sort: req.query.sort,
+        ...req.query,
         userId: req.user.id,
       });
 
