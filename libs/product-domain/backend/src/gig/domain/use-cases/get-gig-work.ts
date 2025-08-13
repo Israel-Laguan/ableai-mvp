@@ -4,9 +4,9 @@ export type GetAllGigWorksUseCase = (
   input: Interfaces.GetAllGigWorkInput
 ) => Promise<Interfaces.GetAllGigWorkOutput>;
 
-export type GetAllCompletedGigWorkResumesUseCase = (
-  input: Interfaces.GetAllCompletedGigWorkResumesInput
-) => Promise<Interfaces.GetAllCompletedGigWorkResumesOutput>;
+export type GetAllGigWorkPaymentsUseCase = (
+  input: Interfaces.GetAllGigWorkPaymentsInput
+) => Promise<Interfaces.GetAllGigWorkPaymentsOutput>;
 
 export type GetOneGigWorkUseCase = (
   input: Interfaces.GetOneGigWorkInput

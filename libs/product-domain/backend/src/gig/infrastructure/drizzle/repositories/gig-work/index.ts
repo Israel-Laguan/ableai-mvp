@@ -7,7 +7,7 @@ import { Infra } from '../../../../../shared';
 import { gigWorks } from '../../schemas';
 import { makeGetAllGigWorks } from './get-all';
 import { makeGetOneByIdAndUserId } from './get-on-by-id-and-user-id';
-import { makeGetAllCompletedGigWorkResumes } from './get-all-completed-gig-work-resumes';
+import { makeGetAllGigWorkPayments } from './get-all-gig-work-payments';
 
 export const makeDrizzleGigWorksRepository: GigWorkRepositoryMaker<NodePgDatabase> = ({ db }) => {
   const repository = Infra.Drizzle.Repositories.makeDrizzleBaseRepository<GigWork>({
@@ -20,7 +20,7 @@ export const makeDrizzleGigWorksRepository: GigWorkRepositoryMaker<NodePgDatabas
 
     getAll: makeGetAllGigWorks(db),
 
-    getAllCompletedGigWorkResumes: makeGetAllCompletedGigWorkResumes(db),
+    getAllGigWorkPayments: makeGetAllGigWorkPayments(db),
 
     getOneByIdAndUserId: makeGetOneByIdAndUserId(db),
   };

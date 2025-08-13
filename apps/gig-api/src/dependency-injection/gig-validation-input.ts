@@ -19,7 +19,7 @@ export const GigValidationInput = {
   }),
 
   validateGetAllCompletedGigWorkResumes: validateInputMiddleware({
-    querySchema: Gig.Infra.Zod.Schemas.GetAllCompletedGigWorkResumesSchema,
+    querySchema: Gig.Infra.Zod.Schemas.GetAllGigWorkPaymentsSchema,
   }),
 
   validateGetOneGigWork: validateInputMiddleware({

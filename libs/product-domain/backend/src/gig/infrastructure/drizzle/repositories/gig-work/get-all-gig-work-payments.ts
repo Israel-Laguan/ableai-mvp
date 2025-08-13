@@ -102,9 +102,7 @@ const offsetPart = (offset = 0) => sql`
   OFFSET ${offset}
 `;
 
-export function makeGetAllCompletedGigWorkResumes(
-  db: NodePgDatabase
-): Repositories.GetAllCompletedGigWorksResumes {
+export function makeGetAllGigWorkPayments(db: NodePgDatabase): Repositories.GetAllGigWorksPayments {
   return async ({ limit = 10, offset = 0, userId }) => {
     const query = parts(
       selectPart,
@@ -128,7 +126,7 @@ export function makeGetAllCompletedGigWorkResumes(
       )}) AS subquery`;
 
     const [queryResult, queryCountResult] = await Promise.all([
-      db.execute<Utils.InterfaceToRecord<Interfaces.CompletedGigWorkResumes>>(query),
+      db.execute<Utils.InterfaceToRecord<Interfaces.GigWorPayments>>(query),
       db.execute<{ total: number }>(queryCount),
     ]);
 

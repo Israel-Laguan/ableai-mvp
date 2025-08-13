@@ -4,9 +4,9 @@ import type { Interfaces } from '..';
 
 type OmitBase = 'getAll';
 
-export type GetAllCompletedGigWorksResumes = (
-  input: Interfaces.GetAllCompletedGigWorkResumesInput
-) => Promise<Interfaces.GetAllCompletedGigWorkResumesOutput>;
+export type GetAllGigWorksPayments = (
+  input: Interfaces.GetAllGigWorkPaymentsInput
+) => Promise<Interfaces.GetAllGigWorkPaymentsOutput>;
 
 export type GetOneGigWorkByIdAndUserId = (id: number, userId: number) => Promise<GigWork | null>;
 
@@ -16,7 +16,7 @@ export type GetAllGigWorks = (
 
 type CustomMethods = {
   getAll: GetAllGigWorks;
-  getAllCompletedGigWorkResumes: GetAllCompletedGigWorksResumes;
+  getAllGigWorkPayments: GetAllGigWorksPayments;
   getOneByIdAndUserId: GetOneGigWorkByIdAndUserId;
 };
 

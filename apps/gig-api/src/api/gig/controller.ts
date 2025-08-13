@@ -32,18 +32,18 @@ export const gigController = {
     }
   ),
 
-  getAllCompletedGigWorkResumes: tryCatchAndNext(
+  getAllGigWorkPayments: tryCatchAndNext(
     async (
       req: Express.Types.AuthorizedRequest<
         UserClaims,
         Request['params'],
         object,
         object,
-        Gig.Domain.Interfaces.GetAllCompletedGigWorkResumesRequestQuery
+        Gig.Domain.Interfaces.GetAllGigWorkPaymentsRequestQuery
       >,
       res: Response
     ) => {
-      const result = await gigService.getAllCompletedGigWorkResumes({
+      const result = await gigService.getAllGigWorkPayments({
         ...req.query,
         userId: req.user.id,
       });

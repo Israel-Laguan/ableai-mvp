@@ -10,7 +10,7 @@ export type MakeGetOneGigWorkInput = {
   gigWorkRepository: Repositories.GigWorkRepository;
 };
 
-export type MakeGetAllCompletedGigWorkResumes = {
+export type MakeGetAllGigWorkPayments = {
   gigWorkRepository: Repositories.GigWorkRepository;
 };
 
@@ -20,7 +20,7 @@ export type GetAllGigWorkInput = Pick<GetAllInput, 'limit' | 'offset' | 'sort'> 
   userId: number;
 };
 
-export type GetAllCompletedGigWorkResumesInput = Pick<GetAllInput, 'limit' | 'offset' | 'sort'> & {
+export type GetAllGigWorkPaymentsInput = Pick<GetAllInput, 'limit' | 'offset' | 'sort'> & {
   userId: number;
 };
 
@@ -30,20 +30,17 @@ export type GetOneGigWorkInput = Pick<GigWork, 'id'> & {
 
 export type GetAllGigWorkRequestQuery = Omit<GetAllGigWorkInput, 'userId'>;
 
-export type GetAllCompletedGigWorkResumesRequestQuery = Omit<
-  GetAllCompletedGigWorkResumesInput,
-  'userId'
->;
+export type GetAllGigWorkPaymentsRequestQuery = Omit<GetAllGigWorkPaymentsInput, 'userId'>;
 
 export type GetOneGigWorkRequestParams = { id: string };
 
 export type GetAllGigWorkOutput = PaginationResult<GigWork>;
 
-export type CompletedGigWorkResumes = GigWork & {
+export type GigWorPayments = GigWork & {
   totalPayment: number;
   workers: (WorkerSkill & { uid: string })[];
 };
 
-export type GetAllCompletedGigWorkResumesOutput = PaginationResult<CompletedGigWorkResumes>;
+export type GetAllGigWorkPaymentsOutput = PaginationResult<GigWorPayments>;
 
 export type GetOneGigWorkOutput = GigWork;
