@@ -3,7 +3,7 @@ import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { sql } from 'drizzle-orm';
 
 import type { Utils } from '@models/shared';
-import type { GigWork } from '@models/gig';
+import { GigWork, Constants } from '@models/gig';
 import type { Interfaces, Repositories } from '../../../../domain';
 
 import { Infra as AuthInfra } from '../../../../../auth';
@@ -27,8 +27,8 @@ const {
     },
   },
 } = SharedInfra.Drizzle.Utils.DrizzleSQLFactory;
+const { GIG_WORK_TEAM_STATUS } = Constants;
 const users = AuthInfra.Drizzle.Schema.users;
-
 const gigWorkAlias = 'gw';
 const gigWorkSelectSchema = select<GigWork>(gigWorks, gigWorkAlias);
 const gigWorkId = gigWorkSelectSchema.column('id');
@@ -77,11 +77,14 @@ const fromPart = (userId: number) => {
 };
 
 const joinPart = sql`
-    LEFT JOIN ${gigWorkTeams} ON  ${gigWorkTeams.gigWorkId} = ${gigWorkId}
-    LEFT JOIN ${workerSkills} ON ${workerSkills.workerId} = ${gigWorkTeams.workerId}
-    LEFT JOIN ${workers} ON ${workers.id} = ${gigWorkTeams.workerId}
-    LEFT JOIN ${users} ON ${users.id} = ${workers.userId}
+  RIGHT JOIN ${gigWorkTeams} ON ${gigWorkTeams.gigWorkId} = ${gigWorkId}
+  LEFT JOIN ${workerSkills} ON ${workerSkills.workerId} = ${gigWorkTeams.workerId}
+  LEFT JOIN ${workers} ON ${workers.id} = ${gigWorkTeams.workerId}
+  LEFT JOIN ${users} ON ${users.id} = ${workers.userId}
   `;
+
+const wherePart = sql`
+  WHERE ${gigWorkTeams.status} = ${sql.raw(`'${GIG_WORK_TEAM_STATUS.PAID}'`)}`;
 
 const groupByPart = sql`
   GROUP BY ${args(gigWorkSelectSchema.columns('*'))}
@@ -107,13 +110,22 @@ export function makeGetAllCompletedGigWorkResumes(
       selectPart,
       fromPart(userId),
       joinPart,
+      wherePart,
       groupByPart,
       orderByPart,
       limitPart(limit),
       offsetPart(offset)
     );
 
-    const queryCount = parts(queryCountSelect, fromPart(userId));
+    const queryCount = sql`
+      SELECT COUNT(*)::int AS total 
+      FROM (${parts(
+        queryCountSelect,
+        fromPart(userId),
+        joinPart,
+        wherePart,
+        groupByPart
+      )}) AS subquery`;
 
     const [queryResult, queryCountResult] = await Promise.all([
       db.execute<Utils.InterfaceToRecord<Interfaces.CompletedGigWorkResumes>>(query),
