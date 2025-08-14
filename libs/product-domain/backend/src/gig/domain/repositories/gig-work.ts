@@ -4,6 +4,10 @@ import type { Interfaces } from '..';
 
 type OmitBase = 'getAll';
 
+export type GetAllGigWorksPayments = (
+  input: Interfaces.GetAllGigWorkPaymentsInput
+) => Promise<Interfaces.GetAllGigWorkPaymentsOutput>;
+
 export type GetOneGigWorkByIdAndUserId = (id: number, userId: number) => Promise<GigWork | null>;
 
 export type GetAllGigWorks = (
@@ -12,6 +16,7 @@ export type GetAllGigWorks = (
 
 type CustomMethods = {
   getAll: GetAllGigWorks;
+  getAllGigWorkPayments: GetAllGigWorksPayments;
   getOneByIdAndUserId: GetOneGigWorkByIdAndUserId;
 };
 

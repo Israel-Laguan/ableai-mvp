@@ -2,6 +2,7 @@ import type { IOmitBase } from '@models/shared';
 import type { PgColumnBuilderBase } from 'drizzle-orm/pg-core';
 
 import { pgTable, serial, timestamp } from 'drizzle-orm/pg-core';
+import { Types } from '..';
 
 export function withBaseSchema<Schema extends object>(
   tableName: string,
@@ -22,38 +23,43 @@ export function withBaseSchema<Schema extends object>(
 
   type ColumnKey = keyof typeof tableColumns;
 
-  const columnKeys = Object.keys(tableColumns) as ColumnKey[];
+  type CustomData = Types.DrizzleSchemaCustomData<ColumnKey>;
 
-  type Column = {
-    [K in ColumnKey]: {
-      key: K;
+  const columnKeys = Object.keys(tableColumns) as CustomData['columnKeys'];
+
+  const makeValue = <K extends ColumnKey>(key: K): CustomData['columns'][K] => {
+    return {
+      key,
+      name: pgTableInstance[key].name,
     };
   };
 
-  const columnEntries = columnKeys.map((key: ColumnKey) => {
-    const value = {
-      key,
-    };
+  const columnEntries = columnKeys.map(key => {
+    const value = makeValue(key);
     return [key, value] as const;
   });
 
-  const columnObjFromEntries = Object.fromEntries(columnEntries) as Column;
+  const columnObjFromEntries = Object.fromEntries(columnEntries);
 
-  const column = Object.freeze(columnObjFromEntries);
+  const columnRecord = Object.freeze(columnObjFromEntries) as CustomData['columns'];
+
+  const _customs = {
+    data: {
+      columnKeys,
+      columns: columnRecord,
+      isSchema: true,
+      tableName,
+    } satisfies Types.DrizzleSchemaCustomData<ColumnKey>,
+  };
 
   Object.defineProperty(pgTableInstance, '_customs', {
-    value: {
-      data: {
-        columnKeys,
-        column,
-      },
-    },
+    value: _customs,
     writable: false,
     enumerable: false,
     configurable: false,
   });
 
   return pgTableInstance as typeof pgTableInstance & {
-    _customs: { data: { columnKeys: ColumnKey[]; column: Column } };
+    _customs: typeof _customs;
   };
 }

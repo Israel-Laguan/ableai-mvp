@@ -18,6 +18,10 @@ export const GigValidationInput = {
     querySchema: Gig.Infra.Zod.Schemas.GetAllGigWorksSchema,
   }),
 
+  validateGetAllGigWorkPayments: validateInputMiddleware({
+    querySchema: Gig.Infra.Zod.Schemas.GetAllGigWorkPaymentsSchema,
+  }),
+
   validateGetOneGigWork: validateInputMiddleware({
     paramsSchema: Gig.Infra.Zod.Schemas.GetOneGigWorkParamsSchema,
   }),

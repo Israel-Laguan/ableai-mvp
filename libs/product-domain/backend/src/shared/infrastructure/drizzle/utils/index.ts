@@ -1,4 +1,5 @@
 export * from './drizzle-express-crud-router';
+export * from './drizzle-sql-factory';
 export * from './is-not-blank-sql';
 export * from './make-select-sql';
 export * from './make-set-sql';

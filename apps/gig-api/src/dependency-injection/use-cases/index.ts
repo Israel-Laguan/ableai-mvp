@@ -1,3 +1,4 @@
+export * from './get-all-gig-work-payments';
 export * from './get-all-gig-works';
 export * from './get-on-gig-work';
 export * from './register-gig-work';

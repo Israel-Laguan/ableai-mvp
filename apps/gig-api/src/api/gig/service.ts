@@ -4,6 +4,8 @@ import { UpdateInput } from '../../interfaces';
 export const gigService = {
   getAllGigWorks: UseCases.getAllGigWorks,
 
+  getAllGigWorkPayments: UseCases.getAllGigWorkPayments,
+
   getOneGigWork: UseCases.getOneGigWork,
 
   registerGigWork: UseCases.registerGigWork,

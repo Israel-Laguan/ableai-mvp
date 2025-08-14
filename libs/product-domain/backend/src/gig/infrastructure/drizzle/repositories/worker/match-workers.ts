@@ -1,40 +1,47 @@
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
-import { getTableConfig } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
 import type { Infra } from '@models/gig';
+import type { Utils } from '@models/shared';
 import type { MatchWorkers } from '../../../../domain/repositories';
 
 import { Infra as SharedInfra } from '../../../../../shared';
-import { workers, workerSkills as workerSkillSchema, slots } from '../../schemas';
-
-type QueryRow = {
-  worker_skill: Infra.MatchedWorker['workerSkill'];
-  slots: Infra.MatchedWorker['slots'];
-  worker: Infra.MatchedWorker['worker'] & { userId?: number };
-};
+import { workers, workerSkills, slots } from '../../schemas';
 
 const {
   Drizzle: {
     Constants: { blankSql },
-    Utils: { isNotBlankSQL, makeSQLArray },
+    Utils: {
+      DrizzleSQLFactory: {
+        make: {
+          sql: {
+            functions: {
+              arrayAgg,
+              jsonBuildObject: { JSONBuildObject, makeJSONBuildObjectSchema },
+            },
+          },
+        },
+      },
+      isNotBlankSQL,
+      makeSQLArray,
+    },
   },
 } = SharedInfra;
 
 const baseSelect = [
-  sql`row_to_json(${sql.raw(`${getTableConfig(workerSkillSchema).name}.*`)}) AS worker_skill`,
-  sql`ARRAY_AGG(row_to_json(${sql.raw(`${getTableConfig(slots).name}.*`)})) AS slots`,
-  sql`row_to_json(${sql.raw(`${getTableConfig(workers).name}.*`)}) AS worker`,
+  JSONBuildObject(makeJSONBuildObjectSchema(workers).selectAll(), 'worker'),
+  JSONBuildObject(makeJSONBuildObjectSchema(workerSkills).selectAll(), 'workerSkill'),
+  arrayAgg(sql`${JSONBuildObject(makeJSONBuildObjectSchema(slots).selectAll())}`, 'slots'),
 ];
 
 const EQUIPMENT_MATCH_COUNT = sql.raw('equipment_match_count');
 
 const baseOrderBy = [
-  sql`${workerSkillSchema.gigsCompleted.name} DESC`,
-  sql`${workerSkillSchema.ratePerHour} ASC`,
-  sql`${workerSkillSchema.responseRate} ASC`,
-  sql`${workerSkillSchema.wouldWork} DESC`,
+  sql`${workerSkills.gigsCompleted.name} DESC`,
+  sql`${workerSkills.ratePerHour} ASC`,
+  sql`${workerSkills.responseRate} ASC`,
+  sql`${workerSkills.wouldWork} DESC`,
 ];
 
 export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
@@ -52,7 +59,9 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
       return [];
     }
 
-    const sqlDiscardedWorkersArray = discardedWorkers
+    const isValidDiscardedWorkers = discardedWorkers && discardedWorkers.length > 0;
+
+    const sqlDiscardedWorkersArray = isValidDiscardedWorkers
       ? makeSQLArray(discardedWorkers, 'int')
       : blankSql;
     const sqlGigDate = gigDate ? sql`${gigDate?.toISOString()}` : blankSql;
@@ -66,7 +75,7 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
         isNotBlankSQL(sqlRequiredArray)
           ? sql`cardinality(
                     ARRAY(
-                      SELECT unnest(string_to_array(${workerSkillSchema.equipment}, ','))
+                      SELECT unnest(string_to_array(${workerSkills.equipment}, ','))
                       INTERSECT
                       SELECT unnest(${sqlRequiredArray})
                     )
@@ -77,7 +86,7 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
 
     const where = [
       sql`${workers.userId} = ANY(${sqlUserIdsArray})`,
-      sql`${workerSkillSchema.name} ILIKE ANY(${sqlSkillsArray})`,
+      sql`${workerSkills.name} ILIKE ANY(${sqlSkillsArray})`,
     ].concat(
       [
         isNotBlankSQL(sqlDiscardedWorkersArray)
@@ -86,13 +95,13 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
 
         isNotBlankSQL(sqlRequiredArray)
           ? sql`EXISTS (
-                SELECT 1 FROM unnest(string_to_array(${workerSkillSchema.equipment}, ',')) AS eq
+                SELECT 1 FROM unnest(string_to_array(${workerSkills.equipment}, ',')) AS eq
                 WHERE trim(eq) ILIKE ANY(${sqlRequiredArray})
               )`
           : blankSql,
 
         isNotBlankSQL(sqlHourlyRate)
-          ? sql`${workerSkillSchema.ratePerHour} <= ${sqlHourlyRate}`
+          ? sql`${workerSkills.ratePerHour} <= ${sqlHourlyRate}`
           : blankSql,
 
         isNotBlankSQL(sqlGigDate)
@@ -112,24 +121,26 @@ export function makeWorkerMatcher(db: NodePgDatabase): MatchWorkers {
     const query = sql`
           SELECT ${sql.join(select, sql`, `)}
           FROM ${workers}
-          LEFT JOIN ${workerSkillSchema} ON ${workerSkillSchema.workerId} = ${workers.id}
+          LEFT JOIN ${workerSkills} ON ${workerSkills.workerId} = ${workers.id}
           LEFT JOIN ${slots} ON ${slots.workerId} = ${workers.id}
           WHERE ${sql.join(where, sql` AND `)}
-          GROUP BY ${workers.id}, ${workerSkillSchema.id}
+          GROUP BY ${workers.id}, ${workerSkills.id}
           ORDER BY ${sql.join(orderBy, sql`, `)}
           LIMIT ${limit}
           OFFSET ${offset}
         `;
 
-    const queryResult = await db.execute(query);
+    const queryResult = await db.execute<
+      Utils.InterfaceToRecord<Infra.MatchedWorker & { worker: { userId: number } }>
+    >(query);
 
-    const matchedWorkers: Infra.MatchedWorker[] = (queryResult.rows as QueryRow[]).map(row => {
+    const matchedWorkers: Infra.MatchedWorker[] = queryResult.rows.map(row => {
       /* eslint-disable @typescript-eslint/no-unused-vars */
       const { userId: __, ...newWorker } = row.worker;
       /* eslint-enable @typescript-eslint/no-unused-vars */
 
       return {
-        workerSkill: row.worker_skill,
+        workerSkill: row.workerSkill,
         slots: row.slots,
         worker: newWorker,
       };

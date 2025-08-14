@@ -1,86 +1,124 @@
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
-import { sql } from 'drizzle-orm';
-
-import type { Repositories } from '../../../../domain';
+import { type SQL, sql } from 'drizzle-orm';
+import { match, P } from 'ts-pattern';
 
 import type { GigWork } from '@models/gig';
+import type { Repositories } from '../../../../domain';
 
-import { APP_ROLE } from '@models/shared';
 import { Constants as GigModelConstants } from '@models/gig';
+import { APP_ROLE, type Utils } from '@models/shared';
 import { Infra as SharedInfra } from '../../../../../shared';
 import { Constants } from '../../../../domain';
 import { gigWorks } from '../../schemas';
 import { makeIsGigWorkOwnerClause, makeIsNotGigWorkOwnerClause } from './shared';
 
-type ValidGigWorksSortFields = (typeof Constants.VALID_GIG_WORK_SORT_FIELDS)[number];
+const { VALID_GIG_WORK_SORT_FIELDS } = Constants;
 
-const selectSql = SharedInfra.Drizzle.Utils.makeSelectSql<GigWork>(gigWorks);
+const {
+  Drizzle: {
+    Utils: {
+      DrizzleSQLFactory: {
+        make: {
+          select,
+          sql: { parts },
+        },
+      },
+    },
+  },
+} = SharedInfra;
+
+const gigWorkTable = select<GigWork>(gigWorks);
+
+const headPart = sql`
+  SELECT ${gigWorkTable.columns('*', true)}
+  FROM ${gigWorks}
+  WHERE 
+`;
+
+type ValidGigWorksSortFields = (typeof VALID_GIG_WORK_SORT_FIELDS)[number];
+
+const validSortFields = Object.fromEntries(
+  VALID_GIG_WORK_SORT_FIELDS.map(value => {
+    return [value, gigWorkTable.column(value)];
+  })
+) as Record<ValidGigWorksSortFields, SQL>;
 
 export function makeGetAllGigWorks(db: NodePgDatabase): Repositories.GetAllGigWorks {
   return async ({ appRole, userId, limit = 10, offset = 0, sort = 'asc:createdAt', status }) => {
-    let sortField: ValidGigWorksSortFields = 'createdAt';
-    let sortOrder: 'ASC' | 'DESC' = 'ASC';
-    const whereClause = [];
+    const [sortOrder, sortField] = sort?.split(':') ?? [];
 
-    if (appRole === APP_ROLE.WORKER) {
-      whereClause.push(makeIsNotGigWorkOwnerClause(userId));
-    } else {
-      whereClause.push(makeIsGigWorkOwnerClause(userId));
-    }
+    const isGigWorkOwnerOrWorkerPart = match(appRole)
+      .with(APP_ROLE.WORKER, () => {
+        return makeIsNotGigWorkOwnerClause(userId);
+      })
+      .otherwise(() => {
+        return makeIsGigWorkOwnerClause(userId);
+      });
 
-    if (status === GigModelConstants.GIG_WORK_STATUS.PENDING) {
-      whereClause.push(sql`${gigWorks.startDate} > CURRENT_DATE`);
-    }
+    const gigWorkStatusPart = match(status)
+      .with(GigModelConstants.GIG_WORK_STATUS.PENDING, () => {
+        return sql`AND ${gigWorks.startDate} > CURRENT_DATE`;
+      })
+      .with(GigModelConstants.GIG_WORK_STATUS.IN_PROGRESS, () => {
+        return sql`
+            AND ${gigWorks.startDate} <= CURRENT_DATE
+            AND ${gigWorks.endDate} >= CURRENT_DATE
+          `;
+      })
+      .with(GigModelConstants.GIG_WORK_STATUS.COMPLETED, () => {
+        return sql`${gigWorks.endDate} < CURRENT_DATE`;
+      })
+      .otherwise(() => {
+        return null;
+      });
 
-    if (status === GigModelConstants.GIG_WORK_STATUS.IN_PROGRESS) {
-      whereClause.push(sql`${gigWorks.startDate} <= CURRENT_DATE`);
-      whereClause.push(sql`${gigWorks.endDate} >= CURRENT_DATE`);
-    }
+    const query = parts(
+      headPart,
+      isGigWorkOwnerOrWorkerPart,
+      gigWorkStatusPart,
 
-    if (status === GigModelConstants.GIG_WORK_STATUS.COMPLETED) {
-      whereClause.push(sql`${gigWorks.endDate} < CURRENT_DATE`);
-    }
+      sql`ORDER BY `,
+      match(sortField)
+        .with(
+          P.when(sortField => {
+            return VALID_GIG_WORK_SORT_FIELDS.includes(sortField as ValidGigWorksSortFields);
+          }),
+          (sortField: ValidGigWorksSortFields) => {
+            return validSortFields[sortField];
+          }
+        )
+        .otherwise(() => validSortFields['createdAt']),
+      match(sortOrder.toUpperCase())
+        .with('DESC', () => {
+          return sql.raw('DESC');
+        })
+        .otherwise(() => {
+          return sql.raw('ASC');
+        }),
 
-    const whereSql = SharedInfra.Drizzle.Utils.makeWhereSql(whereClause);
-
-    const [newSortOrder, newSortField] = sort?.split(':') ?? [];
-
-    if (
-      newSortField &&
-      Constants.VALID_GIG_WORK_SORT_FIELDS.includes(newSortField as ValidGigWorksSortFields)
-    ) {
-      sortField = newSortField as ValidGigWorksSortFields;
-    }
-
-    if (newSortOrder.toUpperCase() === 'DESC') {
-      sortOrder = 'DESC';
-    }
-
-    const sortBy = sql`${gigWorks[sortField]}`;
-
-    const gigWorksQuery = sql`
-      ${selectSql}
-      FROM ${gigWorks}
-      ${whereSql}
-      ORDER BY ${sortBy} ${sql.raw(sortOrder)}
+      sql`
       LIMIT ${limit}
       OFFSET ${offset}
-    `;
+      `
+    );
 
-    const countQuery = sql`
+    const countQuery = parts(
+      sql`
       SELECT COUNT(*)::int AS total
       FROM ${gigWorks}
-      ${whereSql}
-    `;
+      WHERE`,
+      isGigWorkOwnerOrWorkerPart,
+      gigWorkStatusPart
+    );
 
     const [gigWorksQueryResult, countQueryResult] = await Promise.all([
-      db.execute<Record<keyof GigWork, GigWork[keyof GigWork]>>(gigWorksQuery),
+      db.execute<Utils.InterfaceToRecord<GigWork>>(query),
       db.execute<{ total: number }>(countQuery),
     ]);
 
     const currentPage = Math.floor(offset / limit) + 1;
-    const results = gigWorksQueryResult.rows as GigWork[];
+    const results = gigWorksQueryResult.rows;
     const total = countQueryResult.rows[0].total ?? 0;
     const totalPages = Math.ceil(total / limit);
 
