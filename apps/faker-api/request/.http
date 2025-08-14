@@ -21,3 +21,7 @@ Content-Type: application/json
 {
     "limit": 1000
 }
+
+### Generate fake Gig Work Payments
+POST {{baseUrlFaker}}/gig-works/payments
+Authorization: Bearer {{accessToken}}
