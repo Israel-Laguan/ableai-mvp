@@ -56,10 +56,6 @@ const selectPart = sql`
     coalesce(sum(sql`${gigWorkTeams.totalPayment}`), defaultTotalPayment, totalPaymentRowAlias)
   )}`;
 
-const queryCountSelect = sql`
-    SELECT COUNT(*)::int AS total
-  `;
-
 const fromPart = (userId: number) => {
   return sql`
     FROM ${wrap(
@@ -116,7 +112,7 @@ export function makeGetAllGigWorkPayments(db: NodePgDatabase): Repositories.GetA
     const queryCount = sql`
       SELECT COUNT(*)::int AS total 
       FROM (${parts(
-        queryCountSelect,
+        sql`SELECT 1`,
         fromPart(userId),
         joinPart,
         wherePart,
@@ -124,7 +120,7 @@ export function makeGetAllGigWorkPayments(db: NodePgDatabase): Repositories.GetA
       )}) AS subquery`;
 
     const [queryResult, queryCountResult] = await Promise.all([
-      db.execute<Utils.InterfaceToRecord<Interfaces.GigWorPayments>>(query),
+      db.execute<Utils.InterfaceToRecord<Interfaces.GigWorkPayments>>(query),
       db.execute<{ total: number }>(queryCount),
     ]);
 

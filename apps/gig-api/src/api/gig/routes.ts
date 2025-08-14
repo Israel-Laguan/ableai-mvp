@@ -27,7 +27,7 @@ router.get(
 router.get(
   GigWorkSuffix + '/payments',
   authorizationMiddleware,
-  GigValidationInput.validateGetAllCompletedGigWorkResumes,
+  GigValidationInput.validateGetAllGigWorkPayments,
   gigController.getAllGigWorkPayments
 );
 router.get(

@@ -36,11 +36,11 @@ export type GetOneGigWorkRequestParams = { id: string };
 
 export type GetAllGigWorkOutput = PaginationResult<GigWork>;
 
-export type GigWorPayments = GigWork & {
+export type GigWorkPayments = GigWork & {
   totalPayment: number;
   workers: (WorkerSkill & { uid: string })[];
 };
 
-export type GetAllGigWorkPaymentsOutput = PaginationResult<GigWorPayments>;
+export type GetAllGigWorkPaymentsOutput = PaginationResult<GigWorkPayments>;
 
 export type GetOneGigWorkOutput = GigWork;

@@ -18,7 +18,7 @@ export const GigValidationInput = {
     querySchema: Gig.Infra.Zod.Schemas.GetAllGigWorksSchema,
   }),
 
-  validateGetAllCompletedGigWorkResumes: validateInputMiddleware({
+  validateGetAllGigWorkPayments: validateInputMiddleware({
     querySchema: Gig.Infra.Zod.Schemas.GetAllGigWorkPaymentsSchema,
   }),
 
