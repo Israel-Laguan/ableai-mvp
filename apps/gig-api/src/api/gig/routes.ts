@@ -25,6 +25,12 @@ router.get(
   gigController.getAllGigWorks
 );
 router.get(
+  GigWorkSuffix + '/payments',
+  authorizationMiddleware,
+  GigValidationInput.validateGetAllCompletedGigWorkResumes,
+  gigController.getAllGigWorkPayments
+);
+router.get(
   GigWorkSuffix + '/:id',
   authorizationMiddleware,
   GigValidationInput.validateGetOneGigWork,
