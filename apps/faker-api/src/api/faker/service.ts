@@ -392,7 +392,7 @@ export const fakerService = {
       }),
     ]);
 
-    Promise.all(
+    await Promise.all(
       Array.from({ length: 2 }).map(
         async () =>
           await fakerService.generateFakeGigWorkTeam({
