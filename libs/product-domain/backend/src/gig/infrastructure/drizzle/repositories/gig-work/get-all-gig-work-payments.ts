@@ -49,8 +49,7 @@ const selectPart = sql`
             makeJSONBuildObjectSchema(workerSkills).selectAll()
           )}`
         )}
-     `)}
-      FILTER (WHERE ${users.uid} IS NOT NULL)`,
+     `)}`,
       defaultWorkers,
       workersAlias
     ),
@@ -67,19 +66,18 @@ const fromPart = (userId: number) => {
       sql`
       SELECT * 
       FROM ${gigWorks}
-      WHERE ${parts(
-        sql`${gigWorks.endDate} < CURRENT_DATE`,
-        sql`AND ${makeIsGigWorkOwnerClause(userId)}`
-      )}`,
+      WHERE 
+        ${gigWorks.endDate} < NOW()
+        AND ${makeIsGigWorkOwnerClause(userId)}`,
       gigWorkAlias
     )}
   `;
 };
 
 const joinPart = sql`
-  RIGHT JOIN ${gigWorkTeams} ON ${gigWorkTeams.gigWorkId} = ${gigWorkId}
-  LEFT JOIN ${workerSkills} ON ${workerSkills.workerId} = ${gigWorkTeams.workerId}
-  LEFT JOIN ${workers} ON ${workers.id} = ${gigWorkTeams.workerId}
+  LEFT JOIN ${gigWorkTeams} ON ${gigWorkTeams.gigWorkId} = ${gigWorkId}
+  LEFT JOIN ${workerSkills} ON ${workerSkills.id} = ${gigWorkTeams.workerSkillId}
+  LEFT JOIN ${workers} ON ${workers.id} = ${workerSkills.workerId}
   LEFT JOIN ${users} ON ${users.id} = ${workers.userId}
   `;
 
@@ -87,7 +85,7 @@ const wherePart = sql`
   WHERE ${gigWorkTeams.status} = ${sql.raw(`'${GIG_WORK_TEAM_STATUS.PAID}'`)}`;
 
 const groupByPart = sql`
-  GROUP BY ${args(gigWorkSelectSchema.columns('*'))}
+  GROUP BY ${gigWorkSelectSchema.columns('*')}
 `;
 
 const orderByPart = sql`
