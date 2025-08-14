@@ -352,4 +352,58 @@ export const fakerService = {
 
     return await recommendationsRepository.create(fakeRecommendation);
   },
+
+  generateFakeGigWorkPayments: async (userId: number) => {
+    let buyerId: number | null = null;
+    let workerId: number | null = null;
+
+    const [buyer, worker] = await Promise.all([
+      buyerRepository.getAll({
+        where: { fields: [{ field: 'userId', value: userId }] },
+      }),
+      workerRepository.getAll({ where: { fields: [{ field: 'userId', value: userId }] } }),
+    ]);
+
+    if (buyer.results.length < 1) {
+      const newBuyer = await buyerRepository.create({
+        userId,
+      });
+
+      buyerId = newBuyer.id;
+    } else {
+      buyerId = buyer.results[0]?.id;
+    }
+
+    if (worker.results.length < 1) {
+      const [newWorker] = await workerRepository.create({
+        userId,
+      });
+
+      workerId = newWorker.id;
+    } else {
+      workerId = worker.results[0]?.id;
+    }
+
+    const [[workerSkill], [fakeGigWork]] = await Promise.all([
+      fakerService.generateFakeWorkerSkill({ workerId }),
+      fakerService.generateFakeGigWork({
+        buyerId,
+        endDate: new Date(new Date().setHours(0, 0, 0)),
+      }),
+    ]);
+
+    await Promise.all(
+      Array.from({ length: 2 }).map(
+        async () =>
+          await fakerService.generateFakeGigWorkTeam({
+            createdBy: userId,
+            gigWorkId: fakeGigWork.id,
+            workerId,
+            workerSkillId: workerSkill.id,
+            status: 'PAID',
+            totalPayment: faker.number.int({ min: 100, max: 1000 }),
+          })
+      )
+    );
+  },
 };
