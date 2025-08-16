@@ -1,34 +1,67 @@
 import z from 'zod';
 
 import { SORTS, GetAllInput } from '@models/shared';
-import { makeZodObjectSchema } from '../utils';
 
-type MakeZodGetAllSchema<Schema extends object> = {
-  validSortFields: string[] | readonly string[];
-  additionalQueryParams?: Omit<Record<keyof Schema, z.ZodTypeAny>, keyof GetAllInput>;
-};
+export function makeGetAllSchema<ValidSortFields extends string>(
+  validFields: ValidSortFields[] | readonly ValidSortFields[]
+): z.ZodObject<{
+  limit: z.ZodOptional<z.ZodString>;
+  offset: z.ZodOptional<z.ZodString>;
+  sort: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+}>;
+export function makeGetAllSchema<
+  ValidSortFields extends string,
+  AdditionalQueryParams extends Exclude<PropertyKey, keyof GetAllInput>,
+  AdditionalQueryParamsSchema extends Record<AdditionalQueryParams, z.ZodTypeAny>
+>(
+  validFields: ValidSortFields[] | readonly ValidSortFields[],
+  additionalQueryParams: AdditionalQueryParamsSchema
+): z.ZodObject<
+  {
+    limit: z.ZodOptional<z.ZodString>;
+    offset: z.ZodOptional<z.ZodString>;
+    sort: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+  } & AdditionalQueryParamsSchema
+>;
+export function makeGetAllSchema<
+  ValidSortFields extends string,
+  AdditionalQueryParams extends Exclude<PropertyKey, keyof GetAllInput>,
+  AdditionalQueryParamsSchema extends Record<AdditionalQueryParams, z.ZodTypeAny>
+>(
+  validFields: ValidSortFields[] | readonly ValidSortFields[],
+  additionalQueryParams?: AdditionalQueryParamsSchema
+): z.ZodObject<
+  {
+    limit: z.ZodOptional<z.ZodString>;
+    offset: z.ZodOptional<z.ZodString>;
+    sort: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+  } & AdditionalQueryParamsSchema
+> {
+  const invalidSortFieldMessage = `Invalid sort. Valid sorts are: ${SORTS.join(
+    ', '
+  )} and valid fields are: ${validFields.join(', ')}`;
 
-export function makeGetAllSchema<Schema extends object>({
-  validSortFields,
-  additionalQueryParams,
-}: MakeZodGetAllSchema<Schema>) {
-  return makeZodObjectSchema<Omit<GetAllInput, 'where'>>({
-    ...additionalQueryParams,
-    limit: z.string().regex(/^\d+$/, 'Invalid limit').optional(),
-    sort: z
-      .string()
-      .refine(
-        str =>
-          str.includes(':') &&
-          SORTS.includes(str.split(':')[0] as (typeof SORTS)[number]) &&
-          validSortFields.includes(str.split(':')[1]),
-        {
-          message: `Invalid sort. Valid sorts are: ${SORTS.join(
-            ', '
-          )} and valid fields are: ${validSortFields.join(', ')}`,
-        }
-      )
-      .optional(),
-    offset: z.string().regex(/^\d+$/, 'Invalid offset').optional(),
-  }).strict();
+  return z
+    .object({
+      limit: z.string().regex(/^\d+$/, 'Invalid limit').optional(),
+      offset: z.string().regex(/^\d+$/, 'Invalid offset').optional(),
+      sort: z
+        .string()
+        .refine(
+          sort => {
+            const [direction, field] = sort.split(':');
+            const isValidDirection = SORTS.includes(
+              direction.toUpperCase() as (typeof SORTS)[number]
+            );
+            const isValidField = validFields.includes(field as ValidSortFields);
+            return isValidDirection && isValidField;
+          },
+          {
+            message: invalidSortFieldMessage,
+          }
+        )
+        .optional(),
+      ...(additionalQueryParams as AdditionalQueryParamsSchema),
+    })
+    .strict();
 }
