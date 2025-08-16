@@ -1,17 +1,22 @@
-import type { Literal } from './basic-types';
-import type { SORT } from './constants';
+import type { SORT, SORTS } from './constants';
+
+export type SortDirection = (typeof SORTS)[number];
 
 export type Sort = `${typeof SORT.ASC}:${string}` | `${typeof SORT.DESC}:${string}`;
 
-export type WhereField = {
-  field: string;
-  value: Literal | Literal[];
+export type WhereField<Schema extends object = object> = {
+  field: keyof Schema;
+  value: Schema[keyof Schema];
 };
 
-export type GetAllInput = {
+export type GetAllInput<
+  Schema extends object = object,
+  WhereFields = { [K in keyof Schema]: { field: K; value: Schema[K] } }
+> = {
+  select?: (keyof Schema)[];
   sort?: Sort;
   where?: {
-    fields?: Array<WhereField>;
+    fields?: WhereFields[keyof WhereFields][];
   };
   limit?: number;
   offset?: number;

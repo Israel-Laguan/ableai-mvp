@@ -3,7 +3,7 @@ export enum APP_ROLE {
   WORKER = 'WORKER',
 }
 
-export const SORT = Object.freeze({ ASC: 'asc', DESC: 'desc' });
+export const SORT = Object.freeze({ ASC: 'ASC', DESC: 'DESC' });
 
 export const SORTS = Object.values(SORT);
 
