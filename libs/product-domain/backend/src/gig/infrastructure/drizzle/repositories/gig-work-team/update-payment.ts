@@ -30,6 +30,7 @@ export function makeUpdatePayment(db: NodePgDatabase): Repositories.UpdateGigWor
       UPDATE ${gigWorkTeams}
       ${set}
       ${where}
+      RETURNING *
     `;
 
     const queryResult = await db.execute(query);

@@ -39,7 +39,7 @@ export function makeUpdateStatus(db: NodePgDatabase): Repositories.UpdateGigWork
         UPDATE ${gigWorkTeams}
         SET ${sql.join(setClauses, sql`, `)}
         WHERE ${sql.join(whereClauses, sql` AND `)}
-        RETURNING *;
+        RETURNING *
       `;
 
     const queryResult = await db.execute(query);

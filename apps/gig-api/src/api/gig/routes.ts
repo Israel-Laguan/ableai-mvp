@@ -64,7 +64,7 @@ router.patch(
 router.patch(
   GigWorkTeamSuffix + '/payment',
   authorizationMiddleware,
-  GigValidationInput.validateGigWorTeamPaymentUpdate,
+  GigValidationInput.validateGigWorkTeamPaymentUpdate,
   gigController.updateGigWorkTeamPayment
 );
 

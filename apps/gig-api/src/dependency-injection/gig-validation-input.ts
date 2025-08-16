@@ -43,7 +43,7 @@ export const GigValidationInput = {
     bodySchema: RegisterGigWorkTeamSchema,
   }),
 
-  validateGigWorTeamPaymentUpdate: validateInputMiddleware({
+  validateGigWorkTeamPaymentUpdate: validateInputMiddleware({
     bodySchema: Gig.Infra.Zod.Schemas.UpdateGigWorkTeamPaymentSchema,
   }),
 

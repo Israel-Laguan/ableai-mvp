@@ -206,7 +206,7 @@ export function makeGetAllGigWorkTeams(db: NodePgDatabase): Repositories.GetAllG
           mainQuery
         );
 
-        return queryResult.rows[0];
+        return queryResult.rows[0] ?? { values: [] };
       })
 
       .otherwise(async () => {
@@ -226,7 +226,7 @@ export function makeGetAllGigWorkTeams(db: NodePgDatabase): Repositories.GetAllG
 
         const currentPage = Math.floor(offset / limit) + 1;
         const results = queryResult.rows;
-        const total = countQueryResult.rows[0].total;
+        const total = countQueryResult.rows[0].total ?? 0;
         const totalPages = Math.ceil(total / limit);
 
         return { currentPage, results, total, totalPages };

@@ -6,6 +6,6 @@ export * from './register-gig-work';
 export * from './register-worker';
 export * from './register-buyer';
 export * from './slots';
-export * from './update-git-work-team';
+export * from './update-gig-work-team';
 export * from './update';
 export * from './worker-skills';
