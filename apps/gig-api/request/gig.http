@@ -41,3 +41,48 @@ Content-Type: application/json
 ### Get All Gig Work Payments
 GET {{baseUrlGig}}/gig/gig-work/payments?offset=0&limit=10
 Authorization: Bearer {{accessToken}}
+
+### Get Gig Work Teams
+GET {{baseUrlGig}}/gig/work-team?sort=asc:createdAt&offset=0&limit=10
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "appRole": "BUYER",
+  "where": {
+    "fields":[
+      {
+        "field": "status",
+        "value": "PAID"
+      }
+    ]
+  }
+}
+
+### Get One Gig Work Team
+GET {{baseUrlGig}}/gig/work-team/1/BUYER
+Authorization: Bearer {{accessToken}}
+
+### Accept Offer
+PATCH {{baseUrlGig}}/gig/work-team/accept
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "accepted": true,
+  "appRole": "WORKER",
+  "id": 1
+}
+
+### Update Offer Payment
+PATCH {{baseUrlGig}}/gig/work-team/payment
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "expenses": 100,
+  "id": 1,
+  "received": 500,
+  "taxes": 50,
+  "tips": 20
+}
