@@ -67,6 +67,6 @@ export const GetAllGigWorkTeamsRequestQuerySchema = Infra.Zod.Utils.makeGetAllSc
 
 export const GetAllGigWorkTeamsRequestBodySchema =
   Infra.Zod.Utils.makeTypedZodObject<Interfaces.GetAllGigWorkTeamRequestBody>().schema({
-    where: WhereBodySchema,
+    where: WhereBodySchema.optional(),
     appRole: z.enum([APP_ROLE.WORKER, APP_ROLE.BUYER]).optional(),
   });
