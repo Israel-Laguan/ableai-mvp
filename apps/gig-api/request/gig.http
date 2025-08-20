@@ -27,6 +27,10 @@ Authorization: Bearer {{accessToken}}
 GET {{baseUrlGig}}/gig/gig-work/1
 Authorization: Bearer {{accessToken}}
 
+### Get All Gig Work Payments
+GET {{baseUrlGig}}/gig/gig-work/payments?offset=0&limit=10
+Authorization: Bearer {{accessToken}}
+
 ### Register Gig Work Team
 POST {{baseUrlGig}}/gig/work-team
 Authorization: Bearer {{accessToken}}
@@ -37,10 +41,6 @@ Content-Type: application/json
   "gigWorkId": 1,
   "workerSkillId": 1
 }
-
-### Get All Gig Work Payments
-GET {{baseUrlGig}}/gig/gig-work/payments?offset=0&limit=10
-Authorization: Bearer {{accessToken}}
 
 ### Get Gig Work Teams
 GET {{baseUrlGig}}/gig/work-team?sort=asc:createdAt&offset=0&limit=10
@@ -63,7 +63,7 @@ Content-Type: application/json
 GET {{baseUrlGig}}/gig/work-team/1/BUYER
 Authorization: Bearer {{accessToken}}
 
-### Accept Offer
+### Accept Gig Work Team
 PATCH {{baseUrlGig}}/gig/work-team/accept
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
@@ -74,7 +74,7 @@ Content-Type: application/json
   "id": 1
 }
 
-### Update Offer Payment
+### Update Gig Work Team Payment
 PATCH {{baseUrlGig}}/gig/work-team/payment
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
