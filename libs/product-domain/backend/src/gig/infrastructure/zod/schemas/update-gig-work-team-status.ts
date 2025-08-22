@@ -8,13 +8,13 @@ import { Infra } from '../../../../shared';
 
 const { BUYER, WORKER } = APP_ROLE;
 const {
-  GIG_WORK_TEAM_STATUS: { ACCEPTED, CANCELLED, COMPLETED, PAID, REJECTED, STARTED },
+  GIG_WORK_TEAM_STATUS: { CANCELLED, COMPLETED, PAID, STARTED },
 } = Constants;
 
 export const UpdateGigWorkTeamStatusSchema =
   Infra.Zod.Utils.makeTypedZodObject<Interfaces.UpdateGitWorkTeamStatusInput>()
     .schema({
-      status: z.enum([ACCEPTED, CANCELLED, COMPLETED, PAID, REJECTED, STARTED]),
+      status: z.enum([CANCELLED, COMPLETED, PAID, STARTED]),
       id: z.number().positive(),
       appRole: z.enum([BUYER, WORKER]),
       userId: z.number().positive(),
