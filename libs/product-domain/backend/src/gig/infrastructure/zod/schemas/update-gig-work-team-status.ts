@@ -12,11 +12,10 @@ const {
 } = Constants;
 
 export const UpdateGigWorkTeamStatusSchema =
-  Infra.Zod.Utils.makeTypedZodObject<Interfaces.UpdateGitWorkTeamStatusInput>()
+  Infra.Zod.Utils.makeTypedZodObject<Interfaces.UpdateGigWorkTeamStatusRequestBody>()
     .schema({
       status: z.enum([CANCELLED, COMPLETED, PAID, STARTED]),
       id: z.number().positive(),
       appRole: z.enum([BUYER, WORKER]),
-      userId: z.number().positive(),
     })
     .strict();
