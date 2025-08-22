@@ -103,7 +103,7 @@ export function makeUpdateStatus(db: NodePgDatabase): Repositories.UpdateGigWork
               AND ${isNotCompletedOrPaidWhereClause}`;
           })
           .with(STARTED, () => {
-            if ((appRole = APP_ROLE.BUYER)) {
+            if (appRole === APP_ROLE.BUYER) {
               throw Errors.BadRequestError.create('Buyers cannot update status to STARTED', PATH);
             }
 
@@ -111,7 +111,7 @@ export function makeUpdateStatus(db: NodePgDatabase): Repositories.UpdateGigWork
               AND ${isAcceptedWhereClause}`;
           })
           .with(COMPLETED, () => {
-            if ((appRole = APP_ROLE.BUYER)) {
+            if (appRole === APP_ROLE.BUYER) {
               throw Errors.BadRequestError.create('Buyers cannot update status to COMPLETED', PATH);
             }
 
@@ -119,7 +119,7 @@ export function makeUpdateStatus(db: NodePgDatabase): Repositories.UpdateGigWork
               AND ${isValidCompletedWhereClause}`;
           })
           .with(PAID, () => {
-            if ((appRole = APP_ROLE.WORKER)) {
+            if (appRole === APP_ROLE.WORKER) {
               throw Errors.BadRequestError.create('Workers cannot update status to PAID', PATH);
             }
 
