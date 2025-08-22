@@ -9,4 +9,5 @@ export * from './register-gig-work-team';
 export * from './register-worker';
 export * from './register-buyer';
 export * from './update-gig-work-team-payment';
+export * from './update-gig-work-team-status';
 export * from './update-user';

@@ -67,6 +67,11 @@ router.patch(
   GigValidationInput.validateGigWorkTeamPaymentUpdate,
   gigController.updateGigWorkTeamPayment
 );
+router.patch(
+  GigWorkTeamSuffix + '/status',
+  GigValidationInput.validateGigWorkTeamStatusUpdate,
+  gigController.updateGigWorkTeamStatus
+);
 
 const gigRouter = Router().use(suffix, router);
 

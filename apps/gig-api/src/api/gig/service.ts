@@ -20,6 +20,8 @@ export const gigService = {
 
   updateGigWorkTeamPayment: UseCases.updateGigWorkTeamPayment,
 
+  updateGigWorkTeamStatus: UseCases.updateGigWorkTeamStatus,
+
   async updateUser(input: UpdateInput) {
     return await UseCases.updateUser(input);
   },

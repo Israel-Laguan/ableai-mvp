@@ -74,6 +74,17 @@ Content-Type: application/json
   "id": 1
 }
 
+### Update Gig Work Team Status
+PATCH {{baseUrlGig}}/gig/work-team/status
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "appRole": "WORKER",
+  "id": 1,
+  "status": "STARTED"
+}
+
 ### Update Gig Work Team Payment
 PATCH {{baseUrlGig}}/gig/work-team/payment
 Authorization: Bearer {{accessToken}}

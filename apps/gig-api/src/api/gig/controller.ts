@@ -181,7 +181,23 @@ export const gigController = {
         },
       });
 
-      res.status(HTTP_STATUS_CODE.UPDATED).json(result);
+      res.status(HTTP_STATUS_CODE.OK).json(result);
+    }
+  ),
+
+  updateGigWorkTeamStatus: tryCatchAndNext(
+    async (
+      req: Express.Types.AuthorizedRequest<
+        UserClaims,
+        never,
+        object,
+        Gig.Domain.Interfaces.UpdateGigWorkTeamStatusRequestBody
+      >,
+      res: Response
+    ) => {
+      const result = await gigService.updateGigWorkTeamStatus({ ...req.body, userId: req.user.id });
+
+      res.status(HTTP_STATUS_CODE.OK).json(result);
     }
   ),
 };
