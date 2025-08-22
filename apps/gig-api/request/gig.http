@@ -82,7 +82,5 @@ Content-Type: application/json
 {
   "expenses": 100,
   "id": 1,
-  "received": 500,
-  "taxes": 50,
   "tips": 20
 }
