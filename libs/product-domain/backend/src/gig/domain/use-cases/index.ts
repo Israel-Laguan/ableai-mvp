@@ -8,6 +8,7 @@ export * from './register-gig-work';
 export * from './register-worker';
 export * from './register-buyer';
 export * from './update-gig-work-team-payment';
+export * from './update-gig-work-team-status';
 
 export type UpdateMeUserUseCase<
   CustomInput extends object = object,
