@@ -69,6 +69,7 @@ router.patch(
 );
 router.patch(
   GigWorkTeamSuffix + '/status',
+  authorizationMiddleware,
   GigValidationInput.validateGigWorkTeamStatusUpdate,
   gigController.updateGigWorkTeamStatus
 );
