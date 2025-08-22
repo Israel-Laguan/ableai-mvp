@@ -2,12 +2,14 @@ import type { GigWorkTeam } from '@models/gig';
 import type { APP_ROLE } from '@models/shared';
 import type { Repositories } from '..';
 
-export type MakeAcceptGigWorkTeamInput = {
+export type MakeUpdateGigWorkTeamInput = {
   gigWorkTeamRepository: Repositories.GigWorkTeamRepository;
 };
 
-export type MakeUpdateGigWorkTeamPaymentInput = {
-  gigWorkTeamRepository: Repositories.GigWorkTeamRepository;
+export type MakeAcceptGigWorkTeamInput = MakeUpdateGigWorkTeamInput;
+
+export type MakeUpdateGigWorkTeamPaymentInput = MakeUpdateGigWorkTeamInput & {
+  workerSkillRepository: Repositories.WorkerSkillRepository;
 };
 
 export type UpdateGitWorkTeamStatusInput = Pick<GigWorkTeam, 'status' | 'id'> & {
@@ -15,10 +17,7 @@ export type UpdateGitWorkTeamStatusInput = Pick<GigWorkTeam, 'status' | 'id'> & 
   userId: number;
 };
 
-export type AcceptGigWorkTeamInput = Pick<
-  UpdateGitWorkTeamStatusInput,
-  'id' | 'userId' | 'appRole'
-> & {
+export type AcceptGigWorkTeamInput = Omit<UpdateGitWorkTeamStatusInput, 'status'> & {
   accepted: boolean;
 };
 
@@ -30,10 +29,9 @@ export type UpdateGigWorkTeamPaymentInput = Pick<GigWorkTeam, 'id' | 'tips' | 't
 export type UpdateGigWorkTeamPaymentUseCaseInput = Omit<
   UpdateGigWorkTeamPaymentInput,
   'totalPayment'
-> & {
-  received: number;
-  taxes: number;
-};
+>;
+
+export type UpdateGigWorkTeamStatusRequestBody = Omit<UpdateGitWorkTeamStatusInput, 'userId'>;
 
 export type AcceptGigWorkTeamRequestBody = Pick<
   AcceptGigWorkTeamInput,
