@@ -33,9 +33,7 @@ export type GetAllGigWorkTeamsInput<Column extends GigWorkTeamColumns = GigWorkT
   | GetAllGigWorkTeamsRecordOfManyInput<Column>
   | GetAllGigWorkTeamsArrayOfOneInput<Column>;
 
-export type GetAllGigWorkTeamRequestQuery = Omit<GetAllGigWorkTeamsBaseInput, 'userId' | 'where'>;
-
-export type GetAllGigWorkTeamRequestBody = Pick<GetAllGigWorkTeamsBaseInput, 'where' | 'appRole'>;
+export type GetAllGigWorkTeamRequestQuery = Omit<GetAllGigWorkTeamsBaseInput, 'userId'>;
 
 export type GetAllGigWorkTeamsArrayOfOne<Column extends GigWorkTeamColumns = GigWorkTeamColumns> = {
   values: GigWorkTeam[Column][];

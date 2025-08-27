@@ -1,8 +1,7 @@
 import z from 'zod';
 
 import type { GigWorkTeam } from '@models/gig';
-import { type IBase } from '@models/shared';
-import type { Interfaces } from '../../../domain';
+import type { IBase } from '@models/shared';
 
 import { Constants } from '@models/gig';
 import { APP_ROLE } from '@models/shared';
@@ -12,61 +11,83 @@ const {
   GIG_WORK_TEAM_STATUS: { ACCEPTED, CANCELLED, COMPLETED, PAID, PENDING, REJECTED },
 } = Constants;
 
+const IsPositiveNumberStringSchema = z
+  .string()
+  .regex(/^\d+$/, 'Invalid positive number')
+  .transform(data => {
+    return Number(data);
+  });
+
+const IsBooleanStringSchema = z.string().transform(data => {
+  return data === 'true';
+});
+
 const fieldDataTypeSchemas = Infra.Zod.Utils.makeTypedZodObject<
   GigWorkTeam & IBase
 >().recordOfSchemas({
   awardedBadge: z.string(),
-  createdBy: z.number().positive(),
-  delegateTo: z.number().positive(),
+  createdBy: IsPositiveNumberStringSchema,
+  delegateTo: IsPositiveNumberStringSchema,
   endDateOffer: z.date(),
-  endGig: z.boolean(),
-  expenses: z.number().min(0),
+  endGig: IsBooleanStringSchema,
+  expenses: IsPositiveNumberStringSchema,
   feedback: z.string(),
-  gigWorkId: z.number().positive(),
-  isAcceptedOffer: z.boolean(),
-  paymentId: z.number().positive(),
-  workerSkillId: z.number().positive(),
+  gigWorkId: IsPositiveNumberStringSchema,
+  isAcceptedOffer: IsBooleanStringSchema,
+  paymentId: IsPositiveNumberStringSchema,
+  workerSkillId: IsPositiveNumberStringSchema,
   status: z.enum([ACCEPTED, CANCELLED, COMPLETED, PAID, PENDING, REJECTED]),
-  tips: z.number().min(0),
-  totalPayment: z.number().min(0),
-  workerId: z.number().positive(),
-  workTime: z.number().min(0),
-  wouldWork: z.boolean(),
-  id: z.number().positive(),
+  tips: IsPositiveNumberStringSchema,
+  totalPayment: IsPositiveNumberStringSchema,
+  workerId: IsPositiveNumberStringSchema,
+  workTime: IsPositiveNumberStringSchema,
+  wouldWork: IsBooleanStringSchema,
+  id: IsPositiveNumberStringSchema,
   createdAt: z.date(),
   updatedAt: z.date(),
 });
 
 const validFields = Object.keys(fieldDataTypeSchemas) as [keyof GigWorkTeam];
 
-const WhereBodySchema = z
-  .object({
-    fields: z.array(
-      z.object({
-        field: z.enum(validFields),
-        value: z.any(),
-      })
-    ),
-  })
-  .superRefine((obj, ctx) => {
-    obj.fields.forEach(fieldObj => {
-      const fieldResult = fieldDataTypeSchemas[fieldObj.field].safeParse(fieldObj.value);
+export const WhereQuerySchema = z.string().transform((data, ctx) => {
+  const { data: validatedData, error } = z
+    .object({
+      fields: z.array(
+        z
+          .object({
+            field: z.enum(validFields),
+            value: z.any(),
+          })
+          .transform((fieldObj, ctx) => {
+            const { error, data } = fieldDataTypeSchemas[fieldObj.field].safeParse(fieldObj.value);
 
-      if (!fieldResult.success) {
-        fieldResult.error.issues.forEach(issue => {
-          ctx.addIssue({
-            ...issue,
-            path: [...issue.path, 'fields', fieldObj.field],
-          });
-        });
-      }
+            if (error) {
+              ctx.addIssue({
+                ...error.issues[0],
+                path: [...error.issues[0].path, 'fields', fieldObj.field],
+              });
+            }
+
+            return {
+              field: fieldObj.field,
+              value: data,
+            };
+          })
+      ),
+    })
+    .safeParse(JSON.parse(data));
+
+  if (error) {
+    ctx.addIssue({
+      ...error.issues[0],
+      path: [...error.issues[0].path],
     });
-  });
+  }
 
-export const GetAllGigWorkTeamsRequestQuerySchema = Infra.Zod.Utils.makeGetAllSchema(validFields);
+  return validatedData;
+});
 
-export const GetAllGigWorkTeamsRequestBodySchema =
-  Infra.Zod.Utils.makeTypedZodObject<Interfaces.GetAllGigWorkTeamRequestBody>().schema({
-    where: WhereBodySchema.optional(),
-    appRole: z.enum([APP_ROLE.WORKER, APP_ROLE.BUYER]).optional(),
-  });
+export const GetAllGigWorkTeamsRequestQuerySchema = Infra.Zod.Utils.makeGetAllSchema(validFields, {
+  where: WhereQuerySchema.optional(),
+  appRole: z.enum([APP_ROLE.WORKER, APP_ROLE.BUYER]).optional(),
+});

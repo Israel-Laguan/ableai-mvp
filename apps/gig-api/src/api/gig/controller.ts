@@ -77,14 +77,13 @@ export const gigController = {
         UserClaims,
         Request['params'],
         object,
-        Gig.Domain.Interfaces.GetAllGigWorkTeamRequestBody,
+        object,
         Gig.Domain.Interfaces.GetAllGigWorkTeamRequestQuery
       >,
       res: Response
     ) => {
       const result = await gigService.getAllGigWorkTeams({
         ...req.query,
-        ...req.body,
         userId: req.user.id,
       });
 

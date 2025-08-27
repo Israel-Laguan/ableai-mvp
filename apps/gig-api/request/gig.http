@@ -43,21 +43,9 @@ Content-Type: application/json
 }
 
 ### Get Gig Work Teams
-GET {{baseUrlGig}}/gig/work-team?sort=asc:createdAt&offset=0&limit=10
+GET {{baseUrlGig}}/gig/work-team?sort=asc:createdAt&offset=0&limit=10&appRole=BUYER&where=%7B%22fields%22%3A%5B%7B%22field%22%3A%22createdBy%22%2C%22value%22%3A%221%22%7D%5D%7D
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
-
-{
-  "appRole": "BUYER",
-  "where": {
-    "fields":[
-      {
-        "field": "status",
-        "value": "PAID"
-      }
-    ]
-  }
-}
 
 ### Get One Gig Work Team
 GET {{baseUrlGig}}/gig/work-team/1/BUYER

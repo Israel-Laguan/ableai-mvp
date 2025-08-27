@@ -32,8 +32,8 @@ export function makeGetAllSchema<
   additionalQueryParams?: AdditionalQueryParamsSchema
 ): z.ZodObject<
   {
-    limit: z.ZodOptional<z.ZodString>;
-    offset: z.ZodOptional<z.ZodString>;
+    limit: z.ZodOptional<z.ZodEffects<z.ZodString, number, string>>;
+    offset: z.ZodOptional<z.ZodEffects<z.ZodString, number, string>>;
     sort: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
   } & AdditionalQueryParamsSchema
 > {
@@ -43,8 +43,20 @@ export function makeGetAllSchema<
 
   return z
     .object({
-      limit: z.string().regex(/^\d+$/, 'Invalid limit').optional(),
-      offset: z.string().regex(/^\d+$/, 'Invalid offset').optional(),
+      limit: z
+        .string()
+        .regex(/^\d+$/, 'Invalid limit')
+        .transform(data => {
+          return Number(data);
+        })
+        .optional(),
+      offset: z
+        .string()
+        .regex(/^\d+$/, 'Invalid offset')
+        .transform(data => {
+          return Number(data);
+        })
+        .optional(),
       sort: z
         .string()
         .refine(
