@@ -24,6 +24,8 @@ export const validateInputMiddleware: ValidateInputMiddleware =
       if (bodyResponse.error) {
         errors.push(bodyResponse.error);
       }
+
+      req.body = bodyResponse.data;
     }
 
     if (paramsSchema) {
@@ -31,6 +33,8 @@ export const validateInputMiddleware: ValidateInputMiddleware =
       if (paramsResponse.error) {
         errors.push(paramsResponse.error);
       }
+
+      req.params = paramsResponse.data;
     }
 
     if (querySchema) {
@@ -38,6 +42,8 @@ export const validateInputMiddleware: ValidateInputMiddleware =
       if (queryResponse.error) {
         errors.push(queryResponse.error);
       }
+
+      req.query = queryResponse.data;
     }
 
     if (errors.length) {
