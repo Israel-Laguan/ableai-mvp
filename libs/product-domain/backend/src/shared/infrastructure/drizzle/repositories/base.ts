@@ -11,6 +11,7 @@ import type {
 } from '@models/shared';
 import type { DrizzleBaseRepositoryConfig } from '../../../domain/interfaces';
 
+import { SORT } from '@models/shared';
 import { Errors } from '@shared';
 
 const PATH = 'DRIZZLE_BASE_REPOSITORY';
@@ -77,7 +78,7 @@ export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema extends object>({
         const column = (schema as unknown as Record<string, PgColumn>)[sortField];
 
         if (column) {
-          if (sort[0] === 'desc') {
+          if (sort[0] === SORT.DESC) {
             query.orderBy(desc(column));
           } else {
             query.orderBy(asc(column));

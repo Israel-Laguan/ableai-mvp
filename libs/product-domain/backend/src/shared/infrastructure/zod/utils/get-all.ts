@@ -62,9 +62,7 @@ export function makeGetAllSchema<
         .refine(
           sort => {
             const [direction, field] = sort.split(':');
-            const isValidDirection = SORTS.includes(
-              direction.toUpperCase() as (typeof SORTS)[number]
-            );
+            const isValidDirection = SORTS.includes(direction as (typeof SORTS)[number]);
             const isValidField = validFields.includes(field as ValidSortFields);
             return isValidDirection && isValidField;
           },
