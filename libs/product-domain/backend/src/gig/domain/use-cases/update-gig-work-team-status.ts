@@ -1,5 +1,5 @@
 import { Interfaces } from '..';
 
 export type UpdateGigWorkTeamStatus = (
-  input: Interfaces.UpdateGitWorkTeamStatusInput
+  input: Interfaces.UpdateGigWorkTeamStatusInput
 ) => Promise<Interfaces.UpdateGigWorkTeamOutput>;

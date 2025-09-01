@@ -11,7 +11,7 @@ export function makeUpdateGigWorkTeamStatusUseCase({
     const gigWorkTeam = await gigWorkTeamRepository.updateStatus(input);
 
     if (!gigWorkTeam) {
-      throw Errors.NotFoundResourceError.create('Gig Work Team not fount', PATH);
+      throw Errors.NotFoundResourceError.create('Gig Work Team not found', PATH);
     }
 
     return gigWorkTeam;

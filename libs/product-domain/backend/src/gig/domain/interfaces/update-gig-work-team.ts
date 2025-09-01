@@ -12,12 +12,12 @@ export type MakeUpdateGigWorkTeamPaymentInput = MakeUpdateGigWorkTeamInput & {
   workerSkillRepository: Repositories.WorkerSkillRepository;
 };
 
-export type UpdateGitWorkTeamStatusInput = Pick<GigWorkTeam, 'status' | 'id'> & {
+export type UpdateGigWorkTeamStatusInput = Pick<GigWorkTeam, 'status' | 'id'> & {
   appRole: APP_ROLE;
   userId: number;
 };
 
-export type AcceptGigWorkTeamInput = Omit<UpdateGitWorkTeamStatusInput, 'status'> & {
+export type AcceptGigWorkTeamInput = Omit<UpdateGigWorkTeamStatusInput, 'status'> & {
   accepted: boolean;
 };
 
@@ -31,7 +31,7 @@ export type UpdateGigWorkTeamPaymentUseCaseInput = Omit<
   'totalPayment'
 >;
 
-export type UpdateGigWorkTeamStatusRequestBody = Omit<UpdateGitWorkTeamStatusInput, 'userId'>;
+export type UpdateGigWorkTeamStatusRequestBody = Omit<UpdateGigWorkTeamStatusInput, 'userId'>;
 
 export type AcceptGigWorkTeamRequestBody = Pick<
   AcceptGigWorkTeamInput,

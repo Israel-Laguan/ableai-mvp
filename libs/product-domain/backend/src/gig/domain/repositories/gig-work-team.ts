@@ -22,7 +22,7 @@ export type GetOneGigWorkTeam = (
 ) => Promise<GigWorkTeam | null>;
 
 export type UpdateGigWorkTeamStatus = (
-  input: Interfaces.UpdateGitWorkTeamStatusInput
+  input: Interfaces.UpdateGigWorkTeamStatusInput
 ) => Promise<GigWorkTeam | null>;
 
 export type UpdateGigWorkTeamPayment = (
