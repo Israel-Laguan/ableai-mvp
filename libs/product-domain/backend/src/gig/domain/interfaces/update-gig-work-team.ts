@@ -30,7 +30,7 @@ export type UpdateGigWorkTeamPaymentInput = Pick<GigWorkTeam, 'id' | 'tips' | 't
 
 export type UpdateGigWorkTeamPaymentUseCaseInput = Omit<
   UpdateGigWorkTeamPaymentInput,
-  'totalPayment'
+  'totalPayment' | 'workTime'
 >;
 
 export type UpdateGigWorkTeamStatusRequestBody = Omit<UpdateGigWorkTeamStatusInput, 'userId'>;
@@ -42,7 +42,7 @@ export type AcceptGigWorkTeamRequestBody = Pick<
 
 export type UpdateGigWorkTeamPaymentRequestBody = Omit<
   UpdateGigWorkTeamPaymentUseCaseInput,
-  'userId'
+  'userId' | 'workTime'
 >;
 
 export type UpdateGigWorkTeamOutput = GigWorkTeam;
