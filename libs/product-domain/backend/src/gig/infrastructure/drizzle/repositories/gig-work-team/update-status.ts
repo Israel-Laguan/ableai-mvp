@@ -10,7 +10,7 @@ import type { Repositories } from '../../../../domain';
 import { Constants } from '@models/gig';
 import { APP_ROLE } from '@models/shared';
 import { Infra as SharedInfra } from '../../../../../shared';
-import { gigWorks, gigWorkTeams } from '../../schemas';
+import { gigWorkTeams } from '../../schemas';
 import { makeIsGigWorkTeamGigWorkOwnerClause, makeIsGigWorkTeamWorkerClause } from './shared';
 import { Errors } from '@shared';
 
@@ -44,11 +44,7 @@ const isPendingWhereClause = sql`${gigWorkTeams.status} = ${PENDING}`;
 const isAcceptedWhereClause = sql`${gigWorkTeams.status} = ${ACCEPTED}`;
 const isNotCompletedOrPaidWhereClause = sql`${gigWorkTeams.status} NOT IN (${COMPLETED}, ${PAID})`;
 const isValidCompletedWhereClause = sql`
-  ${gigWorkTeams.status} = ${STARTED} 
-  AND NOW() >= (
-    SELECT ${gigWorks.endDate}
-    FROM ${gigWorks}
-    WHERE ${gigWorks.id} = ${gigWorkTeams.gigWorkId}) `;
+  ${gigWorkTeams.status} = ${STARTED}`;
 const isCompletedWhereClause = sql`${gigWorkTeams.status} = ${COMPLETED}`;
 
 const returningPart = sql`
