@@ -9,6 +9,7 @@ export type MakeUpdateGigWorkTeamInput = {
 export type MakeAcceptGigWorkTeamInput = MakeUpdateGigWorkTeamInput;
 
 export type MakeUpdateGigWorkTeamPaymentInput = MakeUpdateGigWorkTeamInput & {
+  gigWorkRepository: Repositories.GigWorkRepository;
   workerSkillRepository: Repositories.WorkerSkillRepository;
 };
 
@@ -24,6 +25,7 @@ export type AcceptGigWorkTeamInput = Omit<UpdateGigWorkTeamStatusInput, 'status'
 export type UpdateGigWorkTeamPaymentInput = Pick<GigWorkTeam, 'id' | 'tips' | 'totalPayment'> & {
   expenses?: number;
   userId: number;
+  workTime: number;
 };
 
 export type UpdateGigWorkTeamPaymentUseCaseInput = Omit<
