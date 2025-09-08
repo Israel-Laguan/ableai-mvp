@@ -11,11 +11,12 @@ import type {
 } from '@models/shared';
 import type { DrizzleBaseRepositoryConfig } from '../../../domain/interfaces';
 
+import { SORT } from '@models/shared';
 import { Errors } from '@shared';
 
 const PATH = 'DRIZZLE_BASE_REPOSITORY';
 
-export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
+export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema extends object>({
   schema,
 }: Pick<DrizzleBaseRepositoryConfig, 'schema'>): (({
   db,
@@ -30,13 +31,16 @@ export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
       return result as TSchema[];
     },
 
-    getAll: async (db: NodePgDatabase, input?: GetAllInput): Promise<PaginationResult<TSchema>> => {
+    getAll: async (
+      db: NodePgDatabase,
+      input?: GetAllInput<TSchema>
+    ): Promise<PaginationResult<TSchema>> => {
       const query = db.select().from(schema);
       const conditions: SQL[] = [];
 
       if (input?.where?.fields && input.where.fields.length > 0) {
         for (const { field, value } of input.where.fields) {
-          const column = (schema as unknown as Record<string, PgColumn>)[field];
+          const column = (schema as Record<keyof TSchema, PgColumn>)[field];
 
           if (column) {
             if (Array.isArray(value)) {
@@ -46,7 +50,7 @@ export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
             }
           } else {
             throw Errors.NotFoundResourceError.create(
-              `The Column '${field}' is not found in the table.`,
+              `The Column '${String(field)}' is not found in the table.`,
               PATH
             );
           }
@@ -74,7 +78,7 @@ export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
         const column = (schema as unknown as Record<string, PgColumn>)[sortField];
 
         if (column) {
-          if (sort[0] === 'desc') {
+          if (sort[0] === SORT.DESC) {
             query.orderBy(desc(column));
           } else {
             query.orderBy(asc(column));
@@ -140,7 +144,7 @@ export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
       create: async function (input: CreateEntityInput<TSchema>): Promise<TSchema[]> {
         return await repository.create(db, input);
       },
-      getAll: async function (input?: GetAllInput): Promise<PaginationResult<TSchema>> {
+      getAll: async function (input?: GetAllInput<TSchema>): Promise<PaginationResult<TSchema>> {
         return await repository.getAll(db, input);
       },
       getById: async function (id: string): Promise<TSchema | null> {
@@ -159,7 +163,7 @@ export const makeDrizzleBaseRepositoryWithSettlesEm = <TSchema>({
   };
 };
 
-export const makeDrizzleBaseRepository = <TSchema>({
+export const makeDrizzleBaseRepository = <TSchema extends object>({
   db,
   schema,
 }: DrizzleBaseRepositoryConfig): ISQLBaseRepository<TSchema> => {

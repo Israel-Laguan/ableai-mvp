@@ -43,6 +43,36 @@ router.post(
   validateRegisterGigWorkTeam,
   registerGigWorkTeam
 );
+router.get(
+  GigWorkTeamSuffix,
+  authorizationMiddleware,
+  GigValidationInput.validateGetAllGigWorkTeams,
+  gigController.getAllGigWorkTeams
+);
+router.get(
+  GigWorkTeamSuffix + '/:id' + '/:appRole',
+  authorizationMiddleware,
+  GigValidationInput.validateGetOneGigWorkTeam,
+  gigController.getOneGigWorkTeam
+);
+router.patch(
+  GigWorkTeamSuffix + '/accept',
+  authorizationMiddleware,
+  GigValidationInput.validateAcceptGigWorkTeam,
+  gigController.acceptGigWorkTeam
+);
+router.patch(
+  GigWorkTeamSuffix + '/payment',
+  authorizationMiddleware,
+  GigValidationInput.validateGigWorkTeamPaymentUpdate,
+  gigController.updateGigWorkTeamPayment
+);
+router.patch(
+  GigWorkTeamSuffix + '/status',
+  authorizationMiddleware,
+  GigValidationInput.validateGigWorkTeamStatusUpdate,
+  gigController.updateGigWorkTeamStatus
+);
 
 const gigRouter = Router().use(suffix, router);
 

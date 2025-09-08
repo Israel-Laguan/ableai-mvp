@@ -67,7 +67,7 @@ export function makeGetAllGigWorks(db: NodePgDatabase): Repositories.GetAllGigWo
           `;
       })
       .with(GigModelConstants.GIG_WORK_STATUS.COMPLETED, () => {
-        return sql`${gigWorks.endDate} < CURRENT_DATE`;
+        return sql`AND ${gigWorks.endDate} < CURRENT_DATE`;
       })
       .otherwise(() => {
         return null;

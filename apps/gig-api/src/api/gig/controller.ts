@@ -12,6 +12,25 @@ const { HTTP_STATUS_CODE } = CONSTANTS;
 const { tryCatchAndNext } = Express;
 
 export const gigController = {
+  acceptGigWorkTeam: tryCatchAndNext(
+    async (
+      req: Express.Types.AuthorizedRequest<
+        UserClaims,
+        never,
+        object,
+        Gig.Domain.Interfaces.AcceptGigWorkTeamRequestBody
+      >,
+      res: Response
+    ) => {
+      const result = await gigService.acceptGigWorkTeam({
+        ...req.body,
+        userId: req.user.id,
+      });
+
+      res.status(HTTP_STATUS_CODE.OK).json(result);
+    }
+  ),
+
   getAllGigWorks: tryCatchAndNext(
     async (
       req: Express.Types.AuthorizedRequest<
@@ -52,6 +71,26 @@ export const gigController = {
     }
   ),
 
+  getAllGigWorkTeams: tryCatchAndNext(
+    async (
+      req: Express.Types.AuthorizedRequest<
+        UserClaims,
+        Request['params'],
+        object,
+        object,
+        Gig.Domain.Interfaces.GetAllGigWorkTeamRequestQuery
+      >,
+      res: Response
+    ) => {
+      const result = await gigService.getAllGigWorkTeams({
+        ...req.query,
+        userId: req.user.id,
+      });
+
+      res.status(HTTP_STATUS_CODE.OK).json(result);
+    }
+  ),
+
   getOneGigWork: tryCatchAndNext(
     async (
       req: Express.Types.AuthorizedRequest<
@@ -61,6 +100,24 @@ export const gigController = {
       res: Response
     ) => {
       const result = await gigService.getOneGigWork({
+        id: Number(req.params.id),
+        userId: req.user.id,
+      });
+
+      res.status(HTTP_STATUS_CODE.OK).json(result);
+    }
+  ),
+
+  getOneGigWorkTeam: tryCatchAndNext(
+    async (
+      req: Express.Types.AuthorizedRequest<
+        UserClaims,
+        Gig.Domain.Interfaces.GetOneGigWorkTeamRequestParams
+      >,
+      res: Response
+    ) => {
+      const result = await gigService.getOneGigWorkTeam({
+        appRole: req.params.appRole,
         id: Number(req.params.id),
         userId: req.user.id,
       });
@@ -95,6 +152,25 @@ export const gigController = {
     }
   ),
 
+  updateGigWorkTeamPayment: tryCatchAndNext(
+    async (
+      req: Express.Types.AuthorizedRequest<
+        UserClaims,
+        never,
+        object,
+        Gig.Domain.Interfaces.UpdateGigWorkTeamPaymentRequestBody
+      >,
+      res: Response
+    ) => {
+      const result = await gigService.updateGigWorkTeamPayment({
+        ...req.body,
+        userId: req.user.id,
+      });
+
+      res.status(HTTP_STATUS_CODE.OK).json(result);
+    }
+  ),
+
   updateProfile: tryCatchAndNext(
     async (req: Express.Types.AuthorizedRequest<{ id: number }>, res: Response) => {
       const result = await gigService.updateUser({
@@ -104,7 +180,23 @@ export const gigController = {
         },
       });
 
-      res.status(HTTP_STATUS_CODE.UPDATED).json(result);
+      res.status(HTTP_STATUS_CODE.OK).json(result);
+    }
+  ),
+
+  updateGigWorkTeamStatus: tryCatchAndNext(
+    async (
+      req: Express.Types.AuthorizedRequest<
+        UserClaims,
+        never,
+        object,
+        Gig.Domain.Interfaces.UpdateGigWorkTeamStatusRequestBody
+      >,
+      res: Response
+    ) => {
+      const result = await gigService.updateGigWorkTeamStatus({ ...req.body, userId: req.user.id });
+
+      res.status(HTTP_STATUS_CODE.OK).json(result);
     }
   ),
 };
